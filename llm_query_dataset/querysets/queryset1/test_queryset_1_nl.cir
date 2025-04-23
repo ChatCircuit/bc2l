@@ -1,0 +1,6 @@
+* Simple RC Circuit
+V1 1 0 DC 5           
+R1 1 out 1k           
+C1 out 0 1uF           
+.tran 0.1ms 10ms
+.end

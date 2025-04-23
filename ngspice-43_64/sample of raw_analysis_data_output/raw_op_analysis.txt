@@ -1,0 +1,22 @@
+Title: a berkeley spice3 compatible circuit
+Date: Fri Apr  4 03:38:51  2025
+Plotname: Operating Point
+Flags: real
+No. Variables: 7
+No. Points: 1       
+Variables:
+	0	v(vcc)	voltage
+	1	v(1)	voltage
+	2	v(base)	voltage
+	3	v(coll)	voltage
+	4	v(emit)	voltage
+	5	i(vin)	current
+	6	i(vcc)	current
+Values:
+0		1.200000000000000e+01
+	0.000000000000000e+00
+	2.074617161619260e+00
+	7.003534142229633e+00
+	1.293956531382122e+00
+	0.000000000000000e+00
+	-1.380398920119799e-03

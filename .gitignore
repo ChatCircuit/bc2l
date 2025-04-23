@@ -1,0 +1,26 @@
+#ipynb files are only for learning
+*.ipynb 
+.env
+
+# cache files
+**/__pycache__/
+
+# ignore folders
+trash_codes/
+yolo_model/
+ngspice-43_64/Spice64/
+llm_query_dataset/test_ckts/test_ckt_netlist all resources/
+
+# neural network weights
+*.bin
+*.pth
+*.crdownload
+
+# image files
+*.jpg
+*.jpeg
+*.png
+
+*.zip
+llm_prompts.py 
+prompts.txt

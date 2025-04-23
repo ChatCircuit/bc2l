@@ -1,0 +1,3 @@
+* check the data output file 
+    - for when there is error
+    - for all the different types of analyses

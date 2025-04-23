@@ -1,0 +1,83 @@
+###############################
+#### HOW TO RUN NGSPICE FROM CMD
+###############################
+ref: ngspice43 manual ch17 from page 501
+
+ngspice_con circuit_netlist_file.cir
+
+After a few moments, you should see the ngspice prompt:
+ngspice 1 -> 
+
+To see the circuit description read by the simulator you can issue the following command:
+ngspice 1 -> listing
+
+Now, execute the simulation by entering the run command:
+ngspice 1 -> run
+
+
+To examine the results of this transient analysis, we can use the plot command. First we will
+plot the nodes labeled ‘1’ and ‘base’.
+ngspice 2 -> plot v(1) base
+
+Now, issue the following command to examine the voltages on two of the internal nodes of the
+transistor amplifier circuit:
+ngspice 3 -> plot vcc coll emit
+
+
+To run the DC simulation of the transistor amplifier, issue the following command:
+ngspice 4 -> op
+
+After a moment the ngspice prompt returns. Now issue the print command to examine the
+emitter, base, and collector DC bias voltages.
+ngspice 5 -> print emit base coll
+
+To run an AC analysis, enter the following command:
+ngspice 6 -> ac dec 10 0.01 100
+
+ssue to the following command to plot the response curve at node ‘coll’:
+ngspice 7 -> plot coll
+
+ngspice 8 -> plot db(coll) ph(coll)
+
+ngspice 9 -> dc vcc 0 15 0.1
+
+ngspice 10 -> plot emit base coll
+
+ngspice 11 -> quit
+
+
+###### running the gui ngspice
+open the application then: source <netlistfilelocation.cir>
+
+
+######################################
+###### NGSPICE NETLIST FORMAT
+######################################
+
+	* use the control statement to give instruction to ngspice. this is not the circuit netlist. this is instruction to ngspice.
+
+.control 
+..
+..
+.endc
+
+
+
+	* to plot from cmd using ngspice_con and gnuplot use:
+
+gnuplot gp v(node_name)
+
+gnuplot must be installed in pc.
+
+
+#####################################
+####### MISC. NOTES
+####################################
+
+	* using capacitor like c1 1 0 1uF and then doing transient analysis wont bring up the curve, it will be flat, as there is no initial condition set.
+do it like this: 
+c1 2 0 1u ic=0
+.tran 0.02ms 20ms uic
+
+
+

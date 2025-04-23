@@ -1,0 +1,16 @@
+I want to write a well structured prompt for o3-mini model. Here is the context:
+
+You have a well organized DB on netlist code. You can call series of command from:
+Create_New_DB_from_scratch(); this function call will create a fresh database (both tabular & graph) on a new netlist.
+Update_DB(component_name:str, new_line:str); this function will replace original line of 'component_name' with 'new_line'. 
+Retrive_line(component_name:str): this function returns the original line of netlist of the 'component_name'.
+Retrive_graph(component_name:str, depth:int); this function performs bfs and returns a subgraph assuming root at 'component_name' and depth is of the bfs search.
+Update_line_by_llm(component_name:str, update_prompt:str, old_line:str): this function returns a new code line for 'component_name' by updating the 'old_line' based on the 'update_prompt' provided by you. an llm-agent will receive the prompt & the old line and return the new line.
+miscellenous(instruction:str): this function handles any other type of query/command by user. 
+
+You should response only with a json format:
+{"Function1": {inputs... }, "Function2": {inputs... }}
+
+For Function = Update_line_by_llm: the prompt (given by you) should have a prompt={instruction:"..{}..",output_format:} format so that I can use instruction = instruction.format(old_line) to generate a complete prompt.
+
+Write down a structured prompt to pass.

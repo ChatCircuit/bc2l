@@ -1,0 +1,17 @@
+* Captured Circuit from Image
+.title Captured Circuit from Image
+
+V1 1 0 10V
+C1 0 2 1uF
+R1 0 3 1k
+V2 4 5 10V
+R2 0 6 1k
+L1 8 7 1mH
+R3 2 3 1k
+L2 0 3 1mH
+R4 4 6 1k
+R5 8 5 1k
+R6 1 5 1k
+R7 3 7 1k
+
+.end

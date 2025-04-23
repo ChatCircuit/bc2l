@@ -1,0 +1,22 @@
+this document summarizes the learning from the ngspice-43-manual. 
+
+there are 4 parts. but we only need to make sure that, part 1 (page 1-531) of the manual is properly learned and implemented by the software. part 2, XSPICE is for mixed signal circuit analysis and support maybe added later. part 3 is CIDER, which does not seem to be used at all these days or use case is unknown as of now. 
+
+so we need to worry about page 1-531 of the manual which is the main ngspice.
+
+# UNNECESSARY CHAPTERS FOR LLM
+ch8 - mixed-mode and behavioral modelling with xspice > MIXED SIGNAL SUPPORT NOT NEEDED NOW, LATER
+ch9 - verilog-a model > NOT NECESSARY NOW, MAYBE LATER
+ch10 - digial device models >  MIXED SIGNAL SUPPORT NOT NEEDED NOW, LATER
+ch12 - starting ngspice > UNNECESSARY
+ch13 - interactive interpreter > UNNECESSARY
+ch14 - ngspice user interface > UNNECESSARY
+* ch15 - ngspice as shared library or dynamic link library > VERY NECESSARY TO RUN NGSPICE FROM OUR SOFTWARE
+ch16 - TCLspice > unnecessary
+ch19 - ckt optimization with ngspice > ADD SUPPORT LATER
+
+
+# NECESSARY CHAPTERS FOR LLM
+ch 1,2, 3, 4, 5, 6,7,
+ch 11,17,18, 20
+

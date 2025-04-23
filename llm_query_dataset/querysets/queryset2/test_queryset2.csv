@@ -1,0 +1,6 @@
+TYPE,QUERY,EXPECTED OUTPUT,SUCCESS
+general,show your netlist,,
+"netlist mod, plot","plot the transient voltage across the capacitor, with R1=300ohm and R2=700ohm",,
+"netlist mod, plot",incrase R1 resistance even more,,
+"netlist mod, plot",plot that for a 20ms,,
+"complex sim com, plot","plot the power consumed by the elements R1, R2 and the capacitor",,

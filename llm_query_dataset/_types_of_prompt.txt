@@ -1,0 +1,24 @@
+	* general query
+Queries that do not require any type of code generation or code modification. for example: what are you?, what is a transient analysis? etc. general query can be answered from the prompt context (may come in context from RAG) and LLM inherent knowledge.
+
+	* netlist modification query
+queries that require modification of some lines of the netlist or add some new lines into the netlist. but this category of query does not add/modify any simulation code into the netlist, only modifies the circuit description, not the simulation description. for example: add a new resistor of 987 ohm between node 1 and 5. 
+may require handling components with specific model number from model library. example: in place of the simple diode shown in the netlist, use the 1N4001G diode.
+
+	* simple simulation command query 
+queries that require only adding simulation spice code at the end of the netlist. example: what is the voltage at node 3, 4 and 10?
+
+	* compound simulation command query
+queries that require modifying the ckt netlist/simulation commands and then perform some simulation. example: change resistance R1 to 600 ohm and find the voltage across it. so it is basically netlist modification query + simple simulation command query. example: find current through resistor R6 (this requires adding a voltage source in series with the resistor[netlist modification] and then observe the current through the voltage[simple simulation command])
+
+	* complex simulation command query
+queries that require both spice code modification (ckt netlist modification or sim command or both) and then needs some data analysis on the simulation output using python. example 1: find the equivalent resistance between node a and b (this requires stripping off the circuit outside node a,b. then adding a voltage source between node a, b. then measure the current through the voltage source. then equivalent resistance = voltage/current).
+
+	* plot query
+queries that ask to plot some data. example: do a transient analysis of the circuit and plot the voltage and current across capacitor C3.
+
+	* data analysis query 
+queries that require no spice simulation or netlist modification. it only requires data analysis using python on the existing simulation output available. example: based on the last transient analysis, find the time point when the power consumed by resistor R3 is maximum.
+
+	* extract sub-circuit then simulate on it 
+queries that require extracting a certain portion of the circuit according to the user prompt and then perform some simulation only on that subcircuit. this may be helpful in simulation of big circuits. example: in the rectifier circuit, i want to perform simulation only on the transformer part which steps down the voltage. show me the voltage output of the transformer with transient analysis.

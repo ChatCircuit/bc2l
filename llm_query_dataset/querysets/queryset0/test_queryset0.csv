@@ -1,0 +1,4 @@
+"TYPE			",QUERY,EXPECTED OUTPUT,SUCCESS
+"compound sim com, compound sim com			",what is the current through the voltage source V1 and R4? ,,
+"data analysis		","what's that in mA?	",,
+"general			",show your netlist,,

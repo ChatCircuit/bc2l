@@ -1,0 +1,29 @@
+* hey
+* hello
+* what are you? 
+* what is bring circuit to life? 
+* what is this software
+* what can you do
+* what type of simulations can you perform
+* what are the different types of independent voltage/current source do you support?? 
+* do you support simulation with LT spice netlist?? or pspice netlist?
+* what are different spice netlist format that you support?
+* can you perform monte carlo simulation? 
+* can you do transient simulation
+* can you do dc transient analysis
+* which simulator are you using under the hood? 
+* can you change your simulation software? 
+
+* what is a transient analysis
+* tell about the monte carlo simulation
+
+* what are the different diode models supported by you? 
+* what diode models do you have in library
+* show me your netlist
+* what is your netlist
+
+# irrelevant questions
+* what is the capital of Bangladesh
+* what is the conversion rate between dollar and bangaldeshi taka
+* what is the currency of France
+

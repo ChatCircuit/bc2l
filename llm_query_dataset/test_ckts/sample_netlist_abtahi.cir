@@ -1,0 +1,48 @@
+* Sample Netlist with Diverse Components and Commands
+.PARAM Vdd=12 Vbias=2
+
+* --- Passive and Active Components ---
+R1 n1 n2 10k          ; Resistor between n1 and n2 (extended format)
++ ac=1m m=0.5 scale=1 temp=25 dtemp=0.5 tc1=0.01 tc2=0.02 noisy=0
+C1 n2 GND 100nF       ; Capacitor between n2 and ground
+L1 n3 n4 10mH         ; Inductor between n3 and n4
+V1 n1 GND DC 5V       ; Independent voltage source (DC)
+I1 n2 n3 DC 2mA       ; Independent current source (DC)
+E1 n3 n4 n2 GND 10    ; Voltage-controlled voltage source (dependent V source)
+G1 n4 n5 n2 GND 0.001 ; Voltage-controlled current source (dependent I source)
+F1 n5 GND V1 0.5      ; Current-controlled current source (dependent I source)
+H1 n1 n2 V1 GND 20    ; Current-controlled voltage source (dependent V source)
+
+* --- Semiconductor Devices ---
+Q1 n6 n2 GND NPN      ; Bipolar junction transistor (NPN)
+M1 n7 n6 n8 n8 NMOS    ; MOS transistor (NMOS)
+D1 n8 n9 Dmodel       ; Diode using predefined model
+
+* --- Device Models ---
+.model Dmodel D(Is=1e-14)       ; Diode model definition
+.model NPN NPN(Bf=100)          ; BJT model definition
+.model NMOS NMOS(VTO=1)           ; NMOS model definition
+
+* --- Subcircuit Definition ---
+.SUBCKT amplifier in out Vdd Vss
+R2 in mid 1k                ; Resistor in subcircuit
+R3 mid out 1k               ; Resistor in subcircuit
+Q2 mid in Vss NPN           ; Transistor in subcircuit
+.ENDS amplifier
+
+* --- Subcircuit Instance ---
+X1 n10 n11 n12 n13 amplifier  ; Instance of amplifier subcircuit
+                              ; Ports: in = n10, out = n11, Vdd = n12, Vss = n13
+
+* --- Simulation Commands ---
+.tran 0 10ms                ; Transient analysis
+.dc V1 0 5 0.5              ; DC sweep from 0 to 5V in 0.5V steps on V1
+.ac dec 10 1 1k             ; AC analysis (decade sweep from 1Hz to 1kHz)
+.op                         ; Operating point analysis
+.print tran V(n1) V(n2)     ; Print transient voltages at n1 and n2
+.meas tran delay TRIG V(n1) VAL=5 RISE=1  ; Measure delay when V(n1) rises through 5V
+.plot tran V(n1) V(n2)      ; Plot transient waveforms of V(n1) and V(n2)
+.save V(n1) V(n2)          ; Save node voltages for later viewing
+.probe all                ; Probe all nodes for debugging/inspection
+
+.end                      ; End of netlist

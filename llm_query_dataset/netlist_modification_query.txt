@@ -1,0 +1,2 @@
+* add a new resistor of 987 ohm between node 1 and 5
+* change the diode 

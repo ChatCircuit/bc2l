@@ -1,0 +1,8 @@
+* simple RC circuit with 2 R and 1 C
+
+V1 1 0 10V
+R1 1 2 1k
+R2 2 0 1k
+C1 2 0 1uF ic=0
+
+.end

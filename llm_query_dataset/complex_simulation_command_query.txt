@@ -1,0 +1,2 @@
+* perform a dc steady state analysis of the circuit from 0 degree celcius to 60 degree celcius and plot the voltage across the capacitor c2 vs the temperature
+
