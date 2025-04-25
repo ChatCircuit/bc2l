@@ -12,6 +12,8 @@ import sys
 import threading
 import re
 
+from logger import get_logger
+logger = get_logger(__name__)
 
 dotenv.load_dotenv()
 
@@ -47,7 +49,7 @@ def generate_response_basic(System_Prompt, User_Prompt):
                     {"role": "system", "content": System_Prompt},  
                     {"role": "user", "content": User_Prompt}  
                 ],  
-                max_tokens=4048
+                max_completion_tokens=4048
             )  
         else:
             response = client.complete(
@@ -70,7 +72,7 @@ def generate_response_basic(System_Prompt, User_Prompt):
     except Exception as e:  
         return f"Error: {e}", 0
 
-def generate_response(System_Prompt, User_Prompt):
+def generate_response(message_history:list):
     stop_event = threading.Event()
     result = {"response": None, "token_count": 0, "error": None}
 
@@ -79,16 +81,13 @@ def generate_response(System_Prompt, User_Prompt):
             if 'gpt' in LLM.lower():
                 response = client.chat.completions.create(  
                     model=deployment_name,  # In Azure, 'model' should be the deployment name  
-                    messages=[  
-                        {"role": "system", "content": System_Prompt},  
-                        {"role": "user", "content": User_Prompt}  
-                    ],  
+                    messages=message_history,  
                     max_completion_tokens=4048
                 )  
             else:
                 response = client.complete(
                     messages=[
-                        UserMessage(content=System_Prompt+User_Prompt)
+                        UserMessage(content=message_history)
                     ],
                     max_tokens=4048,
                     model=deployment_name
@@ -114,7 +113,7 @@ def generate_response(System_Prompt, User_Prompt):
     while not stop_event.is_set():
         elapsed = int(time.time() - start_time)
         # \r = return to start of line; \033[K = clear from cursor to end of line
-        sys.stdout.write(f"\r please wait: {elapsed} seconds elapsed....\033[K")
+        sys.stdout.write(f"\r\t\t\t\t processing prompt (thinking...): {elapsed} seconds elapsed....\033[K")
         sys.stdout.flush()
         time.sleep(1)
 
@@ -124,7 +123,9 @@ def generate_response(System_Prompt, User_Prompt):
 
     # Return the API result or the error
     if result["error"] is not None:
-        return f"Error: {result['error']}", 0
+        logger.error(f"Error in API call: {result['error']}")
+        return f"Error in API call: {result['error']}", 0
+    
     return result["response"], result["token_count"]
 
     
@@ -150,7 +151,7 @@ def Call_Agent(user_message, mode = 'Complex', count_token = False):
     return parsed_json, Response
 
 
-def Prepare_llm(DQuery = False, dbg=False, llm='gpt'):
+def Prepare_llm(DQuery = False, llm='gpt'):
     global api_version, api_key, LLM, api_endpoint, deployment_name, client, System_Prompt_Complex, tokenizer, DBG
     # Retrieve environment variables  
     LLM = llm
@@ -185,16 +186,19 @@ def Prepare_llm(DQuery = False, dbg=False, llm='gpt'):
             endpoint=api_endpoint
         )
 
-    DBG = dbg
+    # DBG = dbg
     tokenizer = tiktoken.get_encoding("cl100k_base")
-    with open('prompts/prompt3.txt', 'r', encoding='utf-8') as file:
-        System_Prompt_Complex = file.read()
+    # with open('prompts/prompt3.txt', 'r', encoding='utf-8') as file:
+    #     System_Prompt_Complex = file.read()
 
-    while DQuery:
-        message = input("Enter your query: ")
-        if message.lower() == 'exit':
-            break
-        _, text = Call_Agent(message)
-        print(text)
+    # while DQuery:
+    #     message = input("Enter your query: ")
+    #     if message.lower() == 'exit':
+    #         break
+    #     _, text = Call_Agent(message)
+    #     print(text)
 
 #Prepare_llm(DQuery=True, dbg=True, llm='gpt-o3-mini')
+
+if __name__ == "__main__":
+    Prepare_llm(DQuery=True, dbg=True, llm='gpt-o3-mini')

@@ -303,14 +303,14 @@ class Analyzer:
         plt.grid(True)
         axe.axhline(0, color='black', linewidth=1, linestyle='--')
         axe.axvline(0, color='black', linewidth=1, linestyle='--')
-        
+
         # Dynamically set xlim and ylim
         x_min, x_max = axe.get_xlim()
         y_min, y_max = axe.get_ylim()
-        
+
         axe.set_xlim(left=max(x_min, -15), right=min(x_max, 15))
         axe.set_ylim(bottom=max(y_min, -15), top=min(y_max, 15))
-        
+
         mplcursors.cursor(axe, hover=True)
         plt.gcf().set_size_inches(10, 5)  # Change the figure size
         plt.show(block=False)  # Ensure the plot stays open until closed by the user

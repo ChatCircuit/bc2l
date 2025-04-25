@@ -28,7 +28,8 @@ import subprocess
 import re
 import numpy as np
 
-#
+from logger import get_logger
+logger = get_logger(__name__)
 
 class SpiceServer:
 
@@ -51,6 +52,7 @@ class SpiceServer:
     def __init__(self, **kwargs):
 
         self._spice_command = kwargs.get('spice_command') or self.SPICE_COMMAND
+        self.error = ""
 
     ##############################################
 
@@ -301,8 +303,9 @@ class SpiceServer:
 
         """
 
-        # self._logger.info("Start the spice subprocess")
-        spice_exe_path = os.path.join(os.getcwd(), 'ngspice_con.exe')
+        logger.info("Start the spice subprocess")
+        
+        # spice_exe_path = os.path.join(os.getcwd(), 'ngspice_con.exe')
 
         process = subprocess.Popen((self._spice_command, '-s'),
                                    stdin=subprocess.PIPE,
@@ -326,11 +329,36 @@ class SpiceServer:
                             ' ngspice returned:' + os.linesep +
                             stderr)
         if len(self.data_points) != number_of_points:
-            raise NameError('The number of points returned by ngspice does not match the number of points '
-                            'in the data array, ngspice returned:' + os.linesep +
-                            stderr)
+            logger.error('The number of points returned by ngspice does not match the number of points '
+                         'in the data array, ngspice returned:' + os.linesep +
+                         stderr)
+            # raise NameError('The number of points returned by ngspice does not match the number of points '
+            #                 'in the data array, ngspice returned:' + os.linesep +
+            #                 stderr)
+            self.error = 'The number of points returned by ngspice does not match the number of points ' \
+                         'in the data array, ngspice returned:' + os.linesep + stderr
 
-        return self.variables, self.data_points
+        # TODO: handle error by simulator properly and create error mitigation by LLM strategy 
+        
+        # return result as a dictionary format 
+        formatted_variables = "\n".join([f"({item[0]}, '{item[1]}', '{item[2]}')" for item in self.variables])
+
+        result = {
+            "data":{"vars": self.variables, "data_points": self.data_points},
+            
+            "description":{
+                "number of variables": len(self.variables),
+                "number of points": number_of_points,
+                "vars": formatted_variables,
+                "data_points": f"a 2D numpy array of shape {self.data_points.shape}",
+                "error": self.error
+            },
+            "error": self.error
+        }
+
+        # the description is for the LLM to understand the output
+
+        return result
 
 
 
@@ -365,55 +393,51 @@ if __name__ == '__main__':
     # with open(r"C:\\Users\\Touhid2\\Desktop\\test.cir", 'r') as file:
     #     spice_netlist = file.read()
 
-    spice_netlist = """"* simple RC circuit with 2 R and 1 C
+#     spice_netlist = """"* simple RC circuit with 2 R and 1 C
 
-V1 1 0 10V
-R1 1 2 300
-R2 2 0 700
-C1 2 0 1uF ic=0
+# V1 1 0 10V
+# R1 1 2 300
+# R2 2 0 700
+# C1 2 0 1uF ic=0
 
-.tran 0.1ms 10ms uic
+# .tran 0.1ms 10ms uic
+# .end
+
+# """
+
+    spice_netlist = """* simple ckt
+V1 1 0 DC 10
+R1 1 2 1k
+R2 2 0 1k
+R3 2 0 2k
+.op
 .end
+    """
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
 
-"""
-
-    spice_exe_path = r"H:\NOTHING\#Projects\bring_ckt_to_life_project\code\ngspice-43_64\Spice64\bin\ngspice_con.exe"
-
+    spice_exe_path = os.getenv("NGSPICE_PATH")
 
     spice_server = SpiceServer(spice_command = f"{spice_exe_path}")  # the ngspice_con.exe file should be in the same directory as this script
-    vars, data_points = spice_server(spice_netlist)
+    
+    sim_out = spice_server(spice_netlist)
+    
+    import json
+    print(json.dumps(sim_out["description"], indent=0))
 
-    print("Number of points:", len(data_points))
-    print("Number of variables:", len(vars))
-    print("Variables:")
-    for i in range(len(vars)):
-        print(vars[i])
+    # print("Number of points:", len(data_points))
+    # print("Number of variables:", len(vars))
+    # print("Variables:")
+    # for i in range(len(vars)):
+    #     print(vars[i])
 
-    print("data_Points[0:4]:")
-    for i in range(5):
-        print(data_points[i])
+    # print("data_Points[0:4]:")
+    # for i in range(5):
+    #     print(data_points[i])
 
 
     # time_data = data_points[:, 0]
     # print(time_data)
 
     #############################################################################################
-
-
-    # import matplotlib.pyplot as plt
-
-    # # Assuming `data_points` is a NumPy array with columns as:
-    # # [time, v(1), v(2), i(v1)]
-    # time = data_points[:, 0]
-    # vc = data_points[:, 2]  # v(2) is across the capacitor
-
-    # plt.figure(figsize=(8, 4))
-    # plt.plot(time * 1000, vc)  # Convert time to milliseconds
-    # plt.title('Transient Voltage Across Capacitor')
-    # plt.xlabel('Time (ms)')
-    # plt.ylabel('Voltage (V)')
-    # plt.grid(True)
-    # plt.tight_layout()
-    # plt.show()
-
-
