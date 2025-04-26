@@ -1,0 +1,20 @@
+6.3 Uniform Distributed RC Lines:
+
+**General Form:**
+`UXXXXXXX n1 n2 n3 mname l=len <n=lumps>`
+
+**Explanation:**
+- `n1` and `n2`: Nodes the RC line connects.
+- `n3`: Node the internal capacitances are connected to.
+- `mname`: Model name.
+- `l=len`: Length of the RC line in meters.
+- `<n=lumps>`: Optional parameter specifying the number of lumped segments used in the model. If omitted, the behavior depends on the model description.
+
+**Examples:**
+1. `U1 1 2 0 URCMOD L=50U`
+   - `.model URCMOD URC CPERL=100p RPERL=100k FMAX=10G`
+   - Defines a uniform RC line with a length of 50 µm and a model (URCMOD) specifying per-unit-length values: CPERL (capacitance per meter) = 100 pF, RPERL (resistance per meter) = 100 kΩ, and FMAX (maximum frequency) = 10 GHz.
+
+2. `URC2 1 12 2 UMODL l=1MIL N=6`
+   - Defines an RC line with a length of 1 millimeter and 6 lumped segments.
+

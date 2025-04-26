@@ -1,0 +1,53 @@
+**Switch Model (SW/CSW)**
+
+The switch model in Ngspice simulates an almost ideal switch with finite positive resistance. These resistances can be designed to approximate zero (RON) and infinity (ROFF) for practical purposes. Below is the extracted content relevant for netlist design and debugging:
+
+### **Parameters and Default Values**
+- **VT (Threshold Voltage)**: Controls switching. Default = 0.0 V (SW model).
+- **IT (Threshold Current)**: Controls switching. Default = 0.0 A (CSW model).
+- **VH (Hysteresis Voltage)**: Adds hysteresis to switching. Default = 0.0 V (SW model).
+- **IH (Hysteresis Current)**: Adds hysteresis to switching. Default = 0.0 A (CSW model).
+- **RON (On Resistance)**: Switch resistance when ON. Default = 1.0 Ω (both models).
+- **ROFF (Off Resistance)**: Switch resistance when OFF. Default = 1.0e+12 Ω or `1/GMIN` (both models).
+  - GMIN is adjustable in `OPTIONS` (Section 11.1.2).
+
+### **Usage and Optimization Guidelines**
+1. Avoid extremely high or low RON/ROFF values, as they can cause numerical issues (e.g., discontinuities or time step problems).
+2. For ROFF/RON ratios > 1e12:
+   - Reduce **TRTOL** (default 7.0) using `.OPTIONS`.
+   - Use `CHGTOL` < 1e-16 when switches are near capacitors.
+3. Match RON realistically to model real devices like MOSFETs.
+
+### **Example Input File Highlights**
+```plaintext
+* Instantiation of voltage-controlled switches
+s1 10 0 1 0 switch1 OFF
+s2 20 0 2 0 switch1 OFF
+s3 30 0 2 0 switch1 ON
+.model switch1 sw vt=1 vh=0.2 ron=1 roff=10k
+
+* Instantiation of current-controlled switch
+w1 40 0 vm3 wswitch1 OFF
+.model wswitch1 csw it=1m ih=0.2m ron=1 roff=10k
+```
+
+### **Key Observations**
+- Switches `s1`, `s2`, `s3`: Voltage-controlled using `SW` model with VT and VH parameters to establish hysteresis. On and off resistances are set via `RON` and `ROFF`.
+- Switch `w1`: Current-controlled using `CSW` model with IT and IH to handle hysteresis.
+- Hysteresis loops and initial conditions are analyzed in `.control` using `PLOT` commands.
+
+### **Control Commands for Debugging**
+```plaintext
+.control
+run
+plot v(1) v(10)           $ Voltage across the first switch
+plot v(10) vs v(1)       $ Hysteresis loop of first switch
+plot v(40) vs vm3#branch $ Current-controlled switch hysteresis
+.endc
+```
+
+### **Additional Notes**
+- Ensure consistency by aligning parameters with physical models to avoid numerical issues during simulation.
+- Recommended `.OPTIONS`:
+  - **TRTOL** < 7.0 (e.g., **TRTOL=1.0**).
+  - **CHGTOL** < 1e-16 when dealing with capacitors near switches.

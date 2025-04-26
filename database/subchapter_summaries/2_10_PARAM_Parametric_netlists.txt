@@ -1,0 +1,1 @@
+Ngspice supports the definition of parametric attributes in netlists using the `.PARAM` statement. This feature enhances the circuit description language by integrating arithmetic functionality.

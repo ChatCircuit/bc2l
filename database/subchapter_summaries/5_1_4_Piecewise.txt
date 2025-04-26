@@ -1,0 +1,76 @@
+**Summary of Ngspice pwl (Piecewise Linear) Function:**
+
+**1. General Usage:**
+- The `pwl` function represents a piecewise-linear dependency of one network variable (e.g., voltage or current).
+- Syntax for current source:
+  ```
+  Bname n+ n- I = pwl(x, x1, y1, x2, y2, ..., xn, yn)
+  ```
+- Syntax for voltage source:
+  ```
+  Bname n+ n- V = pwl(x, x1, y1, x2, y2, ..., xn, yn)
+  ```
+- **`x` (independent variable):** Can be voltage (e.g., `v(1)`), current (e.g., `i(source)`), time (for transient simulations), or an expression (e.g., `-2*i(Vin)`).
+- **Monotonicity Requirement:** The `x` values must be strictly monotonic. Non-monotonic values will terminate the simulation.
+
+**2. Output Behavior Outside Defined Range:**
+- Beyond the specified (`x, y`) pairs:
+  - The function extends using the slope between the last two points (e.g., `(y3 - y2) / (x3 - x2)`).
+- To enforce limits (constant output beyond boundaries), add an additional (`x, y`) pair with extended `x` and unchanged `y`.
+
+**3. Examples:**
+
+- **Voltage-controlled current source:**
+  ```
+  Btest2 2 0 I = pwl(v(ctrl), 'x0', 'y0', 'x1', 'y1', 'x2', 'y2', 'x3', 'y3')
+  ```
+
+- **Voltage-controlled current source with limits:**
+  ```
+  Btest3 3 0 I = (v(ctrl) < 'x0') ? 'y0' : (v(ctrl) < 'x3')
+                  ? pwl(v(ctrl), 'x0', 'y0', 'x1', 'y1', 'x2', 'y2', 'x3', 'y3') : 'y3'
+  ```
+
+- **Efficient table-like behavior with limits (voltage-controlled):**
+  ```
+  Btest4 4 0 I = pwl(v(ctrl), 'xx0', 'y0', 'x0', 'y0', 'x1', 'y1', 'x2', 'y2', 'x3', 'y3', 'xx3', 'y3')
+  ```
+
+- **Efficient table-like behavior with limits (current-controlled):**
+  ```
+  Btest5 5 0 I = pwl(-2*i(Vin), 'xx0', 'y0', 'x0', 'y0', 'x1', 'y1', 'x2', 'y2', 'x3', 'y3', 'xx3', 'y3')
+  ```
+
+- **Behavioral resistor with `pwl` and limits for transient simulation:**
+  ```
+  RR1 3 0 R = pwl(time, 0, 1, 7m, 1, 8m, 1.19, 14m, 1.19, 15m, 1)  
+  RR2 3 0 R = pwl(time, 0, 1, 7m, 1, 8m, 1.19, 14m, 1.19, 15m, 1, 15.1m, 1)
+  ```
+
+**4. Notes on Usage:**
+- The function can emulate a `TABLE` behavior with the appropriate syntax.
+- Care must be taken when modeling components like behavioral resistors to avoid simulation errors (e.g., unbounded resistance or current).
+
+**5. Commands from Examples:**
+- `.param` statements to define variables for `pwl`:
+  ```
+  .param x0=-4 y0=0
+  .param x1=-2 y1=2
+  .param x2=2 y2=-2
+  .param x3=4 y3=1
+  .param xx0=x0-1
+  .param xx3=x3+1
+  ```
+
+- Example simulation control script:
+  ```
+  .control
+  dc Vin -6 6 0.2
+  plot v(2) v(3) v(4)-0.5 v(5)+0.5
+  .endc
+  ```
+
+**6. Observations and Recommendations:**
+- Extending the slope beyond limits is a default behavior but can be manually overridden.
+- Always test `pwl` behavior within your intended operating ranges and apply limits to avoid unphysical results, especially in behavioral components like resistors.
+

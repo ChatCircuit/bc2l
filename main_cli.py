@@ -2,9 +2,9 @@
 
 import argparse
 #from components import cook_llm_feed, img2nl
-import static_database
-import llm_model
-import database_query
+import database.static_database as static_database
+import llm.llm_model as llm_model
+import database.database_query as database_query
 
 def print_json(obj, indent=1):
     if isinstance(obj, dict):

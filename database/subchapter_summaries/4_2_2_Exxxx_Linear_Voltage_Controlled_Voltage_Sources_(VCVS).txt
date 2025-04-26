@@ -1,0 +1,17 @@
+**Ngspice Manual Summary: Linear Voltage-Controlled Voltage Sources (VCVS)**  
+
+**General Form:**  
+`EXXXXXXX N+ N- NC+ NC- VALUE`  
+
+**Description:**  
+- **N+**: Positive node of the controlled voltage source.  
+- **N-**: Negative node of the controlled voltage source.  
+- **NC+**: Positive controlling node.  
+- **NC-**: Negative controlling node.  
+- **VALUE**: Voltage gain parameter that defines the scale of control.  
+
+**Example:**  
+`E1 2 3 14 1 2.0`  
+- Here, node 2 is the positive terminal, node 3 is the negative terminal, node 14 is the positive controlling node, node 1 is the negative controlling node, and the gain is set to 2.0.  
+
+**Additional Info:** Instance parameters specific to the VCVS are detailed in Chapter 27.3.7.

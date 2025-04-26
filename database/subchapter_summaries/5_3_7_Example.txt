@@ -1,0 +1,56 @@
+Summary:
+
+- **Netlist Example for VCCS and VCVS with Non-linear Dependencies**
+
+1. **Parameter Definitions**:
+   - `.param Vi=1`
+   - `.param Offs='0.01*Vi'`
+
+2. **Voltage-Controlled Current Source (VCCS)**:
+   - **Definition 1**:  
+     ```
+     B21 int1 0 V = V(3)*V(3)
+     G1 21 22 int1 0 1
+     vm 22 0 dc 0
+     R21 21 0 1
+     ```
+   - **Definition 2 (with offset)**:  
+     ```
+     G51 55 225 cur = 'V(3)*V(3)-Offs'
+     vm5 225 0 dc 0
+     R51 55 0 1
+     ```
+
+3. **Voltage-Controlled Voltage Source (VCVS)**:
+   - **Definition 1**:  
+     ```
+     B31 int2 0 V = V(3)*V(3)
+     E1 1 0 int2 0 1
+     R1 1 0 1
+     ```
+   - **Definition 2 (with offset)**:  
+     ```
+     E41 4 0 vol = 'V(3)*V(3)-Offs'
+     R4 4 0 1
+     ```
+
+4. **Control Voltage**:
+   ```
+   V1 3 0 PWL(0 0 100u {Vi})
+   ```
+
+5. **Control Commands**:
+   ```
+   .control
+   unset askquit
+   tran 10n 100u uic
+   plot i(E1) i(E41)
+   plot i(vm) i(vm5)
+   .endc
+   ```
+
+6. **Key Characteristics**:
+   - The offset (`Offs`) is calculated as `0.01 * Vi`.
+   - Dependency expressions for VCCS and VCVS: `V(3)*V(3)` and `V(3)*V(3)-Offs`.
+
+Include these elements in netlist files for debugging, evaluating component behavior, or simulation analysis.

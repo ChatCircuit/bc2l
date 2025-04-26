@@ -1,0 +1,19 @@
+**Summary of Ngspice Manual (Section 2.6.1)**:
+
+**.SUBCKT Command**
+- **General Form:** `.SUBCKT subnam N1 <N2 N3 ...>`
+- **Purpose:** Defines a subcircuit, starting with `.SUBCKT` and ending with `.ENDS`.
+
+**Key Points for Netlist Code Use:**
+1. **subnam:** Name of the subcircuit (must be unique within the simulation).
+2. **External Nodes (N1, N2, ...):** Node numbers defining connections of the subcircuit to the external circuit. Nodes cannot be 0 (zero).
+3. **Subcircuit Definition:** Includes element lines, device models, subcircuit calls, and other nested subcircuit definitions. Control lines are **not allowed** within the subcircuit.
+4. **Local Scope:** 
+   - Any device models or nested subcircuit definitions inside the subcircuit are **local** – they are not accessible outside the subcircuit.
+   - Nodes not declared on the `.SUBCKT` line remain **local**, except for node 0 (ground), which is always global.
+5. **Using Parameters:** If parameters are used, the `.SUBCKT` line gets extended.
+
+**Examples:**
+- `.SUBCKT OPAMP 1 2 3 4`
+- This line shows the creation of a subcircuit named `OPAMP` connected via external nodes 1, 2, 3, and 4.
+

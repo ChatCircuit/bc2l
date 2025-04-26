@@ -1,0 +1,17 @@
+- **Ngspice OpenVAF/OSDI Diode Models**  
+  Ngspice integrates the OSDI interface with the OpenVAF compiler, enabling the use of Verilog-A compact diode models. Two diode models supported are:
+
+  - **JUNCAP2**  
+    - Developed by Philips Research.  
+    - Widely used in integrated circuit design.  
+    - Works with MOS models like PSP and as an alternative diode model for source/drain junctions in BSIM4 models.  
+
+  - **DIODE_CMC**  
+    Enhancements over JUNCAP2:  
+    - Series resistance.  
+    - Diffusion capacitance with soft recovery.  
+    - Breakdown voltage temperature coefficient.  
+    - Noise modeling.  
+    - Min-max parameters for generating warnings.  
+
+Refer to Chapter 9 of the manual for details on the OpenVAF/OSDI interface.

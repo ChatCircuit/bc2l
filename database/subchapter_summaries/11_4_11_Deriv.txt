@@ -1,0 +1,20 @@
+.MEASURE DERIV command allows calculating the derivative (first-order rate of change) of a specified output variable (`out_variable`) at a specific condition in simulation results.
+
+General Syntax:
+1. **Basic form**:
+   `.MEASURE {DC|AC|TRAN|SP} result DERIV<ATIVE> out_variable + AT=val`
+   - Computes the derivative of `out_variable` at a specific point in time (or other independent variable) given by `AT=val`.
+
+2. **Condition-based forms**:
+   a. `.MEASURE {DC|AC|TRAN|SP} result DERIV<ATIVE> out_variable + WHEN out_variable2=val <TD=td> + <CROSS=# | CROSS=LAST> <RISE=#|RISE=LAST> <FALL=#|FALL=LAST>`
+   - Calculates the derivative of `out_variable` when `out_variable2` equals `val`.
+   - Optional parameters:
+     - `TD=td`: Time delay offset.
+     - `CROSS=#`: Specify which crossing event to measure (e.g., `CROSS=2` for second crossing).
+     - `CROSS=LAST`: Considers the last crossing event.
+     - `RISE=#` or `FALL=#`: Measures on a specific rising or falling edge.
+
+   b. `.MEASURE {DC|AC|TRAN|SP} result DERIV<ATIVE> out_variable + WHEN out_variable2=out_variable3 + <TD=td> <CROSS=# | CROSS=LAST> + <RISE=#|RISE=LAST> <FALL=#|FALL=LAST>`
+   - Computes derivative of `out_variable` when `out_variable2` equals `out_variable3`.
+   - Same optional parameters (`TD`, `CROSS`, `RISE`, and `FALL`) apply.
+

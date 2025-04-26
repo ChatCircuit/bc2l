@@ -1,0 +1,16 @@
+**Ngspice Manual Summary: Linear Current-Controlled Current Sources (CCCS)**  
+
+**General Form**:  
+`FXXXXXXX N+ N- VNAM VALUE <m=val>`  
+
+**Details**:  
+- `N+`, `N-`: Positive and negative nodes of the current source. Current flows from `N+` through the source to `N-`.  
+- `VNAM`: Name of the voltage source controlling the current. The controlling current flows from the positive node, through the voltage source, to the negative node of `VNAM`.  
+- `VALUE`: Current gain of the CCCS.  
+- `m`: Optional multiplier for the output current (default is `1`).  
+
+**Examples**:  
+`F1 13 5 VSENS 5 m=2`  
+
+Explanation:  
+- Defines a CCCS from node `13` to node `5`, controlled by the current through the voltage source `VSENS`, with a current gain of `5` and an additional multiplier `m=2`.  

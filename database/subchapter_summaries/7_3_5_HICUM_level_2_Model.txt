@@ -1,0 +1,46 @@
+**HICUM Level 2 Model Summary for Ngspice:**
+
+1. **Model Overview:**
+   - **Model:** Physics-based HIgh-CUrrent Model (HICUM) Level 2 (L2)
+   - **Purpose:** Standard compact model for bipolar junction transistors (BJTs) and heterojunction bipolar transistors (HBTs)
+   - **Supported Technologies:** SiGe HBTs, InP HBTs
+   - **Supported Effects:**
+     - Substrate transistor
+     - Avalanche effects
+     - Physics-based transfer current model
+     - Self-heating
+     - Accurate temperature dependence
+     - Excess phase between base and collector current
+   - **Not Implemented:** Noise correlation network
+   - **Ngspice Version:** HICUML2/2.4
+   - **Activation:** `level=8` in `.model` statement
+
+2. **Node Connections:**
+   - Exposed model nodes: `C` (Collector), `B` (Base), `E` (Emitter), `S` (Substrate), `T` (Temperature)
+   - User modifications:
+     - Thermal and substrate network customization via `T` and `S` node connections
+   - Note: Extreme operating regions may cause convergence issues (self-heating, avalanche effect).
+
+3. **HICUM/L2 Initiation Syntax:**
+   ```
+   .model mod1 npn Level=8
+   Qx collector base emitter substrate model area=value
+   ```
+   Example:
+   ```
+   vc c 0 0
+   vb b 0 1
+   ve e 0 0
+   vs s 0 0
+   Q1 c b e s dt mod1 area=1
+   .model mod1 npn Level=8
+   ```
+
+4. **Self-heating Parameters:**
+   - **Model Parameter:** `FLSH`
+     - `FLSH=1`: Main thermal contributions of IC and IB
+     - `FLSH=2`: Includes all transistor power dissipations
+   - **Thermal Resistance Parameter:** `RTH`
+   - Note: Self-heating requires `T` node connection in the circuit.
+
+This brief includes essential commands, syntax, parameters, and features for utilizing the HICUM/L2 model in Ngspice netlist files while avoiding unnecessary details.

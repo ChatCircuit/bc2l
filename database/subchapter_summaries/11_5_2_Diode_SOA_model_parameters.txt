@@ -1,0 +1,30 @@
+**Summary: Diode SOA (Safe Operating Area) Model Parameters in Ngspice**
+
+1. **SOA Parameters and Warnings:**
+   - `Bv_max`: Issues an SOA warning if |Vj| exceeds this value.
+   - `Fv_max`: Issues an SOA warning if |Vf| exceeds this value.
+   - `Id_max`: Issues an SOA warning if |Id| exceeds this value.
+   - `Pd_max`: Issues an SOA warning if power dissipation exceeds this value.
+   - `Te_max`: Issues an SOA warning if temperature exceeds this value.
+
+2. **Thermal Parameters:**
+   - `rth0`: Thermal resistance between junction and ambient.
+   - `tnom`: Nominal temperature at which all parameters are measured.
+
+3. **SOA Modes and Power Derating:**
+   - **Self-heating ON:** 
+     - Requires `Te_max`, `tnom`, and `rth0` for operation.
+     - Power dissipation is adjusted based on current temperature (`temp_curr`):
+       ```
+       Pd_max = Pd_max_mod - (temp_curr - tnom) / rth0
+       ```
+   - **Self-heating OFF:** 
+     - Requires `rth0` and `tnom` for operation.
+     - A static power derating is calculated using:
+       ```
+       Pd_max = Pd_max_mod - (temp - tnom) / rth0
+       ```
+       - `temp` is the device temperature, default 27°C, or provided by `.temp` global parameter or instance-specific parameter `temp`.
+   - **Fallback:** 
+     - If either `rth0` or `tnom` is not defined, no derating is calculated, and power dissipation is capped at `Pd_max`.
+

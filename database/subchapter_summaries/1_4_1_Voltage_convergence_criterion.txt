@@ -1,0 +1,17 @@
+**Summary:**
+
+**Voltage Convergence Criterion:**
+1. Convergence occurs when the voltage difference between the last iteration (k) and the current iteration (k+1) satisfies:
+   - |vn(k+1) - vn(k)| ≤ RELTOL * vmax + VNTOL  
+     where:
+     - **vmax** = max(|vn(k+1)|, |vn(k)|).
+
+2. Parameters:
+   - **RELTOL (relative tolerance) Default value: 1e-3**  
+     Specifies how small the relative solution update must be for convergence based on the node voltage.
+   - **VNTOL (absolute tolerance) Default value: 1μV**  
+     Handles near-zero node voltages that RELTOL cannot effectively address due to computational round-off limits.
+
+**Key Characteristics:**
+- **RELTOL** ensures proportional tolerance relative to node voltage values.
+- **VNTOL** provides an absolute threshold for convergence irrespective of relative tolerance, critical for nodes with near-zero voltages.

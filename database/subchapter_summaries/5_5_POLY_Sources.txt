@@ -1,0 +1,1 @@
+5.5 POLY Sources: Polynomial sources are available only when the XSPICE option is enabled.

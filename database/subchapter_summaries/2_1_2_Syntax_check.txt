@@ -1,0 +1,15 @@
+2.1.2 Syntax Check  
+- Preliminary syntax checks are implemented in the input parser.
+
+2.1.2.1 Valid UTF-8 Characters  
+- The input file is scanned for valid UTF-8 characters. If invalid characters are present, input reading stops.
+
+2.1.2.2 Special Characters Leading a Line  
+- If the first character in a netlist or `.control` line is one of `=[]?()&%$§\"!:`, it is replaced by `*`, and a warning is issued.  
+- The command `set strict_errorhandling` will force ngspice to exit when such special characters are detected.
+
+2.1.2.3 Dot Command Couple Completion  
+- Ensures the proper pairing of the following constructs:  
+  - `.control ... .endc`  
+  - `.subckt ... .ends`  
+  - `.if ... .endif`

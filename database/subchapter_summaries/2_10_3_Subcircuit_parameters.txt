@@ -1,0 +1,52 @@
+**Summary:**
+
+**Subcircuit Definition and Parameters:**  
+- **General Form:**  
+  `.subckt <identn> node node ... <ident>=<value> <ident>=<value> ...`  
+  - `<identn>`: Subcircuit name defined by the user.  
+  - `node node ...`: External nodes, represented as integers or identifiers.  
+  - `<ident>=<value>`: Formal parameters with optional default values (SPICE number or brace expression).  
+  - Default values of parameters can be used like identifiers defined on a `.param` line within the `.subckt ... .ends` context.  
+
+**Subcircuit Invocation:**  
+- **General Form:**  
+  `X<name> node node ... <identn> <ident>=<value> <ident>=<value> ...`  
+  - `<name>`: Symbolic instance name of the subcircuit.  
+  - `<identn>`: Previously defined subcircuit name.  
+  - `node node ...`: Actual nodes for the subcircuit connection.  
+  - `<ident>=<value>`: Parameters for the subcircuit instance, where `<value>` can be a SPICE number or a brace expression `{<expr>}`.  
+
+**Subcircuit Example with Parameters:**  
+```plaintext
+* Param-example
+.param amplitude= 1V
+
+.subckt myfilter in out rval=100k cval=100nF
+Ra in p1   {2*rval}
+Rb p1 out  {2*rval}
+C1 p1 0    {2*cval}
+Ca in p2   {cval}
+Cb p2 out  {cval}
+R1 p2 0    {rval}
+.ends myfilter
+
+X1 input output myfilter rval=1k cval=1n
+V1 input 0 AC {amplitude}
+.end
+```  
+
+Key Notes from Example:  
+- **Default parameters in subcircuit definition (`.subckt`):**  
+  Example: `rval=100k`, `cval=100nF`.
+- **Usage of parameter expressions within subcircuits:**  
+  Example: `{2*rval}`, `{cval}`.
+- **Invocation of subcircuit (`X1`) with overridden values for formal parameters (`rval`, `cval`).**  
+  Example: `X1 input output myfilter rval=1k cval=1n`.
+- **Definition of global parameters using `.param`:**  
+  Example: `.param amplitude=1V`.
+
+**Useful Insights:**  
+- Subcircuits allow repetitive and parameterized circuit block definitions.  
+- Parameters defined within subcircuits can be mathematical expressions using default or overridden values.  
+- Subcircuit connections require mapped node identifiers during invocation.  
+- Parameters in subcircuits can override defaults during instantiation.

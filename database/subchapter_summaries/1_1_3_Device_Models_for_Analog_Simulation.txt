@@ -1,0 +1,37 @@
+**Summary of Device Models for Analog Simulation (Ngspice Manual)**
+
+1. **Bipolar Junction Transistor (BJT) Models**:
+   - **Basic Model (BJT)**: Based on the integral-charge model of Gummel and Poon; defaults to the simpler Ebers-Moll model if parameters are unspecified. Includes charge storage effects, ohmic resistances, and current-dependent output conductance.
+   - **Enhanced Models**:
+     - **BJT2**: Adds DC current computation for substrate diode.
+     - **VBIC**: Advanced features for modern bipolar devices.
+
+2. **Semiconductor Diode Models**:
+   - Supports junction diodes and Schottky barrier diodes.
+
+3. **JFET Models**:
+   - **JFET (Shichman-Hodges Model)**.
+   - **JFET2 (Parker-Skellern Model)**.
+
+4. **MOSFET Models**:
+   - **Original Six Models**:
+     - **MOS1**: Square-law I-V characteristic.
+     - **MOS2**: Analytical model.
+     - **MOS3**: Semi-empirical model.
+     - **MOS6**: Simplified analytic model for short-channel accuracy.
+     - **MOS9**: Modified Level 3 model (distinct from Philips Level 9).
+     - **BSIM1/BSIM2**: Early Berkeley Short-Channel IGFET Models.
+   - **Features of MOS2, MOS3, BSIM**: Support second-order effects such as channel-length modulation, subthreshold conduction, small-size effects, scattering-limited velocity saturation, and charge-controlled capacitance.
+   - **Recent Models**:
+     - **BSIM3/BSIM4**: Developed for submicron devices.
+     - **SOI Models**: Silicon-on-insulator modeled via BSIMSOI family and STAG models.
+
+5. **HFET Models**:
+   - Partial support for HFET and MESA device modeling.
+
+6. **Verilog-A Models**:
+   - Available through OpenVAF/OSDI interface.
+
+**Important Notes for Netlist Coding/Debugging**:
+- When using any transistor models (e.g., BJT, MOSFET), ensure model-specific parameters are properly defined, as default behavior will simplify to basic versions.
+- For MOSFET netlists, second-order effects in MOS2 and MOS3 can play a crucial role in accurate simulations for short-channel and subthreshold operations.

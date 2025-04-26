@@ -1,0 +1,113 @@
+**Summary of the 4-Bit Binary Adder (Bipolar) from Ngspice Manual**
+
+This section describes a 4-bit binary adder built using subcircuits to represent logical components like NAND gates and hierarchical levels, progressing from one-bit to four-bit addition. The circuit utilizes bipolar junction transistors. 
+
+**Key Details:**
+
+1. **NAND Gate Subcircuit (`NAND`):**
+   - Description: Implements a NAND gate.
+   - Node Definition: Input (2 nodes), Output (1 node), VCC (1 node).
+   - Template:
+     ```
+     .SUBCKT NAND 1 2 3 4
+     * NODES: INPUT(2), OUTPUT, VCC
+     Q1 9 5 1 QMOD
+     D1CLAMP 0 1 DMOD
+     Q2 9 5 2 QMOD
+     D2CLAMP 0 2 DMOD
+     RB 4 5 4K
+     R1 4 6 1.6K
+     Q3 6 9 8 QMOD
+     R2 8 0 1K
+     RC 4 7 130
+     Q4 7 6 10 QMOD
+     DVBEDROP 10 3 DMOD
+     Q5 3 8 0 QMOD
+     .ENDS NAND
+     ```
+
+2. **1-Bit Adder Subcircuit (`ONEBIT`):**
+   - Description: Implements a 1-bit full adder using NAND gates.
+   - Node Definition: Input (2 nodes), Carry-In (1 node), Output (1 node), Carry-Out (1 node), VCC (1 node).
+   - Template:
+     ```
+     .SUBCKT ONEBIT 1 2 3 4 5 6
+     * NODES: INPUT(2), CARRY-IN, OUTPUT, CARRY-OUT, VCC
+     X1 1 2 7 6 NAND
+     X2 1 7 8 6 NAND
+     X3 2 7 9 6 NAND
+     X4 8 9 10 6 NAND
+     X5 3 10 11 6 NAND
+     X6 3 11 12 6 NAND
+     X7 10 11 13 6 NAND
+     X8 12 13 4 6 NAND
+     X9 11 7 5 6 NAND
+     .ENDS ONEBIT
+     ```
+
+3. **2-Bit Adder Subcircuit (`TWOBIT`):**
+   - Description: Connects two 1-bit adders (`ONEBIT`) to create a 2-bit adder.
+   - Node Definition: Input-BIT0(2 nodes), BIT1(2 nodes), Carry-In (1 node), Output-BIT0, BIT1 (1 node each), Carry-Out (1 node), VCC (1 node).
+   - Template:
+     ```
+     .SUBCKT TWOBIT 1 2 3 4 5 6 7 8 9
+     * NODES: INPUT - BIT0(2) / BIT1(2), OUTPUT - BIT0 / BIT1,
+     * CARRY-IN, CARRY-OUT, VCC
+     X1 1 2 7 5 10 9 ONEBIT
+     X2 3 4 10 6 8 9 ONEBIT
+     .ENDS TWOBIT
+     ```
+
+4. **4-Bit Adder Subcircuit (`FOURBIT`):**
+   - Description: Combines two `TWOBIT` adders to create a 4-bit full adder.
+   - Node Definition: Input-BIT0 to BIT3 (each 2 nodes), Output-BIT0 to BIT3 (1 node each), Carry-In (1 node), Carry-Out (1 node), VCC (1 node).
+   - Template:
+     ```
+     .SUBCKT FOURBIT 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+     * NODES: INPUT - BIT0(2) / BIT1(2) / BIT2(2) / BIT3(2),
+     * OUTPUT - BIT0 / BIT1 / BIT2 / BIT3, CARRY-IN, CARRY-OUT, VCC
+     X1 1 2 3 4 9 10 13 16 15 TWOBIT
+     X2 5 6 7 8 11 12 16 14 15 TWOBIT
+     .ENDS FOURBIT
+     ```
+
+5. **Models and Definitions:**
+   - Transistor Model:
+     ```
+     .MODEL QMOD NPN(BF=75 RB=100 CJE=1PF CJC=3PF)
+     ```
+   - Diode Model: 
+     ```
+     .MODEL DMOD D
+     ```
+
+6. **Nominal Input Circuit:**
+   - Supplies: VCC = 5V DC.
+   - Input Pulses:
+     - VIN1A: `PULSE(0 3 0 10NS 10NS 10NS 50NS)`
+     - VIN1B to VIN4B: Similar form with increasing period/delay values.
+   - Template:
+     ```
+     VCC 99 0 DC 5V
+     VIN1A 1 0 PULSE(0 3 0 10NS 10NS 10NS 50NS)
+     ...
+     VIN4B 8 0 PULSE(0 3 0 10NS 10NS 1280NS 6400NS)
+     ```
+
+7. **Load Resistances:**
+   ```
+   RBIT0 9 0 1K
+   RBIT1 10 0 1K
+   RBIT2 11 0 1K
+   RBIT3 12 0 1K
+   RCOUT 13 0 1K
+   ```
+
+8. **Simulation Command:**
+   Simulation performed with transient analysis.
+   ```
+   .TRAN 1NS 6400NS
+   ```
+
+**Example Code Notes:**
+All subcircuits and defined components are uniquely detailed.

@@ -1,0 +1,7 @@
+.temp is used to set the circuit temperature in degrees Celsius. It overrides the circuit temperature defined in the `.option` line.
+
+**General Syntax:**  
+.temp value  
+
+**Example:**  
+.temp 27

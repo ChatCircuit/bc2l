@@ -1,0 +1,12 @@
+Comments in Ngspice:
+
+- **Syntax**: 
+  `* <any comment>`
+
+- **Characteristics**:
+  - Lines starting with an asterisk `*` in the first column are treated as comments.
+  - Comment lines can be placed anywhere within the circuit description file.
+
+- **Examples**:
+  - `* RF=1K Gain should be 100`
+  - `* Check open-loop gain and phase margin`

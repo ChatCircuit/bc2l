@@ -1,0 +1,50 @@
+### Resistors in Ngspice
+
+#### General Form:
+`RXXXXXXX n+ n- <resistance|r=>value <ac=val> <m=val> <scale=val> <temp=val> <dtemp=val> <tc1=val> <tc2=val> <noisy=0|1>`
+
+- **`n+` and `n-`:** Two element nodes.
+- **`value`:** Resistance (in ohms), can be positive or negative (*not zero; avoid negative resistances due to convergence issues*).
+- **Optional Parameters:**
+  - **`ac`:** AC resistance for AC analysis only (default is `value` if not specified).
+  - **`m`:** Multiplier for scaling resistance.
+  - **`scale`:** Scale factor for the nominal resistance.
+  - **`temp`/`dtemp`:** Explicit temperature or temperature offset.
+  - **`tc1`/`tc2`:** Temperature coefficients (quadratic dependency).
+  - **`noisy`:** `0` to suppress noise generation.
+
+#### Resistance Value Constraints:
+- If resistance is very small (≤ 0.001 Ohm), use **CCVS (transresistance)** for better numerical accuracy.
+- AC resistance (`ac`) must not be zero.
+
+#### Temperature Dependence:
+Resistance can have temperature-dependent behavior:
+1. **Instance Parameters:** `tc1` and `tc2` (overrides model values if provided per resistor instance).
+2. **Model Line:**
+   - Example: `.MODEL newres R tc1=0.001`
+3. **Exponential Temperature Dependence:**
+   - If `tce` is provided:
+     `R(T) = R(T₀) [1 + TCE * (T - T₀)]`
+   - Choose between quadratic (`tc1`, `tc2`) or exponential (`tce`) model based on availability.
+
+#### Noise Characteristics:
+1. **Thermal Noise:** Always present, depends on absolute temperature.
+2. **Flicker Noise (e.g., for carbon resistors):** Add using `.MODEL` card with flicker noise parameters.
+3. **Noise Suppression:** Use `noisy=0` to suppress all noise sources (thermal and flicker).
+
+#### Examples:
+1. **Basic Resistor:**
+   `R1 1 2 100`
+2. **AC Resistance:**
+   `R2 5 7 1K ac=2K`
+3. **Temperature Dependent Resistor:**
+   - `RE1 1 2 800 newres dtemp=5`
+   - Model: `.MODEL newres R tc1=0.001`
+4. **Noise-Free Resistor:**
+   `Rmd 134 57 1.5k noisy=0`
+
+#### Notes:
+- **Small Resistors Simulation:** Use large conductance for efficiency.
+- **Temperature Effects:** Relevant for thermal noise, even if resistance doesn’t change with temperature.
+
+This section emphasizes resistor modeling, temperature dependency, noise suppression, and handling small resistance values for accurate simulations.

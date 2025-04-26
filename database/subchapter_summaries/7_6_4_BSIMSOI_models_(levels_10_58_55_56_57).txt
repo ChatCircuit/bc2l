@@ -1,0 +1,11 @@
+BSIMSOI Models in Ngspice:  
+- **Purpose**: BSIMSOI is a compact SPICE model for Silicon-On-Insulator (SOI) circuit design, derived from the BSIM3 framework.
+- **Levels Supported in Ngspice**:  
+  - **Level 55**: Fully Depleted (FD).  
+  - **Level 57**: Partially Depleted (PD).  
+  - **Level 56**: Both FD and PD (Dual Depletion, DD).  
+  - **Levels 10, 58**: Modern BSIMSOIv4 models (Version 4.4).  
+- **Characteristics**:  
+  - Based on BSIM3 equations, retaining physical realism and smoothness of BSIM3v3.  
+  - Supports OpenMP for multi-threading in Levels 10 and 58 (BSIMSOIv4).  
+- **Further Reference**: BSIMSOIv4.4 User Manual for details on the recent model version.

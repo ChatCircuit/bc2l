@@ -1,0 +1,32 @@
+### Summary:
+
+**Logic Gate E-Source (AND/OR/NAND/NOR):**
+- Implements basic logic gates (AND, OR, NAND, NOR) with analog inputs and output using the `multi_input_pwl` XSPICE model.
+- **XSPICE Option Requirement:** Must be enabled in Ngspice.
+
+**Syntax:**
+``` 
+E<name> <output+> <output-> <logic_function>(<number_of_pwl_points>) <input1+> <input1-> ... <inputN+> <inputN-> (<PWL_point1>, <PWL_point2>)
+```
+
+**Key Characteristics:**
+- Outputs a **differential voltage** based on input conditions and specified PWL points.
+- Supported Functions:
+  - `"and(N)"`: Selects the smallest of input voltages. Output is zero if input < `PWL_point1` and full voltage (e.g., 3.3) for input > `PWL_point2` with a linear ramp in between.
+  - `"or(N)"`: Selects the maximum of input voltages.
+  - `"nand(N)/nor(N)"`: Reverse the order of PWL points compared to "and/or".
+
+**Example Syntax for AND Gate:**
+``` 
+EAND out1 out0 and(2) in1 0 in2 0 (0.5, 0) (2.8, 3.3)
+```
+- **Explanation:**
+  - `and(2)`: Logic function AND with 2 PWL points.
+  - PWL Points:
+    - Output = 0 if minimum input voltage < 0.5.
+    - Output = 3.3 if minimum input voltage > 2.8.
+    - Linear ramp between these two points.
+
+**Additional Notes:**
+- Supports a maximum of two PWL points.
+- Example circuit available: `examples/digital/compare/adder_esource.cir`.

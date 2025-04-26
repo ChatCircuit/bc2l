@@ -1,0 +1,29 @@
+### Summary for Single-Frequency FM (SFFM)
+
+**Syntax**:  
+`SFFM(VO VA FM MDI FC TD PHASEM PHASEC)`
+
+**Example Code**:  
+`V1 12 0 SFFM(0 2 20 45 1k 1m 0 0)`
+
+**Parameter Table**:
+- **VO (Offset)**: No default; units: V, A (required).  
+- **VA (Amplitude)**: No default; units: V, A (required).  
+- **FM (Modulating frequency)**: Default = `5/TSTOP`; units: Hz.  
+- **MDI (Modulation index)**: Default = `90`; no units; limited to `0 <= MDI <= FC/FM`.  
+- **FC (Carrier frequency)**: Default = `500/TSTOP`; units: Hz.  
+- **TD (Signal delay)**: Default = `0.0`; units: seconds.  
+- **PHASEM (Modulation signal phase)**: Default = `0.0`; units: degrees.  
+- **PHASEC (Carrier signal phase)**: Default = `0.0`; units: degrees.
+
+**Waveform Equation**:  
+For `t > TD`:
+```
+V(t) = VO + VA ⋅ sin(2π ⋅ FC ⋅ (t - TD) + MDI ⋅ sin(2π ⋅ FM ⋅ (t - TD) + PHASEM) + PHASEC)
+```
+For `t ≤ TD`:  
+`V(t) = 0`.
+
+**Important Notes**:
+- **VO** and **VA** are mandatory parameters.
+- **MDI** has an upper limit defined as `FC/FM`.

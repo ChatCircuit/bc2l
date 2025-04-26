@@ -1,0 +1,8 @@
+Convergence failure in ngspice occurs when the program is unable to converge to a solution. This can terminate the simulation process. Common causes include errors in circuit connections, element values, or model parameters.
+
+- **DC Analysis Convergence Issues**:
+  - Circuits with regenerative switching or positive feedback are prone to non-convergence.
+  - To address this, use the **`OFF`** option for certain devices within the feedback path.
+  - Alternatively, use the **`.nodeset`** control line to guide the circuit into the desired state. 
+
+For debugging or netlist refinement, ensure proper specification of circuit components, connections, and parameters to avoid convergence failures.

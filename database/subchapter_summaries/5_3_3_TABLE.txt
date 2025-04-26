@@ -1,0 +1,33 @@
+**Summary of Ngspice Manual Section 5.3.3: TABLE**
+
+- **Purpose:** Defines components with a current output controlled by a tabulated listing based on voltage.
+
+- **Syntax for Table Data Entry:** 
+  ```
+  Gxxx n1 n2 TABLE {expression} =
+  + (x0, y0) (x1, y1) (x2, y2) <m=val>
+  ```
+  - `Gxxx`: Identifier for the device.
+  - `n1, n2`: Connected nodes.
+  - `TABLE {expression}`: Specifies the controlling voltage expression.
+  - `(x0, y0), (x1, y1), (x2, y2)`: Value pairs defining the table (input-output relationship).
+  - `<m=val>`: Optional multiplier for output current.
+  
+- **Characteristics:**
+  - `m` is optional; it can be a numerical value or an expression using other parameters (but not node voltages or branch currents). It is evaluated before simulation.
+  - An '=' can optionally follow the `TABLE` keyword.
+
+- **Example Code:**
+  ```
+  GCMP 0 11 TABLE {V(10,9)} = (-5MV, 0V) (5MV, 5V)
+  R 11 0 1k
+  ```
+  Explanation:
+  - `GCMP`: Current-source element with identifier.
+  - `V(10,9)`: Voltage control taken from nodes 10 and 9.
+  - Table mapping: `(-5MV, 0V)` and `(5MV, 5V)` define the input-output voltage characteristics.
+  - Resistor `R 11 0 1k` is added at node 11 for terminal load.
+
+- **Additional Notes:**
+  - `m=val` usage adheres to section **2.10.5**, ensuring compatibility with parameter references only.
+  

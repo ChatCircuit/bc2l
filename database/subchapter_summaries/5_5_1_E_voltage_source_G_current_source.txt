@@ -1,0 +1,32 @@
+- **Components/Commands**: E Voltage Source, G Current Source (focus on "E" component).  
+   
+- **General Syntax**:  
+  ```  
+  EXXXX N+ N- POLY(ND) NC1+ NC1- (NC2+ NC2-...) P0 (P1...)
+  ```  
+  - **N+ N-**: Output nodes; Positive current flows from N+ to N-.  
+  - **POLY(ND)**: Defines the number of polynomial dimensions. Number of controlling node pairs must equal **ND**.  
+  - **NC1+ NC1-**: Controlling node pairs. Multiple instances of the same node are allowed. Output and controlling nodes can overlap.  
+
+- **Key Functionality**:
+  - Produces a voltage output based on controlling node voltages and polynomial coefficients.  
+  - Example Equation for Polynomial Dimensions:  
+    ```
+    POLY(1): y = p0 + p1*X1 + p2*X1*X1 + p3*X1*X1*X1 + ...
+    POLY(2): y = p0 + p1*X1 + p2*X2 + p3*X1*X1 + p4*X2*X1 + ...
+    POLY(3): y = p0 + p1*X1 + p2*X2 + p3*X3 + ...
+    ```  
+    Here, X1, X2, and X3 are voltage differences of corresponding controlling node pairs.  
+
+- **Example**:  
+  ```
+  ENONLIN 100 101 POLY(2) 3 0 4 0 0.0 13.6 0.2 0.005
+  ```  
+  - This defines a 2D polynomial based on controlling voltages **v(3,0)** and **v(4,0)**.  
+  - Four polynomial coefficients make the equation:  
+    `y = 0 + 13.6*v(3) + 0.2*v(4) + 0.005*(v(3)^2)`.  
+
+- **Theoretical Characteristics**:  
+  - Outputs depend on both linear and higher-order terms of controlling voltages.  
+  - Useful for implementing voltage sources with complex dependency on multiple controlling nodes.  
+

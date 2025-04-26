@@ -1,0 +1,14 @@
+Ngspice Nonlinear Sources (Section 2.15.2):
+
+1. Nonlinear sources allow expressions to define non-linear behaviors in simulations. These sources include B sources (Ch. 5), E and G sources, as well as R, C, and L devices, with continuous value updates during simulations.
+
+2. Expressions for these sources can include:
+   - Parameters (evaluated upon ngspice start-up).
+   - Numerical data.
+   - Predefined functions.
+   - Node voltages and branch currents from the simulation.
+
+3. Nonlinear sources can simulate new devices by customizing their behavior.
+
+4. **Limitations:** The expression syntax and predefined functions for these nonlinear sources may differ from those specified for parameters in Section 2.10.1.
+

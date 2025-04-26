@@ -1,0 +1,33 @@
+- **Behavioral Sources and Debugging Context**: B, E, G sources and behavioral R, C, L elements are powerful but challenging to debug when defining user models. Issues become complex with multiple equations or repeated behavioral functions like `log()`.
+
+- **Buggy Example Netlist**:
+  ```
+  V1 1 0 1
+  V2 2 0 -2
+  E41 4 0 vol = 'V(1)*log(V(2))'
+  .control
+  tran 1 1
+  .endc
+  .end
+  ```
+  - The above produces an error due to the invalid operation `log(-2)`:
+    `Error: -2 out of range for log`.
+
+- **Debugging with `ngdebug`**: 
+  - If the **`ngdebug`** variable is set (e.g., in `.spiceinit`), it provides enhanced error messages with detailed information on variable values and operations. 
+  - Resulting error breakdown:
+    ```
+    Error: -2 out of range for log
+    calling PTeval, tree =
+        (v0) * (log (v1))
+    d / d v0 : log (v1)
+    d / d v1 : (v0) * ((0.434294) / (v1))
+    values: var0 = 1
+            var1 = -2
+    ```
+  - This enables more precise debugging by revealing the parameter causing the issue.
+
+- **Effect of `strict_errorhandling`**: 
+  - If `strict_errorhandling` is enabled, Ngspice will immediately exit after the error.
+  - If not enabled, debugging processes like **gmin** and **source stepping** may start, although these often fail in cases like this.
+

@@ -1,0 +1,12 @@
+**Ngspice Command: .width**
+
+- **Purpose**: Specifies the maximum number of characters per row for printing or plotting when using columns or ASCII plots.
+
+- **Syntax**:  
+  `.width out = <value>`  
+
+- **Parameter**:  
+  `out`: Defines the maximum number of characters per row.  
+
+- **Example**:  
+  `.width out = 256` (sets the row width to 256 characters).

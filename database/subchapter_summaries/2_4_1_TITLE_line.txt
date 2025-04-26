@@ -1,0 +1,16 @@
+.TITLE Directive Summary:
+
+- **Purpose**: Specifies the title or heading for the simulation output. 
+- **Usage**: The title line must be the first line of the netlist file or explicitly specified using a `.TITLE` statement.
+- **Syntax**:  
+  `.TITLE <any title>`  
+
+- **Behavior**:  
+  - When `.TITLE` is used, it overrides the contents of the first line of the input deck and replaces it with the new title.  
+  - The title is printed verbatim as the heading in the output sections.  
+
+- **Examples**:
+  ```
+  .TITLE Test of CAM cell
+  ```
+  The above will replace the first line of the input deck with "Test of CAM cell" in both internal processing and simulation output.

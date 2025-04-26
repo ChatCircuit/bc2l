@@ -1,0 +1,79 @@
+**Ngspice `.MEASURE` command summary for debugging and netlist modifications:**
+
+The `.MEASURE` command is used to calculate specific results from simulations (DC, AC, TRAN, or SP) based on conditions like signal crossings, value equivalences, time delays, and slopes.
+
+---
+
+**General Forms and Key Templates:**
+1. **Measure a condition at a crossing or matching value:**
+   ```
+   .MEASURE {DC|AC|TRAN|SP} result WHEN out_variable=val
+   + <TD=td> <FROM=val> <TO=val> <CROSS=# | CROSS=LAST>
+   + <RISE=# | RISE=LAST> <FALL=# | FALL=LAST>
+   ```
+   - Example:
+     ```
+     .measure tran teval WHEN v(2)=0.7 CROSS=LAST
+     ```
+     Measures the time when `v(2)` crosses 0.7V for the last time.
+
+2. **Measure when two signals are equal:**
+   ```
+   .MEASURE {DC|AC|TRAN|SP} result WHEN out_variable=out_variable2
+   + <TD=td> <FROM=val> <TO=val> <CROSS=# | CROSS=LAST>
+   + <RISE=# | RISE=LAST> <FALL=# | FALL=LAST>
+   ```
+   - Example:
+     ```
+     .measure tran teval WHEN v(2)=v(1) RISE=LAST
+     ```
+     Measures the time when `v(2)` equals `v(1)` while `v(2)` rises for the last time.
+
+3. **Measure a dependent variable when another meets a condition:**
+   ```
+   .MEASURE {DC|AC|TRAN|SP} result FIND out_variable
+   + WHEN out_variable2=val <TD=td> <FROM=val> <TO=val>
+   + <CROSS=# | CROSS=LAST> <RISE=# | RISE=LAST>
+   + <FALL=# | FALL=LAST>
+   ```
+   - Example:
+     ```
+     .measure tran yeval FIND v(2) WHEN v(1)=-0.4 FALL=LAST
+     ```
+     Returns the value of `v(2)` when `v(1)` equals `-0.4`, with `v(1)` falling for the last time.
+
+4. **Measure a dependent variable when two signals equate:**
+   ```
+   .MEASURE {DC|AC|TRAN|SP} result FIND out_variable
+   + WHEN out_variable2=out_variable3
+   + <TD=td> <CROSS=# | CROSS=LAST>
+   + <RISE=# | RISE=LAST> <FALL=# | FALL=LAST>
+   ```
+   - Example:
+     ```
+     .measure tran yeval FIND v(2) WHEN v(1)=v(3) FALL=2
+     ```
+     Returns the value of `v(2)` when `v(1)` equals `v(3)`, with `v(1)` falling for the second time.
+
+5. **Measure a variable at a specific time point:**
+   ```
+   .MEASURE {DC|AC|TRAN|SP} result FIND out_variable AT=val
+   ```
+   - Example:
+     ```
+     .measure tran yeval FIND v(2) AT=2m
+     ```
+     Returns the value of `v(2)` at 2ms (`AT=time`).
+
+---
+
+**Key Options:**
+- `<TD=td>`: Start measuring after a time delay `td`.
+- `<FROM=val>` and `<TO=val>`: Restrict measurements to the range from `val` to `val`.
+- `<CROSS=# | CROSS=LAST>`: Specify the crossing point (nth crossing or last crossing).
+- `<RISE=# | RISE=LAST>` or `<FALL=# | FALL=LAST>`: Specify the nth or last rising/falling point of a signal.
+
+**Default Characteristics:**
+- If no `CROSS` or `RISE/FALL` keyword is specified, the first event is considered.
+- Measurements automatically consider all slopes unless restricted to rising or falling transitions.
+

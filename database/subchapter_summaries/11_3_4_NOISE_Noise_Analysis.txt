@@ -1,0 +1,40 @@
+**Summary of `.NOISE` Command for Noise Analysis**
+
+**General Form**:  
+```
+.noise v(output <,ref>) src (dec | lin | oct) pts fstart fstop <pts_per_summary>
+```
+
+**Key Parameters**:  
+- `v(output <,ref>)`: Specifies the output node for total output noise. Optional `ref` sets a reference node; default is ground if not specified.
+- `src`: The name of the independent source to which input noise is referred.
+- `(dec | lin | oct)`: Specifies the type of frequency sweep.
+- `pts`: Number of frequency points for the sweep.
+- `fstart` and `fstop`: Start and stop frequencies for the sweep.
+- `<pts_per_summary>` (optional): Outputs noise contributions of each generator every specified frequency points.
+
+**Purpose**: Noise analysis calculates:
+1. Noise Spectral Density at output or equivalent input.
+2. Total Integrated Noise over the frequency range.
+
+**Example Syntax**:  
+```
+.noise v(5) VIN dec 10 1kHz 100MEG
+.noise v(5,3) V1 oct 8 1.0 1.0e6 1
+```
+
+**Outputs and Plot Selection** (via `setplot` command):
+1. **Voltage/Current Noise Spectral Density (V/Hz or A/Hz)**  
+   - `onoise_spectrum`: Output noise spectrum (voltage/current per √Hz).  
+   - `inoise_spectrum`: Equivalent input noise (output noise divided by gain).
+
+2. **Total Integrated Noise (V or A)**  
+   - `onoise_total`: Total output noise over the frequency range.  
+   - `inoise_total`: Equivalent input noise over frequency range (output noise divided by gain).
+
+**Control Variable**:  
+- `set sqrnoise`: Outputs results in squared form (V²/Hz or A²/Hz) for power spectral density.
+- By default (`unset sqrnoise`): Outputs practical Voltage or Current Noise Spectral Density.
+
+**Important Notes**:  
+- KLU matrix solver is **not compatible** with noise simulation.

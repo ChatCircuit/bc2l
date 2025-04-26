@@ -1,0 +1,34 @@
+**Summary:**
+
+**Purpose of `.param Line**`: Assign numerical or string values to identifiers in netlists for use in expressions.
+
+**Syntax**:
+`.param <ident> = <expr> <ident> = <expr> ...`
+
+**Key Rules**:
+1. Identifiers must start with an alphabetic character; subsequent characters can include letters, digits, or special characters (`!`, `#`, `$`, `%`, `[`, `]`, `_`).
+2. Invalid identifier names: `time`, `temper`, and `hertz`. 
+3. Expressions defining a parameter should be enclosed in `{}` or single quotes `'`.
+4. Assignments are executed sequentially through the expanded circuit.
+5. Parameters inside subcircuits are copied per call as regular lines.
+6. Self-referential assignments are not allowed (e.g., `.param pip = 'pip+3'` will fail).
+
+**General Characteristics**:
+- Numerical assignments: `pippo=5`, `po=6 pp=7.8`, `pap={AGAUSS(pippo, 1, 1.67)}`.
+- String assignments: Limited operations (only concatenation at top-level).
+  Example: `.param str1="first" str2="second" both={str1}" and "{str2}`.
+
+**Special Notes**:
+- Braces `{}` or single quotes `'` are recommended for all expressions, especially when spaces are involved.
+- String values can only be used for concatenation and not within deeper expressions.
+
+**Examples**:
+- `.param pippo=5`: Simple numerical assignment.
+- `.param pap={AGAUSS(pippo, 1, 1.67)}`: Functional assignment with Gaussian distribution.
+- `.param p={pp}`: Parameter inheritance.
+- `.param pop='pp+p'`: Expression evaluation within quotes.
+- `.param c = a+123`: Works if braces or quotes are used correctly (e.g., `.param c = 'a + 123'`).
+
+**Default String Behavior**:
+- Concatenation (top-level only): `.param str1="first" str2="second" both={str1}" and "{str2`.
+

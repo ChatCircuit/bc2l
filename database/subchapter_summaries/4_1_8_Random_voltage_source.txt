@@ -1,0 +1,36 @@
+**Summary: Random Voltage Source (TRRANDOM)**
+
+**General Description:**  
+The `TRRANDOM` option generates statistically distributed random voltage values, which may be used for transient simulations or Monte-Carlo simulations. These values can control behavioral sources, capacitors, inductors, resistors, and other components to model statistical variations in device parameters.
+
+**Syntax:**  
+`TRRANDOM(TYPE TS <TD <PARAM1 <PARAM2>>> )`
+
+**Key Parameters:**  
+- **TYPE:** Determines the type of random distribution:  
+  - **1 (Uniform):** Values in range ±PARAM1 around Offset (PARAM2).  
+  - **2 (Gaussian):** Standard deviation (PARAM1) around Mean (PARAM2).  
+  - **3 (Exponential):** Mean value (PARAM1), Offset (PARAM2).  
+  - **4 (Poisson):** Lambda value (PARAM1), Offset (PARAM2).
+- **TS:** Duration for individual random voltage values.  
+- **TD (Optional):** Time delay before the random sequence starts; output stays at Offset or Mean value during delay.  
+- **PARAM1 and PARAM2:** Distribution-specific parameters (dependent on TYPE).
+
+**Default Values (Table):**  
+| **TYPE**      | **Description** | **PARAM1** | **Default (PARAM1)** | **PARAM2** | **Default (PARAM2)** |
+|---------------|-----------------|------------|----------------------|------------|----------------------|
+| **1 (Uniform)** | Range           | ±          | 1                   | Offset      | 0                   |
+| **2 (Gaussian)** | Std. Dev.       |            | 1                   | Mean        | 0                   |
+| **3 (Exponential)** | Mean          |            | 1                   | Offset      | 0                   |
+| **4 (Poisson)** | Lambda           |            | 1                   | Offset      | 0                   |
+
+**Examples:**  
+1. **Gaussian Distribution:**  
+   `VR1 r1 0 dc 0 trrandom (2 10m 0 1)`  
+   Generates Gaussian-distributed values with a mean of 0 and standard deviation 10m (0.01).
+
+2. **Uniform Distribution:**  
+   `V1 1 0 dc 0 trrandom (1 1u 0.5u 0.5 0.5)`  
+   Generates uniform values between 0 and 1.  
+
+This allows precise implementation for netlist code generation and debugging regarding random voltage sources and their interaction with component parameters.

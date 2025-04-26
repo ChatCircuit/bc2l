@@ -1,0 +1,62 @@
+**Summary: Behavioral Capacitor in Ngspice**
+
+1. **Syntax and Definitions**:  
+   Behavioral capacitors depend on expressions for capacitance (C) or charge (Q). General forms:  
+   - `CXXXXXXX n+ n- C = 'expression' <tc1=value> <tc2=value>`
+   - `CXXXXXXX n+ n- 'expression' <tc1=value> <tc2=value>`
+   - `CXXXXXXX n+ n- Q = 'expression' <tc1=value> <tc2=value>`  
+
+   Expressions can contain parameters, node voltages, branch currents (`i(vm)`), and special variables like:
+   - `time`, `temper`, and `hertz`.
+
+2. **Default/Optional Parameters**:
+   - Temperature coefficients (`tc1` and `tc2`) are optional.
+   - Behavioral expressions use equations involving voltage/current, parameters, or special variables.
+
+3. **Theoretical Characteristics**:
+   - Behavioral capacitors allow dynamic changes to capacitance or charge based on node voltage or expressions.
+   - Especially useful for simulating non-linear or voltage-dependent capacitance behavior.
+
+4. **Examples**:
+   - Capacitance expression based on control voltage:
+     `C1 cc 0 c = 'V(cc) < {Vt} ? {C1} : {Ch}' tc1=-1e-03 tc2=1.3e-05`
+   - Charge expression:  
+     `C1 a b q = '1u*(4*atan(V(a,b)/4)*2+V(a,b))/3'`
+
+5. **Example Netlist File**:  
+   Includes components, expressions, and measurement techniques:  
+   ```spice
+   .param Cl=5n Ch=1n Vt=1m Il=100n
+   .ic v(cc) = 0 v(cc2) = 0
+   * Capacitor depending on control voltage V(cc)
+   C1 cc 0 c = 'V(cc) < {Vt} ? {Cl} : {Ch}'
+   I1 0 1 {Il}
+   Exxx n1-copy n2 n2 cc2 1
+   Cxxx n1-copy n2 1
+   Bxxx cc2 n2 I = '(V(cc2) < {Vt} ? {Cl} : {Ch})' * i(Exxx)
+   I2 n2 22 {Il}
+   vn2 n2 0 DC 0
+   * Measure charge by integrating current
+   aint1 %id(1 cc) 2 time_count
+   aint2 %id(22 cc2) 3 time_count
+   .model time_count int(in_offset=0.0 gain=1.0
+   + out_lower_limit=-1e12 out_upper_limit=1e12
+   + limit_range=1e-9 out_ic=0.0)
+   .control
+   unset askquit
+   tran 100n 100u
+   plot v(2)
+   plot v(cc) v(cc2)
+   .endc
+   .end
+   ```
+
+**Key Components**:
+- `C` and `Q` expressions define capacitor dynamics.
+- `tc1`/`tc2` for temperature adjustments.
+- `aint` and `.model time_count` for integrated current measurement.
+
+**Important Notes**:
+- Behavioral capacitors rely on equations using node voltages (e.g., `V(cc)`), logical expressions, or dependent variables.
+- Charge measurement often integrates currents over time (`aint` commands).
+- Special syntax enables simulation of complex behaviors such as voltage-controlled capacitance.

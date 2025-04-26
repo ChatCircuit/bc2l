@@ -1,0 +1,35 @@
+**.SAVE Command in Ngspice (Summary):**
+
+**Purpose:**  
+The `.SAVE` command specifies the vectors to be saved in the raw file for post-simulation use.
+
+**General Form:**  
+```
+.save vector vector vector ...
+```
+
+**Examples:**  
+- `.save i(vin) node1 v(node2)`
+- `.save @m1[id] vsource#branch`
+- `.save all @m2[vdsat]`
+
+**Key Details:**
+1. **Vector Types:**  
+   - Save **node voltages** using `nodename` or `v(nodename)`.  
+   - Save **currents** through an independent voltage source using `i(sourcename)` or `sourcename#branch`.  
+   - Save **internal device parameters** using `@dev[param]`.
+
+2. **Behavior:**  
+   - **Default behavior:** If no `.SAVE` command is provided, Ngspice saves **node voltages** and **voltage source branch currents** by default.  
+   - **Custom selection:** If `.SAVE` commands are provided, only the specified vectors are saved, replacing the default set.  
+   - To include **default vectors** along with others, add `all` as one of the specified vectors (e.g., `.save all @dev[param]`).
+
+3. **Magnitude Requests:**  
+   If `.save vm(out)` is given, only the original data `v(out)` is stored in the raw file. Magnitude (or other derived data) can be computed later during evaluation.
+
+**Usage Notes:**
+- Use `.SAVE` to restrict saved data to only what is needed, thereby limiting file size and improving focus during debugging or analysis.
+- Refer to Chapter 27.1 (Appendix) for details on internal device parameters (e.g., `@m1[id]`).
+- Use Chapter 13.5 for interactive commands and rawfile usage.
+
+This command is critical when generating targeted raw data for verification, debugging, or performance evaluation.

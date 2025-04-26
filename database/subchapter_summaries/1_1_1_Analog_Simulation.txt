@@ -1,0 +1,18 @@
+- **Focus of Analog Simulation**:  
+  Simulates the linear and non-linear behavior of a circuit over continuous time or frequency intervals. Circuit response is solved iteratively using Kirchhoff's Laws. Slower compared to digital simulators due to matrix solving at each time step.
+
+- **Source Types in Ngspice**:
+  - **Supported sources**: DC, sine-wave, and pulse.
+
+- **Modes of Analysis**:  
+  1. **DC Analysis**:
+     - Characteristics: Neglects time-varying behaviors of reactive elements.
+     - Default behavior: Calculates the circuit's DC solution.  
+     - Swept DC Analysis: Repeats DC analysis across a range of input source DC levels.
+
+  2. **AC Analysis**:
+     - Characteristics: Small-signal sinusoidal inputs analyzed over a frequency range.  
+     - Output: Amplitudes and phases as a function of frequency.
+
+  3. **Transient Analysis**:  
+     - Characteristics: Calculates circuit response (including reactive elements) over time.

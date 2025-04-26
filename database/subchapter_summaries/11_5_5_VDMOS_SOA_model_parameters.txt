@@ -1,0 +1,7 @@
+VDMOS SOA Model Parameters:
+
+- **Vgs_max**: Triggers SOA warning if |Vgs| exceeds this value.
+- **Vgd_max**: Triggers SOA warning if |Vgd| exceeds this value.
+- **Vds_max**: Triggers SOA warning if |Vds| exceeds this value.
+- **Vgsr_max**: Triggers SOA warning if |Vgsr| exceeds this value.
+- **Vgdr_max**: Triggers SOA warning if |Vgdr| exceeds this value.

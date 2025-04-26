@@ -1,0 +1,6 @@
+**Summary:**
+
+**Model Binning**  
+Binning partitions geometry-dependent models (e.g., MOSFETs) into segments based on Width (W) and Length (L), offering greater accuracy over larger geometry ranges than built-in formulas. Each range employs parameters: **LMIN**, **LMAX**, **WMIN**, and **WMAX**, with specific model cards identified using a numerical extension (e.g., `nch.1`).  
+Ngspice uses an algorithm to select the appropriate model card based on requested values of W and L.  
+Applicable to **BSIM3** (section *7.6.3.3*) and **BSIM4** (section *7.6.3.4*) models.

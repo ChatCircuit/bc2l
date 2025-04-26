@@ -1,0 +1,39 @@
+### Extracted Summary from Ngspice Manual (Section 2.1.3)
+
+#### **General Naming Conventions**
+- **Line Continuation**: Lines are continued using a `+` in column 1 of the next line or backslashes (`\`) as the last two characters for Unix shell style.
+- **Device Naming**: Device names *must* start with a letter (A-Z) and cannot contain delimiters. 
+
+#### **Number Representations**
+- **Scale Factors Table**:
+  - `T`: Tera, \( 10^{12} \)
+  - `G`: Giga, \( 10^{9} \)
+  - `Meg`: Mega, \( 10^{6} \)
+  - `K`: Kilo, \( 10^{3} \)
+  - `mil`: Mil, \( 25.4 \times 10^{-6} \)
+  - `m`: milli, \( 10^{-3} \)
+  - `u`: micro, \( 10^{-6} \)
+  - `n`: nano, \( 10^{-9} \)
+  - `p`: pico, \( 10^{-12} \)
+  - `f`: femto, \( 10^{-15} \)
+  - `a`: atto, \( 10^{-18} \)
+
+#### **Letters Following Numbers**
+- Letters immediately after a number or its scale factor are ignored (e.g., `10`, `10Hz`, `10Volts` all equal 10).
+- Notations such as `M` or `m` represent milli (\(10^{-3}\)); use `Meg` for Mega (\(10^6\)).
+- **RKM Notation**: Enabled in LT compatibility mode; allows formats like `2K7` or `100R`.
+
+#### **Node Names**
+- **Acceptable Node Names**: Arbitrary strings for node names, case insensitive in batch mode, but restricted in interactive/control mode (cannot start with numbers).
+- **Special Character Restrictions**: Characters `= % ( ) , [ ] < > ~` are disallowed in node names, especially alongside XSPICE models.
+
+#### **Ground Node**
+- Must always be named `0` (zero). 
+- `gnd` is accepted as an alias for `0`, but internally treated as global and converted to `0`. 
+  - Conversion can be disabled via `set no_auto_gnd` inside `spinit` or `.spiceinit`.
+- Every circuit *must* have a ground node.
+- **Nodes Handling**: Nodes are treated as character strings, making `0` distinct from `00`. This behavior differs from older SPICE2 standards.
+
+---
+
+This extracted summary includes key points relevant for netlist creation or debugging, focusing on syntax, conventions, and practical usages.

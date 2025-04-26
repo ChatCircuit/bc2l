@@ -1,0 +1,38 @@
+### Summarized Information from Section "7.2 Junction Diodes" (Ngspice Manual)
+
+**General Syntax for Junction Diode Definition:**  
+`DXXXXXXX n+ n- mname <area=val> <m=val> <pj=val> <off>`  
+`+ <ic=vd> <temp=val> <dtemp=val>`  
+`+ <lm=val> <wm=val> <lp=val> <wp=val>`
+
+#### Key Components:
+1. **`n+` and `n-`:** Positive (anode) and negative (cathode) nodes.
+2. **`mname`:** Model name linked to the diode model.
+3. **Instance Parameters:**  
+    - **`area`:** Area scale factor for saturation current; default = `1.0` (if omitted).
+    - **`pj`:** Perimeter scale factor for sidewall saturation current and associated capacitance.
+    - **`m`:** Multiplier for area and perimeter.
+    - **`off`:** Optional flag to set starting condition for DC analysis.
+    - **`ic=vd`:** Initial condition for transient analysis (`uic` option required).
+    - **`temp`:** Specific temperature for this device, overrides global temp in `.option`.
+    - **`dtemp`:** Offset temperature from circuit temperature.
+4. **Parasitic Effect Parameters:**  
+    - **`lm`, `wm`, `lp`, `wp`:** Parameters for modeling metal and polysilicon overlap capacitances and other parasitics in advanced processes. Priority given to element parameters if both model and element parameters are specified.
+
+#### Additional Features:
+- Perimeter effects and high injection level included.
+- Supports temperature-dependent modeling.
+- Can activate modern parasitic modeling with `LEVEL=3` in the model or individual element parameters (`lm`, `wm`, `lp`, `wp`).
+- Instance-specific parameters override global settings from the `.option` line.
+
+#### Examples:
+- `DBRIDGE 2 10 DIODE1`
+    - A simple diode with nodes `2` and `10` using model `DIODE1`.
+- `DCLMP aa cc DMOD AREA=3.0 IC=0.2`  
+    - A diode with `AREA=3.0` and initial voltage (`ic=0.2` V) across the diode for transient analysis.
+
+#### Special Note:
+- Advanced models for modern diode designs (e.g., JUNCAP) can be imported through the OpenVAF/OSDI framework (requires Verilog-A models) starting in `ngspice-39`.
+
+#### Theoretical Additions: 
+- Added sidewall junction currents, capacitances, tunneling effects, and metal and polysilicon overlap capacitances to the SPICE3 model. Perfect for modern PDK usage.

@@ -1,0 +1,254 @@
+1 Introduction
+1.1 Simulation Algorithms
+1.1.1 Analog Simulation
+1.1.2 Matrix solvers
+1.1.3 Device Models for Analog Simulation
+1.1.4 Digital Simulation
+1.1.5 Mixed-Signal Simulation
+1.1.6 Mixed-Level Simulation (Electronic and TCAD)
+1.2 Supported Analyses
+1.2.1 DC Analysis
+1.2.2 AC Small-Signal Analysis
+1.2.3 Transient Analysis
+1.2.4 Pole-Zero Analysis
+1.2.5 Small-Signal Distortion Analysis
+1.2.6 Sensitivity Analysis
+1.2.7 Noise Analysis
+1.2.8 Periodic Steady State Analysis
+1.3 Analysis at Different Temperatures
+1.3.1 Introduction
+1.3.2 Controlling the temperature
+1.4 Convergence
+1.4.1 Voltage convergence criterion
+1.4.2 Current convergence criterion
+1.4.3 Convergence failure
+2 Circuit Description
+2.1 General Structure and Conventions
+2.1.1 Input file structure
+2.1.2 Syntax check
+2.1.3 Some naming conventions
+2.1.4 Topological constraints
+2.2 Dot commands
+2.3 Circuit elements (device instances)
+2.4 Basic lines
+2.4.1 .TITLE line
+2.4.2 .END Line
+2.4.3 Comments
+2.4.4 End-of-line comments
+2.4.5 Continuation lines
+2.5 .MODEL Device Models
+2.6 .SUBCKT Subcircuits
+2.6.1 .SUBCKT Line
+2.6.2 .ENDS Line
+2.6.3 Subcircuit Calls
+2.7 .GLOBAL
+2.8 .INCLUDE
+2.9 .LIB
+2.10 .PARAM Parametric netlists
+2.10.1 .param line
+2.10.2 Brace expressions in circuit elements:
+2.10.3 Subcircuit parameters
+2.10.4 Symbol scope
+2.10.5 Syntax of expressions
+2.10.6 Reserved words
+2.10.7 A word of caution on the three ngspice expression parsers
+2.11 .FUNC
+2.12 .CSPARAM
+2.13 .TEMP
+2.14 .IF Condition-Controlled Netlist
+2.15 Parameters, functions, expressions, and command scripts
+2.15.1 Parameters
+2.15.2 Nonlinear sources
+2.15.3 Control commands, Command scripts
+3 Circuit Elements and Models
+3.1 About netlists, device instances, models and model parameters
+3.2 General options
+3.2.1 Paralleling devices with multiplier m
+3.2.2 Instance and model parameters
+3.2.3 Model binning
+3.2.4 Initial conditions
+3.3 Elementary Devices
+3.3.1 Resistors
+3.3.2 Semiconductor Resistors
+3.3.3 Semiconductor Resistor Model (R)
+3.3.4 Resistors, dependent on expressions (behavioral resistor)
+3.3.5 Resistor with nonlinear r2_cmc or r3_cmc models
+3.3.6 Capacitors
+3.3.7 Semiconductor Capacitors
+3.3.8 Semiconductor Capacitor Model (C)
+3.3.9 Capacitors, dependent on expressions (behavioral capacitor)
+3.3.10 Inductors
+3.3.11 Inductor model
+3.3.12 Coupled (Mutual) Inductors
+3.3.13 Inductors, dependent on expressions (behavioral inductor)
+3.3.14 Capacitor or inductor with initial conditions
+3.3.15 Switches
+3.3.16 Switch Model (SW/CSW)
+4 Voltage and Current Sources
+4.1 Independent Sources for Voltage or Current
+4.1.1 Pulse
+4.1.2 Sinusoidal
+4.1.3 Exponential
+4.1.4 Piece-Wise Linear
+4.1.5 Single-Frequency FM
+4.1.6 Amplitude modulated source (AM)
+4.1.7 Transient noise source
+4.1.8 Random voltage source
+4.1.9 External voltage or current input
+4.1.10 Arbitrary Phase Sources
+4.1.11 RF Port
+4.2 Linear Dependent Sources
+4.2.1 Gxxxx: Linear Voltage-Controlled Current Sources (VCCS)
+4.2.2 Exxxx: Linear Voltage-Controlled Voltage Sources (VCVS)
+4.2.3 Fxxxx: Linear Current-Controlled Current Sources (CCCS)
+4.2.4 Hxxxx: Linear Current-Controlled Voltage Sources (CCVS)
+4.2.5 Polynomial Source Compatibility
+5 Non-linear Dependent Sources (Behavioral Sources)
+5.1 Bxxxx: Nonlinear dependent source (ASRC)
+5.1.1 Syntax and usage
+5.1.2 Special B-Source Variables time, temper, hertz
+5.1.3 par('expression')
+5.1.4 Piecewise
+5.2 Exxxx: non-linear voltage source
+5.2.1 VOL
+5.2.2 VALUE
+5.2.3 TABLE
+5.2.4 POLY
+5.2.5 LAPLACE
+5.2.6 FREQ
+5.2.7 AND/OR/NAND/NOR
+5.3 Gxxxx: non-linear current source
+5.3.1 CUR
+5.3.2 VALUE
+5.3.3 TABLE
+5.3.4 POLY
+5.3.5 LAPLACE
+5.3.6 FREQ
+5.3.7 Example
+5.4 Debugging a behavioral source
+5.5 POLY Sources
+5.5.1 E voltage source, G current source
+5.5.2 F voltage source, H current source
+6 Transmission Lines
+6.1 Lossless Transmission Lines
+6.2 Lossy Transmission Lines
+6.2.1 Lossy Transmission Line Model (LTRA)
+6.3 Uniform Distributed RC Lines
+6.3.1 Uniform Distributed RC Model (URC)
+6.4 KSPICE Lossy Transmission Lines
+6.4.1 Single Lossy Transmission Line (TXL)
+6.4.2 Coupled Multiconductor Line (CPL)
+7 Device Models
+7.1 Instance lines and .model lines
+7.2 Junction Diodes
+7.2.1 Diode Model (D)
+7.2.2 Diode Equations
+7.2.3 Diode models available via OpenVAF/OSDI
+7.3 BJT
+7.3.1 Bipolar Junction Transistors (BJTs)
+7.3.2 BJT Models (NPN/PNP)
+7.3.3 Gummel-Poon Models
+7.3.4 VBIC Model
+7.3.5 HICUM level 2 Model
+7.3.6 BJT models available via OpenVAF/OSDI
+7.4 JFETs
+7.4.1 Junction Field-Effect Transistors (JFETs)
+7.4.2 JFET Models (NJF/PJF)
+7.4.3 Basic model statement
+7.4.4 JFET level 1 model with Parker Skellern modification
+7.4.5 JFET level 2 Parker Skellern model
+7.5 MESFETs
+7.5.1 MESFET devices
+7.5.2 MESFET Models (NMF/PMF)
+7.5.3 Model by Statz e.a.
+7.5.4 Model by Ytterdal e.a.
+7.5.5 hfet1 and hfet2
+7.6 MOSFETs
+7.6.1 MOSFET devices
+7.6.2 MOSFET models (NMOS/PMOS)
+7.6.3 BSIM Models
+7.6.4 BSIMSOI models (levels 10, 58, 55, 56, 57)
+7.6.5 SOI3 model (level 60)
+7.6.6 HiSIM models of the University of Hiroshima
+7.6.7 MOS models available via OpenVAF/OSDI
+7.7 Power MOSFET model (VDMOS)
+8 Mixed-Mode and Behavioral Modeling with XSPICE
+11 Analyses and Output Control (batch mode)
+11.1 Simulator Variables (.options)
+11.1.1 General Options
+11.1.2 OP and DC Solution Options
+11.1.3 AC Solution Options
+11.1.4 Transient Analysis Options
+11.1.5 ELEMENT Specific options
+11.1.6 Transmission Lines Specific Options
+11.1.7 Precedence of option and .options commands
+11.2 Initial Conditions
+11.2.1 .NODESET: Specify Initial Node Voltage Guesses
+11.2.2 .IC: Set Initial Conditions
+11.3 Analyses
+11.3.1 .AC: Small-Signal AC Analysis
+11.3.2 .DC: DC Transfer Function
+11.3.3 .DISTO: Distortion Analysis
+11.3.4 .NOISE: Noise Analysis
+11.3.5 .OP: Operating Point Analysis
+11.3.6 .PZ: Pole-Zero Analysis
+11.3.7 .SENS: DC or Small-Signal AC Sensitivity Analysis
+11.3.8 .SP S-Parameter Analysis
+11.3.9 .TF: Transfer Function Analysis
+11.3.10 .TRAN: Transient Analysis
+11.3.11 Transient noise analysis (at low frequency)
+11.3.12 .PSS: Periodic Steady State Analysis
+11.4 Measurements after AC, DC and Transient Analysis
+11.4.1 .meas(ure)
+11.4.2 batch versus interactive mode
+11.4.3 General remarks
+11.4.4 Input
+11.4.5 Trig Targ
+11.4.6 Find ... When
+11.4.7 AVG|MIN|MAX|PP|RMS|MIN_AT|MAX_AT
+11.4.8 Integ
+11.4.9 param
+11.4.10 par('expression' )
+11.4.11 Deriv
+11.4.12 More examples
+11.5 Safe Operating Area (SOA) warning messages
+11.5.1 Resistor and Capacitor SOA model parameters
+11.5.2 Diode SOA model parameters
+11.5.3 BJT SOA model parameters
+11.5.4 MOS SOA model parameters
+11.5.5 VDMOS SOA model parameters
+11.6 Batch Output
+11.6.1 .SAVE: Name vector(s) to be saved in raw file
+11.6.2 .PRINT Lines
+11.6.3 .PLOT Lines
+11.6.4 .FOUR: Fourier Analysis of Transient Analysis Output
+11.6.5 .PROBE: Save device node currents, device power dissipation, or differential voltages between arbitrary nodes
+11.6.6 par('expression'): Algebraic expressions for output
+11.6.7 .width
+11.7 Measuring current through device terminals
+11.7.1 Using the .probe command
+11.7.2 Adding a voltage source in series
+11.7.3 Using option 'savecurrents'
+12 Starting ngspice
+17 Example Circuits
+17.1 AC coupled transistor amplifier
+17.2 Differential Pair
+17.3 MOSFET Characterization
+17.4 RTL Inverter
+17.5 Four-Bit Binary Adder (Bipolar)
+17.6 Four-Bit Binary Adder (MOS)
+17.7 Transmission-Line Inverter
+18 Statistical circuit analysis
+18.1 Introduction
+18.2 Using random param(eters)
+18.3 Behavioral sources (B, E, G, R, L, C) with random control
+18.4 ngspice control language
+18.5 Monte-Carlo Simulation
+18.5.1 Varying model or instance parameters
+18.5.2 Using the ngspice control language
+18.6 Data evaluation with Gnuplot
+19 Circuit optimization with ngspice
+20 Notes
+20.1 Glossary
+20.2 Acronyms and Abbreviations
+20.3 To Do

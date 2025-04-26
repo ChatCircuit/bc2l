@@ -1,0 +1,10 @@
+.MEASURE command for integration:
+
+General syntax:  
+.MEASURE {DC|AC|TRAN|SP} result INTEG out_variable <TD=td> <FROM=val> <TO=val>
+
+Purpose: Calculates the integral (area under the curve) of `out_variable` over a specified interval.
+
+Example:
+.measure tran yint INTEG v(2) from=2m to=3m  
+Calculates the integral of `v(2)` (voltage at node 2) between 2 ms and 3 ms in a transient analysis.

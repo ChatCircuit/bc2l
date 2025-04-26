@@ -1,0 +1,61 @@
+### Summary of `.DISTO` Command in Ngspice for Netlist Code Use and Debugging
+
+#### General Form and Modes:
+```
+.disto dec nd fstart fstop <f2overf1>
+.disto oct no fstart fstop <f2overf1>
+.disto lin np fstart fstop <f2overf1>
+```
+- **Modes:**
+  - `dec`: Sweep frequency logarithmically per decade.
+  - `oct`: Sweep frequency logarithmically per octave.
+  - `lin`: Sweep frequency linearly.
+- **Parameters:**
+  - `nd`, `no`, `np`: Number of frequencies per step type (decade, octave, or linear).
+  - `fstart`: Starting frequency.
+  - `fstop`: Stopping frequency.
+  - `<f2overf1>`: Optional ratio of second frequency to the first, used in spectral distortion analysis.
+
+#### Examples:
+```
+.disto dec 10 1kHz 100MEG
+.disto dec 10 1kHz 100MEG 0.9
+```
+
+#### Analysis Types:
+1. **Harmonic Analysis (Default):**
+   - Only first input frequency (`F1`) is used.
+   - Distortion components (e.g., AC voltages/currents at `2F1` and `3F1`) are analyzed.
+   - Results focus on magnitudes of harmonic distortion.
+
+2. **Spectral Analysis (When `<f2overf1>` is specified):**
+   - Two sinusoidal inputs (`F1` swept and `F2 = f2overf1 × fstart` fixed).
+   - Analyzes intermodulation frequencies: `F1 + F2`, `F1 - F2`, and `(2F1) - F2`.
+
+#### Important Parameters and Defaults:
+- **Magnitude and Phase:**
+  - `distof1`: Magnitude and phase of frequency `F1`. Default: 1.0 (magnitude) and 0.0° (phase).
+  - `distof2`: Magnitude and phase of frequency `F2`. Default: 1.0 (magnitude) and 0.0° (phase).
+- **Phase Specification:** Degrees.
+- **Default Behavior:** Assumes no input at a frequency unless specified with `distof1` or `distof2`.
+
+#### Special Notes on `<f2overf1>`:
+- Must be a real number in `(0, 1)`.
+- Ideally an **irrational number** for better accuracy.
+- Efforts should focus on maximizing the denominator of its fractional representation (e.g., `49/100` preferred over `1/2`).
+
+#### Results Interpretation:
+- Output values represent actual AC voltages and currents at harmonic/intermodulation mix frequencies.
+- For HD2/HD3 and IM parameters, normalization with `.ac` values is required.
+
+#### Supported Nonlinear Device Models:
+- **Diodes:** DIO.
+- **BJTs:** Bipolar Junction Transistors.
+- **JFET (level 1):** Junction Field-Effect Transistors.
+- **MOSFETs:** Levels 1, 2, 3, 9, BSIM1.
+- **MESFET (level 1):** Metal-Semiconductor Field-Effect Transistors.
+
+#### Key Advantages and Disadvantages:
+- **Advantage (Volterra series):** Accurate computation of distortion at closely spaced frequencies, expressed symbolically.
+- **Disadvantage:** Coinciding frequencies are not merged, requiring manual postprocessing.
+

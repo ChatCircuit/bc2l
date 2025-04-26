@@ -1,0 +1,22 @@
+**Summary for Netlist Code Assistance:**
+
+1. **Batch Mode Commands**: 
+   - Commands `.print`, `.plot`, and `.four` are **specific to batch mode** usage in ngspice.
+   - Commands `.save` and `.probe` are valid in **all operating modes**.
+
+2. **Batch Mode Execution**:
+   - Start ngspice in batch mode using the `-b` option.
+     Example: `ngspice -b input.cir`
+   - Outputs for `.print`, `.plot`, and `.four` will be sent to the **console output** by default.
+   - To redirect outputs to a file: 
+     Syntax: `ngspice -b -o output.log input.cir`
+
+3. **Rawfile Generation Conflict**:
+   - Adding the `-r` option to create a rawfile **disables** `.print` and `.plot`.
+     Syntax: `ngspice -b -r rawdata.raw input.cir`
+
+4. **Graphical Output Alternative**:
+   - For graphical plotting, use **control mode output** instead of batch mode (`-b`).
+
+**Important Notes**:
+   - Output redirection (`-o`) is **not supported** by MS Windows GUI.

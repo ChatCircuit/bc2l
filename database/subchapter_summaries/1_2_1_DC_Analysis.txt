@@ -1,0 +1,20 @@
+**Summary of DC Analysis (`.DC`, `.TF`, `.OP`) in Ngspice:**
+
+- **Purpose**: Determines the DC operating point of the circuit by treating inductors as shorted and capacitors as open. Time-dependent behavior of sources is not considered.
+
+- **Key Syntaxes**:  
+  - **`.DC`**: Used for generating DC transfer curves by sweeping a specified voltage/current source, resistor, or temperature over a user-defined range.
+  - **`.TF`**: Computes the DC small-signal transfer function (ratio of output variable to input source), input, and output resistances.
+  - **`.OP`**: Determines and outputs the complete DC operating point of the circuit.
+
+- **Default Behavior**:  
+  - DC analysis is performed **automatically** before:  
+    - Transient analysis (to determine initial conditions).  
+    - AC small-signal analysis (to compute linearized small-signal models for nonlinear devices).
+
+- **Additional Features**:  
+  - Interface between analog and event-driven parts of the circuit are iterated for system consistency.  
+  - Results of the analysis can be displayed or printed as requested.  
+  - Includes stepping through parameter values (voltage/current source, resistance, or temperature) to store sequential outputs as DC transfer curves.  
+
+No example code was present in the text.

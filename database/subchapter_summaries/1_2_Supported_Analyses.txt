@@ -1,0 +1,44 @@
+**Ngspice Supported Analyses Summary:**
+
+Ngspice supports various types of simulation analyses, which are invoked using specific netlist directives. Below is the list of supported analyses and relevant details:
+
+1. **DC Analysis (Operating Point and DC Sweep)**:  
+   - **Directives**: `.DC` and `.OP`.
+   - Used for determining circuit behavior under static conditions or varying DC sources.
+   - Analog-only applications supported.
+
+2. **AC Small-Signal Analysis**:  
+   - **Directive**: `.AC`.
+   - Analyzes frequency response of a circuit.
+   - Applies to analog circuits.
+
+3. **Transient Analysis**:  
+   - **Directive**: `.TRAN`.
+   - Simulates circuit behavior over time.
+   - Supported for both analog and event-driven applications including digital components.
+
+4. **Pole-Zero Analysis**:  
+   - **Directive**: `.PZ`.
+   - Used for calculating poles and zeros of circuits (not supported for digital applications).
+   - Analog-only applications supported.
+
+5. **Small-Signal Distortion Analysis**:  
+   - **Directive**: `.DISTO`.
+   - Evaluates distortion effects in an analog circuit.
+   - Exclusively for analog applications.
+
+6. **Sensitivity Analysis**:  
+   - **Directive**: `.SENS`.
+   - Calculates sensitivity of circuit response to parameter variation.
+   - Applicable for analog circuits only.
+
+7. **Noise Analysis**:  
+   - **Directive**: `.NOISE`.
+   - Predicts noise contribution from components.
+   - Limited to analog circuits.
+
+- **Application Restrictions**:  
+  - Analog applications can utilize all analysis modes except those restricted by the Code Model subsystem (Pole-Zero, Distortion, Sensitivity, Noise unsupported).
+  - Event-driven applications (digital and user-defined types) are limited to **DC** and **Transient analyses**.
+
+Understanding relationships between analyses and simulation algorithms is crucial. Specific netlist directives govern these modes and should be used appropriately depending on circuit type (analog or digital).

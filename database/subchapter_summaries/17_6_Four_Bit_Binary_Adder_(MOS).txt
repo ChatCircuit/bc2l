@@ -1,0 +1,106 @@
+### Summary of Ngspice Manual Excerpt: Simulation of Four-Bit Binary Adder (MOS)
+
+This excerpt defines and simulates a four-bit binary adder using MOSFETs and subcircuit hierarchies in Ngspice. Below are the details relevant to netlist generation, debugging, and circuit definition:
+
+---
+
+#### **Subcircuit Definitions**
+1. **NAND Gate Subcircuit (`.SUBCKT NAND`)**
+   - **Nodes**: Inputs (`in1`, `in2`), Output (`out`), and Power Supply (`VDD`).
+   - **Transistors**: 
+     - PMOS (`M1`, `M3`): `W=7.5u`, `L=0.35u`, `pd=13.5u`, `ad=22.5p`, `ps=13.5u`, `as=22.5p`.
+     - NMOS (`M2`, `M4`): `W=3u`, `L=0.35u`, `pd=9u`, `ad=9p`, `ps=9u`, `as=9p`.
+   - Syntax:
+     ```
+     .SUBCKT NAND in1 in2 out VDD
+     M1 out in2 Vdd Vdd p1 W=7.5u L=0.35u pd=13.5u ad=22.5p ps=13.5u as=22.5p
+     M2 net.1 in2 0 0 n1 W=3u L=0.35u pd=9u ad=9p ps=9u as=9p
+     M3 out in1 Vdd Vdd p1 W=7.5u L=0.35u pd=13.5u ad=22.5p ps=13.5u as=22.5p
+     M4 out in1 net.1 0 n1 W=3u L=0.35u pd=9u ad=9p ps=9u as=9p
+     .ENDS NAND
+     ```
+
+2. **One-Bit Adder (`.SUBCKT ONEBIT`)**
+   - **Nodes**: Inputs, Outputs, AND gate, and VCC.
+   - Structure: Built using multiple `NAND` gates connected sequentially.
+   - Syntax:
+     ```
+     .SUBCKT ONEBIT 1 2 3 4 5 6 AND
+     X2 1 7 8 6 NAND
+     X3 2 7 9 6 NAND
+     X4 8 9 10 6 NAND
+     X5 3 10 11 6 NAND
+     X6 3 11 12 6 NAND
+     X7 10 11 13 6 NAND
+     X8 12 13 4 6 NAND
+     X9 11 7 5 6 NAND
+     .ENDS ONEBIT
+     ```
+
+3. **Two-Bit Adder (`.SUBCKT TWOBIT`)**
+   - **Nodes**: Two input bits per stage, carry-in, carry-out, and VCC.
+   - Combines `ONEBIT` subcircuits.
+   - Syntax:
+     ```
+     .SUBCKT TWOBIT 1 2 3 4 5 6 7 8 9
+     X1 1 2 7 5 10 9 ONEBIT
+     X2 3 4 10 6 8 9 ONEBIT
+     .ENDS TWOBIT
+     ```
+
+4. **Four-Bit Adder (`.SUBCKT FOURBIT`)**
+   - **Nodes**: Four input bits, four outputs bits, carry-in, carry-out, and VCC.
+   - Combines `TWOBIT` subcircuits.
+   - Syntax:
+     ```
+     .SUBCKT FOURBIT 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+     X1 1 2 3 4 9 10 13 16 15 TWOBIT
+     X2 5 6 7 8 11 12 16 14 15 TWOBIT
+     .ENDS FOURBIT
+     ```
+
+---
+
+#### **Simulation Setup**
+1. **Power Supply**
+   - Voltage Source: `VCC 99 0 DC 3.3V`.
+
+2. **Inputs (Pulse Generators for A and B Bits)**
+   - Example syntax for input pulses:
+     ```
+     VIN1A 1 0 DC 0 PULSE(0 3 0 5NS 5NS 20NS 50NS)
+     VIN1B 2 0 DC 0 PULSE(0 3 0 5NS 5NS 30NS 100NS)
+     VIN2A 3 0 DC 0 PULSE(0 3 0 5NS 5NS 50NS 200NS)
+     ```
+     Each input uses `PULSE` sources with distinct timing parameters.
+
+3. **Main Adder Module**
+   - Syntax:
+     ```
+     X1 1 2 3 4 5 6 7 8 9 10 11 12 0 13 99 FOURBIT
+     ```
+
+4. **Simulation Commands**
+   - Save Points:
+     ```
+     .save V(1) V(2) V(3) V(4) V(5) V(6) V(7) V(8) $ INPUTS
+     .save V(9) V(10) V(11) V(12) V(13) $ OUTPUTS
+     ```
+   - Transient Analysis:
+     ```
+     .TRAN 1NS 6400NS
+     ```
+
+5. **Device Models**
+   - NMOS:
+     ```
+     .model n1 nmos level=49 version=3.3.0
+     ```
+   - PMOS:
+     ```
+     .model p1 pmos level=49 version=3.3.0
+     ```
+
+---
+
+This detailed structure and syntax provide a reference for defining and simulating MOS-based binary adders in Ngspice, enabling modular design and efficient debugging.

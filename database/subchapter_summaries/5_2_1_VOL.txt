@@ -1,0 +1,29 @@
+**Summary for Netlist Code Generation/Modification/Debugging:**
+
+**Component: VOL (Voltage-Controlled Voltage Source)**  
+**General Syntax:**  
+`EXXXXXXX n+ n- vol='expr'`  
+- **n+:** Positive node connection  
+- **n-:** Negative node connection  
+- **vol='expr':** Expression defining the output voltage  
+
+**Expression Details:**  
+- The `expr` can include:  
+  - Node voltages (e.g., `V(node)`), branch currents (e.g., `i(vm)`), parameters, and special variables (`time`, `temper`, `hertz`).  
+  - Mathematical equations similar to expressions for the B source (see Chapter 5.1 for reference).  
+
+**Allowed Symbols:**  
+- The expression can be enclosed using:
+  - Single quotes (`'expr'`)  
+  - Curly braces (`{expr}`)  
+
+**Default Characteristics:**  
+- Output voltage is evaluated based on the given expression, dynamically influenced by circuit parameters, voltages, currents, and special variables.
+
+**Example Code:**  
+`E41 4 0 vol = 'V(3)*V(3)-Offs'`  
+- **Explanation:**  
+  - Defines a voltage source between nodes 4 and 0.  
+  - Voltage output is calculated as `(V(3) * V(3)) - Offs`.  
+
+This extracted information provides insights for creating or debugging netlists involving controlled voltage sources (`VOL`). 

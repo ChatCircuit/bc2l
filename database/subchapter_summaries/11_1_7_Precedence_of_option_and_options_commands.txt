@@ -1,0 +1,8 @@
+**Summary:**
+
+- **Precedence of Options in Ngspice:**
+  - If no options are set, Ngspice uses **internal default values** for simulator variables.
+  - Options can be specified at various levels:
+    1. **Init files** (`spinit` or `.spiceinit`) using the `option` command (see section 13.5.55). These override default values.
+    2. **Input file** via the `.options` command. These override both default values and init file values.
+    3. **Control block** (`.control ... .endc`) in the input file. These override all prior settings, including `.options` and init file values.

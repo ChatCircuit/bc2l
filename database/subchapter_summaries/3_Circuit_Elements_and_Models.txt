@@ -1,0 +1,5 @@
+3 Circuit Elements and Models:
+
+- Fields enclosed in `< >` are optional.
+- Punctuation (e.g., parentheses, equal signs) is optional but may become mandatory in future versions. Following the stated punctuation improves clarity.
+- For branch voltages and currents, the reference convention is used: current flows in the direction of the voltage drop.

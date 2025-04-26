@@ -1,0 +1,85 @@
+**Ngspice Gummel-Poon Model Summary for Netlist Usage**
+
+The Gummel-Poon model for BJTs is a detailed extension of the traditional Ebers-Moll model, supporting more advanced effects like high-bias behavior, quasi-saturation, and temperature dependencies. Below is a concise yet functional breakdown for applying this model in netlist development, debugging, and modification.
+
+---
+
+**DC Model Key Parameters:**
+- **IS**: Transport saturation current (default: 1.0e-16 A, scale: area).
+- **BF**: Ideal maximum forward beta (default: 100, unitless).
+- **NF**: Forward current emission coefficient (default: 1.0, unitless).
+- **ISE**: B-E leakage saturation current (default: 0.0 A).
+- **IKF**: Forward beta roll-off corner current (default: ∞ A).
+- **NE**: B-E leakage emission coefficient (default: 1.5).
+- **BR**: Ideal maximum reverse beta (default: 1, unitless).
+- **NR**: Reverse current emission coefficient (default: 1).
+
+---
+
+**Capacitive and Reactive Behavior:**
+- **CJE**: B-E zero-bias depletion capacitance (default: 0, scale: area).
+- **VJE**: B-E built-in potential (default: 0.75 V).
+- **MJE**: B-E junction exponential factor (default: 0.33).
+- **CJC**: B-C zero-bias capacitance (default: 0 F, dependent on device orientation).
+- **CJS**: C-S capacitance (default: 0 F).
+- **TR**: Ideal reverse transit time (default: 0 seconds).
+
+---
+
+**Temperature Dependencies (Key Parameters):**
+- **TNOM**: Nominal parameter measurement temperature (default: 27°C).
+- **XTI**: Temperature exponent for IS (default: 3).
+- **XTB**: Forward and reverse beta temperature coefficient (default: 0).
+
+---
+
+**Quasi-Saturation Model Extensions (Toggle with Parameters):**
+- **RCO**: Epitaxial region resistance (default: 0 Ω, scale: 1/area).
+- **VO**: Carrier mobility knee voltage (default: 10 V).
+- **QCO**: Charge factor in epitaxial region (default: 0.0 C).
+- **GAMMA**: Doping factor in epitaxial region (default: 1e-11).
+
+Example Enhanced Usage for Quasi-Saturation:
+```
+.model Q1 NPN BF=100 IS=1e-16 RCO=0.45 VO=4.16 GAMMA=1.0e-15 QCO=3.4e-11
+```
+
+---
+
+**High-Bias Parameter Extensions:**
+- **NK**: High-current Beta rolloff exponent (default: 0.5).
+- **ITF**: High-current parameter for TF (default: 0).
+- **PTF**: Excess phase at 1/(2πTF) Hz (default: 0).
+
+---
+
+**Temperature Coefficients (Advanced Modeling):**
+- Available for most resistances, currents, and voltages (e.g., TRE1, TIKF1, TVAF1, etc.).
+- Default value for all: 0. Example for RE temperature coefficient:
+  ```
+  .model Q1 NPN RE=1 TRE1=1e-3
+  ```
+
+---
+
+**Default Temperature Behavior for Quasi-Saturation:**
+- **VG**: Energy gap temperature dependence (default: 1.206 V).
+- **CN, D**: Temperature exponents (default: 2.42 for NPN, 2.2 for PNP).
+
+---
+
+**Component Template for Netlist:**
+```
+Q<name> <collector> <base> <emitter> <substrate> <model> [area=<value>]
+.model <model_name> NPN | PNP [parameters...]
+```
+
+**Example:**
+```
+Q1 C B E S QMODEL
+.model QMODEL NPN IS=1e-16 BF=120 CJE=2pF VJE=0.6 IKF=0.01
+```
+
+---
+
+This summary ensures clarity and utility for BJT modeling and experimentation while emphasizing critical parameters, syntax, and extensions relevant to ngspice usage. Always verify model suitability with simulation results to align theoretical and practical behavior.

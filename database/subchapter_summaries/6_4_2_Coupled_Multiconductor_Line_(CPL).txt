@@ -1,0 +1,41 @@
+### Coupled Multiconductor Line (CPL) Model Summary for Ngspice
+
+- **Overview**:  
+The CPL model is a multiconductor transmission line model based on RLGC parameters, excluding frequency-dependent losses (skin effect and dielectric loss). Supports up to 8 coupled lines.
+
+- **General Syntax**:
+  ```
+  PXXXXXXX NI1 NI2...NIX GND1 NO1 NO2...NOX GND2 mname <LEN=LENGTH>
+  ```
+
+- **Key Parameters** (Matrix definitions adhere to Maxwell matrix formats):  
+  - `R`: Resistance per length, default = 0.0 Ω/unit (e.g., `0.2` Ω/unit).  
+  - `L`: Inductance per length, default = 0.0 H/unit (e.g., `9.13e-09` H/unit).  
+  - `G`: Conductance per length, default = 0.0 mhos/unit.  
+  - `C`: Capacitance per length, default = 0.0 F/unit (e.g., `3.65e-12` F/unit).  
+  - `LENGTH`: Length of the line (no default, must be defined).  
+
+- **Node Definitions**:
+  - `ni1` to `nix`: Nodes at port 1 with `gnd1`.  
+  - `no1` to `nox`: Nodes at port 2 with `gnd2`.  
+
+- **Behavior**:  
+The length (`LEN`) is optional and overrides the `LENGTH` in the `.model` for a specific instance if specified.
+
+- **Example**:
+  ```
+  P1 in1 in2 0 b1 b2 0 PLINE  
+  .model PLINE CPL length={Len}
+  + R=1 0 1
+  + L={L11} {L12} {L22}
+  + G=0 0 0
+  + C={C11} {C12} {C22}
+  .param Len=1 Rs=0
+  + C11=9.143579E-11 C12=-9.78265E-12 C22=9.143578E-11
+  + L11=3.83572E-7 L12=8.26253E-8 L22=3.83572E-7
+  ```
+
+- **Important Notes**:
+  - Parameters `R`, `G`: Diagonal elements must be specified.
+  - Parameters `L`, `C`: Specify lower or upper triangular elements only.
+  - CPL is specifically designed for transient simulations.

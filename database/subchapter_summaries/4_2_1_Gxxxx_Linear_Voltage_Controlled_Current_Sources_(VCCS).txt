@@ -1,0 +1,18 @@
+**Summary:**
+
+**Gxxxx: Linear Voltage-Controlled Current Sources (VCCS)**
+
+- **General Form Syntax:**  
+  `GXXXXXXX N+ N- NC+ NC- VALUE <m=val>`
+
+- **Parameters Explanation:**
+  - **N+, N-:** Positive and negative nodes of the current source (current flows from N+ to N-).
+  - **NC+, NC-:** Positive and negative controlling nodes.
+  - **VALUE:** The transconductance in mhos (siemens).
+  - **m (optional):** Multiplier for the output current.  
+    - **val:** A numerical value or an expression (refer to section 2.10.5 for syntax).  
+    - Specific instance parameters discussed in section 27.3.6.
+
+- **Examples:**  
+  - `G1 2 0 5 0 0.1`  
+    (defines a VCCS with nodes 2–0, controlling nodes 5–0, and transconductance = 0.1 mhos.)  

@@ -1,0 +1,54 @@
+### Summary of Section: **Behavioral Sources with Random Control**
+
+1. **Supported Sources**: The following sources can be controlled by random voltage sources using the `TRRANDOM` option:
+   - **B-source (Nonlinear behavioral voltage/current sources)**.
+   - Derivatives: **E (voltage-controlled voltage source)** and **G (voltage-controlled current source)**.
+   - Behavioral passive components: **R (resistor)**, **L (inductor)**, and **C (capacitor)**.
+
+2. **Random Control Mechanism**:
+   - These components can be influenced by **random independent voltage sources** created with `TRRANDOM` during simulation.
+   - Random voltage sources use specific distributions and parameters for controlled variability.
+
+3. **Example: Wien Bridge Oscillator**:
+   - In the example, resistor and capacitor values (frequency-determining elements) are varied via random Gaussian voltage sources.
+   - The **control voltages** are updated at regular intervals (e.g., for 100 equally spaced blocks of time).
+
+4. **Example Commands**:
+   - **Parameter Definitions**:
+     ```
+     .param res = 10k
+     .param ttime=12000m
+     .param varia=100
+     .param ttime10 = 'ttime/varia'
+     ```
+     - `res`: Nominal resistor value.
+     - `ttime`: Total simulation time.
+     - `varia`: Number of control voltage variations.
+     - `ttime10`: Interval for control voltage update.
+   
+   - **Random Control Voltage (Gaussian Distribution)**:
+     ```
+     VR2 r2  0 dc 0 trrandom (2 'ttime10' 0 1)
+     ```
+     - `dc 0`: Initial DC voltage is 0.
+     - `trrandom`: Creates Gaussian random signal with specified parameters:
+       - Mean: `0`.
+       - Absolute deviation (1 sigma): `1`.
+       - Update interval: `'ttime10'`.
+
+   - **Behavioral Resistor**:
+     ```
+     R2 4 6  R = 'res + 0.033 * res*V(r2)'
+     ```
+     - The resistance `R` is controlled dynamically:
+       - Nominal value: `res`.
+       - Variability: ±10% deviation from `res` (`0.033` is the scaling factor).
+
+5. **Theoretical Characteristics**:
+   - **Random Voltage Source**: Generates a Gaussian-distributed signal during simulation.
+   - **Behavioral Resistor**: Resistance depends on the random control voltage signal via a formula. Allows simulation of variability in circuit properties.
+
+6. **Simulation Results**:
+   - A single simulation run gives 100 distinct resistor values (`R2`) and corresponding output from the Wien bridge oscillator.
+
+This information is useful for generating, modifying, or debugging netlist codes featuring behavioral components with random control.

@@ -1,0 +1,13 @@
+- **.INCLUDE Command**  
+  - **General form**: `.INCLUDE filename`  
+  - **Purpose**: Allows you to include content from an external file (e.g., common models or subcircuits) in the current netlist. The included file's content is treated as if it were directly written at the `.INCLUDE` statement's location.
+  
+  - **Filename Details**:  
+    - Can be an absolute or relative path.  
+    - If the relative path file is not found, `sourcepath` variable locations (Section 13.7) are searched.  
+    - No naming restrictions apart from the operating system's rules.
+
+  - **Example Usage**:
+    ```
+    .INCLUDE /users/spice/common/bsim3-param.mod
+    ```

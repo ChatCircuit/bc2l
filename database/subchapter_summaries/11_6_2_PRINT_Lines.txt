@@ -1,0 +1,38 @@
+**Summary: .PRINT Command in Ngspice**
+
+The `.PRINT` command in Ngspice specifies the output variables for tabular listings during analysis. It supports up to eight output variables and works for various analysis types: `DC`, `AC`, `TRAN`, `NOISE`, and `DISTO`. Key details and syntax:
+
+1. **General Form:**
+   ```
+   .print prtype ov1 <ov2 ... ov8>
+   ```
+   - `prtype`: Type of analysis (`DC`, `AC`, `TRAN`, etc.).
+   - `ov1, ov2, ...`: Output variables (up to eight).
+
+2. **Examples:**
+   ```
+   .print tran v(4) i(vin)
+   .print dc v(2) i(vsrc) v(23, 17)
+   .print ac vm(4, 2) vr(7) vp(8, 3)
+   ```
+
+3. **Supported Output Variables:**
+   - **Voltage:**
+     - `V(N1, N2)`: Voltage difference between nodes `N1` and `N2`. Omitting `N2` assumes ground (`0`).
+     - AC-specific replacements:
+       - `VR`: Real part.
+       - `VI`: Imaginary part.
+       - `VM`: Magnitude.
+       - `VP`: Phase.
+       - `VDB`: 20log10(magnitude).
+
+   - **Current:**
+     - `I(VXXXXXXX)`: Current through an independent voltage source `VXXXXXXX`. Positive current flows from positive to negative terminals.
+
+4. **Additional Features:**
+   - Noise and distortion analyses use different formats for output variables.
+   - Algebraic expressions can be used with the `par(expression)` option (see `11.6.6`).
+   - The `.width` option (see `11.6.7`) sets the maximum number of characters per line.
+   - Multiple `.PRINT` lines can be used for each analysis type.
+
+This command is essential when generating or debugging netlists to define usable outputs for simulation results.

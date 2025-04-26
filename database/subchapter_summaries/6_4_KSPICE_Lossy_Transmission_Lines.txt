@@ -1,0 +1,15 @@
+- **Component/Feature:** KSPICE Lossy Transmission Lines in ngspice.  
+- **Simulation Method:** Uses the recursive convolution method for simulating lossy transmission lines and coupled multiconductor line systems.  
+  - Recursive convolution is derived from the Pade approximations of the function.  
+  - This method results in faster simulations compared to the state-based approach in SPICE3.  
+
+- **Theoretical Characteristics:**  
+  - Simulates arbitrary transfer function impulse responses.  
+  - Handles both transmission line characteristics and multiconductor line modal functions.  
+    
+- **Limitations:**  
+  - Supports **only transient simulations**, no AC simulation capability.
+
+- **Additional Notes:**  
+  - The method is particularly relevant for faster transient analysis of lossy or coupled transmission lines but does not provide examples or netlist templates in the provided text.  
+  

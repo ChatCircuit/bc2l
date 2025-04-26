@@ -1,0 +1,136 @@
+The section contains advanced examples of `.meas` commands in Ngspice netlists, demonstrating various measurement techniques. Below is a structured and precise summary that focuses on new and significant details, particularly constructs and templates for code generation, modification, debugging, and analysis:
+
+### **Measurement Commands (`.meas`) Examples and Templates**
+
+#### **Transient Analysis (`.meas tran`)**
+- **Delay Measurements with Conditions**:
+  ``` 
+  .meas tran inv_delay2 trig v(in) val='vp/2' td=1n fall=1 targ v(out) val='vp/2' rise=1
+  ```
+  Measures delay with trigger and target voltage conditions and timing.
+
+- **Trigger and Target Timing with Specific Cycle (`rise`, `fall`)**:
+  ``` 
+  .meas tran test_data1 trig AT=1n targ v(out) val='vp/2' rise=3
+  ```
+  Measures the time difference based on conditions at specific waveform cycles.
+
+- **Output Slew Rate Measurement**:
+  ``` 
+  .meas tran out_slew trig v(out) val='0.2*vp' rise=2 targ v(out) val='0.8*vp' rise=2
+  ```
+  Computes the time for a signal to transition between low and high threshold levels.
+
+- **Parameter-Based Measurement Validation**:
+  ```
+  .meas tran delay_chk param='(inv_delay < 100ps) ? 1 : 0'
+  ```
+  Boolean output depending on a delay parameter condition.
+
+- **Skew Calculation**:
+  - **Simple Case**:
+    ```
+    .meas tran skew when v(out)=0.6
+    ```
+  - **Using Previously Measured Value**:
+    ```
+    .meas tran skew2 when v(out)=skew_meas
+    ```
+  - **Specific Waveform Transition Cycles**:
+    ```
+    .meas tran skew3 when v(out)=skew_meas fall=2
+    ```
+    ```
+    .meas tran skew4 when v(out)=skew_meas fall=LAST
+    ```
+
+- **Value at a Specific Time**:
+  ```
+  .meas tran skew5 FIND v(out) AT=2n
+  ```
+
+- **Statistical Measures on Waveforms**:
+  - Minimum:
+    ```
+    .meas tran v0_min min i(v0) from='dfall' to='dfall+period'
+    ```
+  - Average:
+    ```
+    .meas tran v0_avg avg i(v0) from='dfall' to='dfall+period' 
+    ```
+  - Integration:
+    ```
+    .meas tran v0_integ integ i(v0) from='dfall' to='dfall+period'
+    ```
+  - RMS:
+    ```
+    .meas tran v0_rms rms i(v0) from='dfall' to='dfall+period'
+    ```
+
+#### **DC Analysis (`.meas dc`)**
+- **Value at a Specific Point**:
+  ```
+  .meas dc is_at FIND i(vs) AT=1
+  ```
+- **Maximum/Minimum in a Range**:
+  ```
+  .meas dc is_max max i(vs) from=0 to=3.5
+  ```
+- **Voltage When Current Match Occurs**:
+  ```
+  .meas dc vds_at when i(vs)=0.01
+  ```
+
+#### **AC Analysis (`.meas ac`)**
+- **Value at a Specific Frequency**:
+  ```
+  .meas ac vout_at FIND v(out) AT=1MEG
+  ```
+  ```
+  .meas ac vout_atd FIND vdb(out) AT=1MEG
+  ```
+- **Maximum Value Across a Frequency Range**:
+  ```
+  .meas ac vout_max max v(out) from=1k to=10MEG
+  ```
+- **Frequency at a Specific Voltage**:
+  ```
+  .meas ac freq_at when v(out)=0.1
+  ```
+- **Time Difference Between Voltage Crossings**:
+  ```
+  .meas ac vout_diff trig v(out) val=0.1 rise=1 targ v(out) val=0.1 fall=1
+  ```
+- **Trigger-Based Timing**:
+  ```
+  .meas ac fixed_diff trig AT=10k targ v(out) val=0.1 rise=1
+  ```
+
+- **Statistical Measures for AC Signals**:
+  - Average:
+    ```
+    .meas ac vout_avg avg v(out) from=10k to=1MEG
+    ```
+  - Integration:
+    ```
+    .meas ac vout_integ integ v(out) from=20k to=500k
+    ```
+  - Frequency When Voltage Condition is Met (`LAST`):
+    ```
+    .meas ac freq_at2 when v(out)=0.1 fall=LAST
+    ```
+  - RMS:
+    ```
+    .meas ac vout_rms rms v(out) from=10 to=1G
+    ```
+
+- **Parameter Check on Bandwidth/Behavior**:
+  ```
+  .meas ac bw_chk param='(vout_diff < 100k) ? 1 : 0'
+  ```
+
+### **Key Notes**
+1. These commands highlight advanced usage of `.meas` for debugging, validation, and waveform analysis in netlists.
+2. Default or implicit details (e.g., time unit assumed as seconds, unless specified otherwise) must still be carefully managed.
+3. Utilize these templates for precise queries and measurement criteria in simulations.
+

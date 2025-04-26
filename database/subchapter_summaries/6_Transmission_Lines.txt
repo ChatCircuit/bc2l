@@ -1,0 +1,11 @@
+6 Transmission Lines  
+Ngspice supports two transmission line models:  
+1. **SPICE3f5 Transmission Line Model**  
+2. **KSPICE Model**  
+   - KSPICE provides improved transient analysis for lossy transmission lines and coupled multiconductor systems via the **recursive convolution method**.   
+   - Uses Pade approximations to derive recursive convolutions for impulse response computation.  
+   - Offers a performance speedup of 10x to 100x compared to SPICE3f5 for simulating:  
+     - Lossy transmission lines.  
+     - Multiconductor line systems using modal functions.  
+
+No additional code, syntax, or templates provided in the text.  

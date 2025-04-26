@@ -1,0 +1,26 @@
+### Summary for Ngspice Section 6.2: Lossy Transmission Lines
+
+**Component General Form**:  
+`OXXXXXXX n1 n2 n3 n4 mname`
+
+**Key Details**:  
+- This is a **two-port convolution model** for single-conductor lossy transmission lines.  
+- `n1` and `n2` are nodes at port 1, while `n3` and `n4` are nodes at port 2.  
+- A lossy transmission line with zero loss may sometimes be more accurate than a lossless transmission line due to implementation details.
+
+**Example Code**:  
+`O23 1 0 2 0 LOSSYMOD`  
+`.model LOSSYMOD ltra rel=1 r=12.45 g=0 l=8.972e-9 c=0.468e-12 len=16 steplimit compactrel=1.0e-3 compactabs=1.0e-14`  
+`OCONNECT 10 5 20 5 INTERCONNECT`  
+
+**Model Parameters**:  
+1. **`rel`**: Model parameter (relative tolerance).  
+2. **`r`**: Resistance (Ohms).  
+3. **`g`**: Conductance (Siemens).  
+4. **`l`**: Inductance (Henries).  
+5. **`c`**: Capacitance (Farads).  
+6. **`len`**: Length of the transmission line (meters).  
+7. **`steplimit`**: Specifies the step limit for the simulation.  
+8. **`compactrel`** and **`compactabs`**: Compact modeling tolerances for relative and absolute values, respectively.
+
+This information is vital for defining and customizing lossy transmission lines in netlist generation, debugging, or modification. The detailed parameters allow fine-tuning for simulation accuracy.

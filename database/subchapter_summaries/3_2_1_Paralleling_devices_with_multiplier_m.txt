@@ -1,0 +1,96 @@
+### Summary: Parallel Multiplier (`m`) in Ngspice 
+
+**Purpose:**
+The `m` parameter is used to simulate multiple parallel devices of the same type efficiently by scaling the element's matrix stamp. This avoids manually creating numerous instances in the netlist.
+
+---
+
+**Syntax and Example:**
+```plaintext
+Component_Name Node1 Node2 Model_Name m=<value>
+```
+
+Example with Diodes:
+```plaintext
+d1 2 0 mydiode m=10
+```
+Equivalent representation:
+```plaintext
+d01 1 0 mydiode  
+d02 1 0 mydiode  
+...  
+d10 1 0 mydiode
+```
+
+Here, `d1` (m=10) between nodes 2 and 0 is mathematically equivalent to ten parallel diodes (`d01-d10`) between nodes 1 and 0.
+
+---
+
+**Default Devices Supporting '`m`' Parameter:**  
+(Table 3.1)  
+
+| **Element Prefix** | **Description**                                        |
+|---------------------|--------------------------------------------------------|
+| C                   | Capacitor                                              |
+| D                   | Diode                                                  |
+| F                   | Current-controlled current source (CCCs)               |
+| G                   | Voltage-controlled current source (VCCS)               |
+| I                   | Current source                                         |
+| J                   | Junction field effect transistor (JFET)                |
+| L                   | Inductor                                               |
+| M                   | MOSFET                                                 |
+| Q                   | Bipolar junction transistor (BJT)                      |
+| R                   | Resistor                                               |
+| X                   | Subcircuit                                             |
+| Z                   | Metal semiconductor field effect transistor (MESFET)   |
+
+---
+
+**Using `m` in Subcircuits:**
+When used with `X` (subcircuit instance), parallel multiplier `m` propagates to supported components inside the subcircuit. The multiplication applies recursively if nested subcircuits are involved.
+
+Example with Parameterized Multiplication:
+```plaintext
+.param madd = 6
+X1 a b sub1 m=5
+.subckt sub1 a1 b1
+   Cs1 a1 b1 C=5p m='madd-2'  
+.ends
+```
+**Result:**  
+Capacitance between nodes `a` and `b`:  
+C = 5pF × (madd - 2) × 5 = **100pF**
+
+Recursive Example:
+```plaintext
+.param madd = 4
+X1 a b sub1 m=3
+.subckt sub1 a1 b1
+   X2 a1 b1 sub2 m='madd-2'  
+.ends
+.subckt sub2 a2 b2
+   Cs2 a2 b2 C=3p m=2  
+.ends
+```
+**Result:**   
+Capacitance between nodes `a` and `b`:  
+C = 3pF × 2 × (madd - 2) × 3 = **36pF**
+
+---
+
+**Important Notes:**
+1. Using `m` for real devices (e.g., MOS transistors) may fail to account for geometrical scaling and edge effects.  
+   - Example difference:  
+     ```plaintext
+     M1 d g s nmos W=0.3u L=0.18u m=20
+     M1 d g s nmos W=6u L=0.18u
+     ```
+     The wide transistor (`W=6u`) overcomes small width effects better than `m=20`.
+
+---
+
+**Key Takeaways for Netlist Generation/Debugging:**
+1. Use `m` for efficient parallel device instantiation when theoretical equivalence suffices.  
+2. Carefully verify physical characteristics (e.g., MOSFETs) to avoid misrepresentation.  
+3. Recursive subcircuit usage amplifies multiplier effects.  
+4. Utilize parameter expressions for dynamic multiplier adjustments (e.g., `'madd-2'`).

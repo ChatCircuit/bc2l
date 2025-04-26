@@ -1,0 +1,19 @@
+**Summary of Important Information from Provided Text:**
+
+**Ngspice Control Language Overview:**
+- The control language enables the generation of simple or complex scripts for simulations.
+- Commands, built-in functions, control structures, and predefined variables are available for scripting (details are located in specified manual chapters).
+- Key functionality includes loops for repeated simulation runs, altering device or model parameters during or between runs using `alter` and `altermod` commands.
+- Simulations can be interrupted with the `stop` command and resumed using `resume` with updated parameters.
+
+**Statistical Functions for Scripting:**
+1. **rnd(vector)**: Produces a vector where each component is a random integer between `0` and the absolute value of the input vector's corresponding integer element.
+2. **sgauss(vector)**: Produces a vector of random numbers from a Gaussian distribution (`mean = 0`, `std deviation = 1`). Input vector determines the output vector's length. Example: `sgauss(0)` returns a single random number as a vector of length 1.
+3. **sunif(vector)**: Produces uniformly distributed random real numbers in the interval `[-1 .. 1]`. Input vector determines the output vector's length. Example: `sunif(0)` returns a single random number as a vector of length 1.
+4. **poisson(vector)**: Produces a vector with elements as integers drawn from a Poisson distribution based on expected values (`λ`) from the input vector (real numbers). Handles real and imaginary values separately for complex vectors.
+5. **exponential(vector)**: Produces a vector with elements (real numbers) drawn from an exponential distribution using mean values (real numbers) from the input vector. Handles real and imaginary values separately for complex vectors.
+
+**Application for Netlist/Scripts:**
+- To redefine parameters mid-simulation, utilize `stop` followed by adjustments using `alter` or `altermod`, then resume the simulation with `resume`.
+- Incorporate statistical randomness into simulations using statistical functions like `rnd`, `sgauss`, `sunif`, `poisson`, or `exponential`.
+

@@ -1,0 +1,25 @@
+### Summary: Ngspice Manual (Section 11.2 Initial Conditions)
+
+#### Initial Condition Specification:
+- **Purpose**: Used to set the initial voltages on capacitors and currents through inductors in the circuit. Essential for determining circuit behavior at the start of simulations, especially transient analysis. 
+
+#### Command Syntax:
+- Defined in netlists using **`.IC`** in the following format:
+  ```
+  .IC V(node1)=value1 V(node2)=value2 ...
+  ```
+  Example:
+  ```
+  .IC V(1)=2.5 V(2)=0.5
+  ```
+  - Sets the initial voltage at node 1 to 2.5V and node 2 to 0.5V.
+
+#### Impact and Behavior:
+- **Transient Analysis (default)**: 
+  - Overrides default initial guesses for circuit variables.
+  - Typically influences the initial solution of differential equations.
+- **DC Operating Point**: 
+  - Does NOT modify the DC operating point directly unless `.NODESET` or another related directive is used.
+
+#### Related Notes:
+- The `.IC` directive is used during transient analysis and enhances the solver's performance by providing a good starting point.

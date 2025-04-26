@@ -1,0 +1,30 @@
+17.7 Transmission-Line Inverter  
+The section describes simulating a transmission-line inverter using two transmission-line elements required for modeling two propagation modes. In the case of a coaxial line:  
+- `T1` models the inner conductor concerning the shield.  
+- `T2` models the shield concerning the outside world.  
+
+**Example Deck**:  
+This example defines a transmission-line inverter circuit.  
+
+```
+v1 1 0 pulse(0 1 0 0.1n)      ; Voltage source with a pulse waveform.
+r1 1 2 50                    ; Resistor with 50 Ohms impedance.
+x1 2 0 0 4 tline             ; Subcircuit instance of the transmission line.
+r2 4 0 50                    ; Termination resistor of 50 Ohms.
+
+.subckt tline 1 2 3 4        ; Subcircuit declaration for the transmission line.
+t1 1 2 3 4 z0=50 td=1.5ns    ; First transmission line (Z0=50 Ohms, td=1.5ns).
+t2 2 0 4 0 z0=100 td=1ns     ; Second transmission line (Z0=100 Ohms, td=1ns).
+.ends tline                  ; End of subcircuit.
+
+.tran 0.1ns 20ns             ; Transient analysis with 0.1ns step and 20ns duration.
+.end                         ; End of the simulation deck.
+```
+
+Key Syntax/Parameter Notes:  
+- `v1`: Voltage source using a `pulse` waveform.  
+- `z0`: Characteristic impedance of the transmission line.  
+- `td`: Time delay of the transmission line.  
+- `.subckt/.ends`: Used to define reusable subcircuits.  
+- `.tran`: Time-domain analysis command with specified time step and simulation time.  
+

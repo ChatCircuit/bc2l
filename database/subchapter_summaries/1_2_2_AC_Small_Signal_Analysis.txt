@@ -1,0 +1,14 @@
+**Summary: AC Small-Signal Analysis for Netlist Code Generation and Queries**
+
+- **Purpose**: AC analysis computes the sinusoidal steady-state behavior of analog circuits at a set of user-defined frequencies. It represents the small-signal response of the system.
+
+- **Procedure**:
+  1. **DC Operating Point**: Computes the circuit's DC operating point first.
+  2. **Linearization**: Linearizes all nonlinear devices to create small-signal models.
+  3. **Frequency Sweep**: Analyzes the linear circuit across a range of user-specified frequencies.
+
+- **Outputs**:
+  - Common outputs include transfer functions like voltage gain, transimpedance, etc.
+  - For circuits with a single AC input, the input is often set to **unity magnitude and zero phase**, simplifying output variables to represent the transfer function directly.
+
+**Note**: No code or specific syntax was provided in the excerpt. The primary takeaways involve theoretical understanding and typical setup practices for AC analysis in Ngspice.

@@ -1,0 +1,49 @@
+### Summary of Ngspice Section 1.1.6 on Mixed-Level Simulation (Electronic and TCAD):
+
+1. **Mixed-Level Simulation in Ngspice**:
+   - Ngspice integrates with **CIDER**, which combines circuit simulation with device-level numerical modeling.
+   - Compact models are used for noncritical devices, while critical devices are modeled numerically for added accuracy.
+
+2. **CIDER Features**:
+   - Couples Ngspice with an internal **C-based device simulator**.
+   - Provides both **1D and 2D numerical device models** solving:
+     - Poisson's equation.
+     - Electron and hole current-continuity equations.
+   - Input Format:
+     - **SPICE-like** descriptions for circuits and compact models.
+     - **PISCES-like** descriptions for numerically modeled device structures.
+   - Includes physical models for **state-of-the-art technologies**, such as:
+     - **Transverse field mobility degradation** for scaled-down MOSFETs.
+     - **Polysilicon model** for poly-emitter BJTs.
+   - **Temperature dependence** across -50°C to 150°C for most physical models.
+   - Simulates basic semiconductor devices:
+     - Resistors, MOS capacitors, diodes, BJTs, JFETs, MOSFETs.
+     - BJTs and JFETs have optional substrate contacts.
+   - Enables management of device **internal states**.
+     - States can be preloaded for accurate initial conditions in subsequent simulations.
+
+3. **Simulation Capabilities**:
+   - Post-processing and control of computed device states through the **ngspice control interface**.
+
+4. **Modeling Sources and Dependencies**:
+   - Uses physical models from tools like **PISCES** and earlier works (CODECS).
+   - References for advanced models include:
+     - Inversion-layer mobility model ([LGATE90]).
+     - Temperature-dependent PISCES models ([SOLL90]).
+   - Does not provide full details of semiconductor equations but references foundational texts like [PINT90] and [SELB84].
+
+5. **Advanced Modeling Access**:
+   - Allows **flexible input formats** with increased access to physical model parameters.
+   - New models support modern technology variations for higher simulation fidelity.
+
+6. **Supplementary Tools**:
+   - Integration with the **GSS TCAD software** (no longer maintained).
+   - Successor: **Cogenda Genius**, available as open-source TCAD software.
+
+7. **Linux Users Note**:
+   - Interaction with TCAD software such as **GSS** and its evolution (Genius simulator) is available.
+
+8. **Key Limitations**:
+   - The manual does not detail the semiconductor equations or their physical model implementations.
+
+For more theoretical details, consult referenced works such as [PINT85], [MAYA88], [LGATE90], and [SELB84].

@@ -1,0 +1,17 @@
+- **Card**: A logical SPICE input line, extendable using `+`. Comprises multiple lines in a SPICE deck.
+
+- **Code Model**: A component, function, or device modeled in C functions. Custom code models are allowed alongside those in XSPICE.
+
+- **Deck**: A collection of SPICE cards containing all input for circuit analysis, stored in a file.
+
+- **Element Card**: A single SPICE card describing a circuit element. Example: `R1 2 0 10K` represents a resistor connecting nodes 2 and 0 with value 10 kΩ.
+
+- **Instance**: A specific occurrence of a circuit element, e.g., `R1` is an instance of a resistor defined with an element card.
+
+- **Macro (.mod)**: C macros used to construct custom models for parameter management in XSPICE (`cfunc.mod` is an example file).
+
+- **Model (.model)**: Associated with element cards for readable data storage in the deck. 
+
+- **Nutmeg**: Obsolete post-processor for displaying/plotting simulator raw files.
+
+- **Subcircuit**: A set of element cards combined to define a reusable "device," which can be referenced elsewhere in a circuit deck.

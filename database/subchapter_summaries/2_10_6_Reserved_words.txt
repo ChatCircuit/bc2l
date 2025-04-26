@@ -1,0 +1,2 @@
+Reserved words in Ngspice (cannot be used as parameter names):  
+or, defined, sqr, sqrt, sin, cos, exp, ln, log, log10, arctan, abs, pwr, time, temper, hertz.  

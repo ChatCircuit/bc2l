@@ -1,0 +1,37 @@
+### Summary for Netlist Code Generation/Modification/Debugging for Differential Pair:
+
+The code performs DC operating-point and AC small-signal response analysis for a differential pair circuit operating across 1 Hz to 100 MHz. Below are the key extracted details:
+
+- **Circuit Components:**
+  - Power supplies: `VCC (12V)` and `VEE (-12V)`.
+  - Transistors: Two identical NPN BJTs (`Q1`, `Q2`) set with the same model.
+  - Resistors: `RS1`, `RS2`, `RC1`, `RC2`, `RE`.
+
+- **Important Syntax/Templates:**
+  - Voltage sources:
+    `VCC <node+> <node-> <voltage>`  
+    `VEE <node+> <node-> <voltage>`  
+  - Resistor:
+    `<ResistorName> <node1> <node2> <resistance_value>`  
+  - Bipolar Junction Transistor (BJT):
+    `<BJTName> <collector> <base> <emitter> <model_name>`  
+  - Model Declaration:
+    `.MODEL <model_name> NPN <parameters>`  
+  - Transfer Function Analysis:
+    `.TF <output_variable> <input_variable>`  
+  - AC Small-Signal Analysis:
+    `.AC <sweep_type> <points_per_decade> <start_frequency> <stop_frequency>`  
+
+- **Transistor Model `MOD1`:**
+  - Key Parameters:
+    `BF=50` (current gain), `VAF=50` (Early voltage),  
+    `IS=1E-12` (saturation current), `RB=100` (base resistance),  
+    `CJC=0.5pF` (collector-base capacitance), `TF=0.6ns` (forward transit time).
+
+- **Important Example Lines from Model and Analysis**:
+  ```
+  .MODEL MOD1 NPN BF=50 VAF=50 IS=1.E-12 RB=100 CJC=.5PF TF=.6NS
+  .TF V(5) VIN
+  .AC DEC 10 1 100MEG
+  ```
+
