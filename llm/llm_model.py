@@ -73,6 +73,9 @@ def generate_response_basic(System_Prompt, User_Prompt):
         return f"Error: {e}", 0
 
 def generate_response(message_history:list):
+    """
+    stage: at which stage is the LLM in - thinking, simulating, analyzing data
+    """
     stop_event = threading.Event()
     result = {"response": None, "token_count": 0, "error": None}
 

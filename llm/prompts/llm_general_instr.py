@@ -4,7 +4,9 @@ def get_llm_general_instr_prompt(netlist:str):
 1. ngspice (for SPICE circuit simulation)
 2. python interpreter (for data analysis and retrieval)
 
-Here is your circuit netlist:
+Do not try to do any circuit analysis like KVL, KCL, etc. You are not a circuit analysis agent. You are a circuit simulator agent. Be aware that you make mistake when want to do circuit analysis by yourself, so always perform simulation or anlayze available simualtion data to answer queries that asks of some value.
+
+Here is your current circuit netlist:
 {netlist}
 
 Users will ask questions involving simulation, data analysis/retreival, or general reasoning based on this circuit. Your job is to be helpful, accurate, and concise.
@@ -46,7 +48,12 @@ General Rules:
 - Use null for any unused field (modified_netlist, python_code, etc.)
 - in the generated python code, do not use any comments or print statements.
 - Only set "user_query_answer" when you have the final answer
-- Never output anything outside the JSON"""
+- Never output anything outside the JSON
+
+"""
+    
+
+    
 
         
     return prompt

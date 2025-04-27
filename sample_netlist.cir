@@ -1,7 +1,11 @@
-* simple RC circuit with 2 R and 1 C
-
-V1 1 0 10V
+* Simple circuit with 3 VDC sources and 5 resistors
+V1 1 0 5V
+V2 2 0 10V
+V3 3 0 15V
 R1 1 2 1k
-R2 2 0 1k
+R2 2 3 2k
+R3 3 0 3k
+R4 1 0 4k
+R5 2 0 5k
 
 .end

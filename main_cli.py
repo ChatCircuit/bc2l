@@ -98,14 +98,19 @@ def main():
 
         ####### processing the prompt with LLM
         while True:
-            response, token_count = llm_model.generate_response(message_history=prompt_manager.get_prompt())
+            if os.getenv("SHOW_FULL_PROMPT") == "True": 
+                print("full prompt being passed to llm: \n", prompt_manager.get_pretty_prompt())
             
+            response, token_count = llm_model.generate_response(message_history=prompt_manager.get_prompt()) # call the LLM model to get the response
+
             logger.debug(f"llm raw response: {response}")
             logger.debug(f"llm response token count: {token_count}")
 
             ######## decoding json into dictionary object
             try:
                 response_dict = json.loads(response) # data is a dictionary object
+                prompt_manager.append(role="assistant", content=response_dict)  # append the response to the prompt history
+
             except json.JSONDecodeError:
                 response_dict = None
                 logger.error("Failed to parse JSON response from LLM")
@@ -130,8 +135,9 @@ def main():
                 mod_netlist = response_dict["modified_netlist"]
                 
                 if mod_netlist is not None:
-                    # run the simulator with the modified netlist
+                    print("(simulating circuit....)", end="")
                     result = spice_server(mod_netlist)  # run the simulator with the modified netlist
+                    print("(simulation completed)")
 
                     data = result["data"] # a dictionary object {"vars": [], "data_points": []}
                     sim_out_desc = result["description"] # a dictionary object
@@ -142,18 +148,14 @@ def main():
                         logger.error(f"Error in simulation: {error}")
                         print("Failed to execute :( Please try again, thank you.")
                         break
-
-                    sim_out_desc = json.dumps(sim_out_desc, indent=0) # convert to string 
-                    sim_out_desc = "ngspice simulation output: \n" + sim_out_desc
-                    logger.debug(f"sim_out_desc passed to llm:{sim_out_desc}")
                     
-                    prompt_manager.append(role="user", content = ""+ sim_out_desc)
-
+                    prompt_manager.append(role="user", content = sim_out_desc, subrole="simulator")
                     # print(prompt_manager.get_prompt())
                 else:
-                    logger.error("Tying to simulate but modified netlist is None")
+                    logger.error("Trying to simulate but modified netlist is None")
                     print("Failed to execute :( Please try again, thank you.")
                     break
+
             elif target == "python interpreter":
                 # if the target is python interpreter, then we can run the python code and get the output
                 logger.info("Running python interpreter with python code")
@@ -161,12 +163,15 @@ def main():
 
                 if python_code is not None:
                     # run the python code with the data from simulator
+                    print("(analyzing data...)", end="") #TODO: why is this not printing out?
                     ipreter_out = python_interpreter(python_code, data=data) # run the python code with the data from simulator
+                    print("(data analysis completed)")
+
                     ipreter_out_desc = json.dumps(ipreter_out, indent=0) # convert to string
                     ipreter_out_desc = "python interpreter output: \n" + ipreter_out_desc
                     logger.debug(f"ipreter_out_desc passed to llm:{ipreter_out_desc}")
                     
-                    prompt_manager.append(role="user", content = ""+ ipreter_out_desc)
+                    prompt_manager.append(role="user", content = ""+ ipreter_out_desc, subrole="interpreter")
             else:
                 logger.error("Invalid response from LLM: target is not user or simulator or python interpreter")
                 print("Failed to execute :( Please try again, thank you.")
