@@ -27,9 +27,7 @@ class Prompt_manager:
                                                         {"role": role, "subrole": subrole, "content": content},
                                                         {"role": role, "subrole": subrole, "content": content},...]                                         
                                 }
-        """
-        self.interactions = [] 
-        
+        """        
         # keep up a unique task id for each user prompt
         self.task_id = 0
 
@@ -42,7 +40,7 @@ class Prompt_manager:
         if (role == "assistant"):
             # if there is a modified netlist in the content, then update the system content with the new netlist
             try: 
-                mod_netlist = content["modified_netlist"]
+                mod_netlist = content["netlist_for_simulator"]
             except:
                 mod_netlist = None
 
@@ -98,8 +96,25 @@ class Prompt_manager:
         """
         check the length of the prompt and trim it if it exceeds the max length
         """
-        # TODO after implementing the interaction list and probably object
+        if (len(self.prompt) > self.max_history_length):
+            # remove the oldest entry from the prompt
+            self.prompt.pop(1) # not zero as removing the first entry is the system content
+            logger.info(f"prompt history length exceeded {self.max_history_length}, removed the oldest entry")
+        else:
+            logger.debug(f"prompt history length: {len(self.prompt)}")
         pass
+
+    def clear_history(self, netlist:str=None):
+        """
+        clear the prompt history entirely and add a new system content with new netlist. this is used when the user wants to start a new task with a new netlist.
+        """
+        self.prompt = []
+        self.system_content = get_llm_general_instr_prompt(netlist)
+        self.prompt.append({"role": "system", "content": self.system_content})
+
+    def get_current_netlist(self):
+        return self.netlist
+
 
     def get_user_prompt(self):
         """

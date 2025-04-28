@@ -1,6 +1,6 @@
 # command line interface for the bring circuit to life application software
 
-import argparse, logging, json, os
+import argparse, logging, json, os, sys
 from dotenv import load_dotenv
 
 
@@ -76,7 +76,7 @@ def main():
     llm_model.Prepare_llm(llm=os.getenv("LLM_MODEL"))  # prepare the LLM model
 
     from llm.cook_llm_feed import Prompt_manager
-    prompt_manager = Prompt_manager(netlist=netlist, max_history_length=30)
+    prompt_manager = Prompt_manager(netlist=netlist, max_history_length=int((os.getenv("MAX_HISTORY_LENGTH"))))  # initialize the prompt manager with the netlist and max history length
     
     from run_simulation_from_nl import SpiceServer
     spice_exe_path = os.getenv("NGSPICE_PATH")
@@ -85,19 +85,48 @@ def main():
     ##########################################
     ########Loop without maintaining database
     ##########################################
+    data = {"data_points_df":None} # initialize the data object to pass to the python interpreter
+
 
     # take prompt from user on a loop and process
     while True:
-        prompt = input("\n\n\n#Enter your prompt (or 'quit' to quit): ")
-        
+        prompt = input("\n\n\n\n#Enter your prompt (or 'quit' to quit): ")
+
+        # special commands to handle
         if prompt.lower() == 'quit':
             break
+        elif prompt.lower() == 'show-netlist':
+            # show the current netlist
+            print("Current netlist: \n", prompt_manager.get_current_netlist())
+            continue
+        elif prompt.lower() == 'load-new':
+            # load a new netlist from file
+            new_netlist_file = input("Enter the path to the new netlist file: ").strip('"')
+            with open(new_netlist_file, 'r') as file:
+                netlist = file.read()
+            print("loaded new netlist: \n", netlist)
+            prompt_manager.clear_history(netlist)  # update the netlist in the prompt manager and clear the history
+            continue
+        elif prompt.lower() == 'stop-debug':
+            # TODO: gotta update the looger file, otherwise not working
+            # stop the debug mode and start the normal mode
+            os.environ["LOGGING_LEVEL"] = "CRITICAL" # set the logging level to CRITICAL to stop the debug mode
+            print("Debug mode stopped")
+            continue
+        elif prompt.lower() == 'start-debug':
+            # start the debug mode
+            #TODO: gotta update the looger file
+            os.environ["LOGGING_LEVEL"] = "DEBUG" # set the logging level to DEBUG to start the debug mode
+            print("Debug mode started")
+            continue
 
         prompt_manager.append(role="user", content= prompt)      
-        logger.info(f"user prompt History: {prompt_manager.get_user_prompt()}")
 
         ####### processing the prompt with LLM
         while True:
+            sim_error_retry_count = 0
+            ipreter_error_retry_count = 0
+
             if os.getenv("SHOW_FULL_PROMPT") == "True": 
                 print("full prompt being passed to llm: \n", prompt_manager.get_pretty_prompt())
             
@@ -113,8 +142,7 @@ def main():
 
             except json.JSONDecodeError:
                 response_dict = None
-                logger.error("Failed to parse JSON response from LLM")
-                print("Failed to execute :( Please try again, thank you.")
+                logger.error("Failed to parse JSON response from LLM, re-entering the loop with the same prompt and retrying.")
                 continue    
             
             ####### handle output from llm
@@ -122,7 +150,7 @@ def main():
 
             if target == "user":
                 # if the target is user, then we can print the final answer
-                if response_dict["current_status"] == "final answer ready":
+                if response_dict["user_query_answer"] is not None:
                     print(f">>>> {response_dict['user_query_answer']}")
                 else:
                     logger.error("Invalid response from LLM: target is user but current status is not final answer ready")
@@ -132,7 +160,7 @@ def main():
             elif target == "simulator":
                 # if the target is simulator, then we can run the simulator and get the output
                 logger.info("Running simulator with modified netlist")
-                mod_netlist = response_dict["modified_netlist"]
+                mod_netlist = response_dict["netlist_for_simulator"]
                 
                 if mod_netlist is not None:
                     print("(simulating circuit....)", end="")
@@ -141,16 +169,19 @@ def main():
 
                     data = result["data"] # a dictionary object {"vars": [], "data_points": []}
                     sim_out_desc = result["description"] # a dictionary object
-                    error = result["error"] # a string object
+                    error = result["description"]["error"] # a string object
 
-                    if error != "":
-                        # TODO: handle error in simulation by the LLM
-                        logger.error(f"Error in simulation: {error}")
-                        print("Failed to execute :( Please try again, thank you.")
-                        break
+                    if error is not None:
+                        sim_error_retry_count += 1
+                        if sim_error_retry_count > int(os.getenv("SIM_ERROR_RETRY_LIMIT")):
+                            logger.error(f"Error in simulation. LLM could not fix the error within the given try limit.")
+                            print("Failed to execute. Please try again, thank you.")
+                            break
+                        else:
+                            # retry the simulation with the same netlist
+                            logger.info(f"Error in simulation. Retrying({sim_error_retry_count})... Error Message: {error}")
                     
                     prompt_manager.append(role="user", content = sim_out_desc, subrole="simulator")
-                    # print(prompt_manager.get_prompt())
                 else:
                     logger.error("Trying to simulate but modified netlist is None")
                     print("Failed to execute :( Please try again, thank you.")
@@ -159,19 +190,28 @@ def main():
             elif target == "python interpreter":
                 # if the target is python interpreter, then we can run the python code and get the output
                 logger.info("Running python interpreter with python code")
-                python_code = response_dict["python_code"]
+                python_code = response_dict["python_code_for_interpreter"] 
 
                 if python_code is not None:
                     # run the python code with the data from simulator
-                    print("(analyzing data...)", end="") #TODO: why is this not printing out?
+                    print("(analyzing data...)", end="") 
                     ipreter_out = python_interpreter(python_code, data=data) # run the python code with the data from simulator
                     print("(data analysis completed)")
 
-                    ipreter_out_desc = json.dumps(ipreter_out, indent=0) # convert to string
-                    ipreter_out_desc = "python interpreter output: \n" + ipreter_out_desc
-                    logger.debug(f"ipreter_out_desc passed to llm:{ipreter_out_desc}")
+
+                    ipreter_error = ipreter_out["error"] # a string object
+
+                    if ipreter_error is not None:
+                        ipreter_error_retry_count += 1
+                        if ipreter_error_retry_count > int(os.getenv("IPRETER_ERROR_RETRY_LIMIT")):
+                            logger.error(f"Error in interpreter execution. LLM could not fix the error within the given try limit.")
+                            print("Failed to execute. Please try again, thank you.")
+                            break
+                        else:
+                            # retry the simulation with the same netlist
+                            logger.info(f"Error in python interpreter. Retrying({ipreter_error_retry_count})... Error Message: {ipreter_error}")
                     
-                    prompt_manager.append(role="user", content = ""+ ipreter_out_desc, subrole="interpreter")
+                    prompt_manager.append(role="user", content = ipreter_out, subrole="interpreter")
             else:
                 logger.error("Invalid response from LLM: target is not user or simulator or python interpreter")
                 print("Failed to execute :( Please try again, thank you.")

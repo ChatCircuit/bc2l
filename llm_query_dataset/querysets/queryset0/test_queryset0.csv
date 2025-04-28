@@ -1,4 +1,5 @@
 "TYPE			",QUERY,EXPECTED OUTPUT,SUCCESS
-"compound sim com, compound sim com			",what is the current through the voltage source V1 and R4? ,,
-"data analysis		","what's that in mA?	",,
-"general			",show your netlist,,
+"general			",show your netlist,,yes
+"compound sim com, compound sim com			",what is the current through the voltage source V1 and R4? ,from original ngspice sim: -7.5mA and 6.25mA respectively,yes
+"data analysis		","what's that in mA?	",,yes
+,"do multiple simulations with V1 = 10V, 17.5V and 19.5V and tell me the voltage accross R1 in each case",,

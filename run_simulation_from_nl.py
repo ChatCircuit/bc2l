@@ -52,7 +52,6 @@ class SpiceServer:
     def __init__(self, **kwargs):
 
         self._spice_command = kwargs.get('spice_command') or self.SPICE_COMMAND
-        self.error = ""
 
     ##############################################
 
@@ -94,7 +93,7 @@ class SpiceServer:
                     break
 
             if values_index == -1:
-                print("Warning: 'Values:' marker not found.")
+                logger.warning("Warning: 'Values:' marker not found.")
                 return []
 
             # Regex to match the variable definition lines (index, name, type)
@@ -115,11 +114,11 @@ class SpiceServer:
                         variables.append((index, name, var_type))
                     except ValueError:
                         # This should not happen due to \d+ in regex, but safety first
-                        print(f"Warning: Could not convert index '{index_str}' to int on line: {line}")
+                        logger.warning(f"Warning: Could not convert index '{index_str}' to int on line: {line}")
                         continue
 
         except Exception as e:
-            print(f"An error occurred during parsing: {e}")
+            logger.error(f"Error in parsing SPICE output: {e}")
             return [] # Return empty list on error
 
         # Optional: Validate against "No. Variables" line if needed
@@ -164,7 +163,7 @@ class SpiceServer:
                 try:
                     num_variables = int(line.split(':')[1].strip())
                 except (IndexError, ValueError):
-                    print("Warning: Could not parse 'No. Variables'.")
+                    logger.warning(f"Warning: Could not parse 'No. Variables' line: {line}")
             elif stripped_line.startswith("Flags:"):
                 flags_line_found = True
                 try:
@@ -173,22 +172,22 @@ class SpiceServer:
                         data_is_complex = True
                     # Add handling for other flags if needed, otherwise assume real
                 except IndexError:
-                     print("Warning: Could not parse 'Flags:' line content.")
+                     logger.warning(f"Warning: Could not parse 'Flags:' line: {line}")
             elif stripped_line == "Values:":
                 values_index = i
                 # Optimization break can be added here if desired
 
         # --- 2. Validate Header Information ---
         if values_index == -1:
-            print("Error: 'Values:' marker not found in the output.")
+            logger.error("Error: 'Values:' marker not found in the output.")
             return None
         if num_variables <= 0:
             # Try to infer num_variables from 'No. of Data Columns' if necessary?
             # For now, require 'No. Variables'.
-            print("Error: 'No. Variables:' not found or has an invalid value.")
+            logger.error("Error: 'No. Variables:' not found or has an invalid value.")
             return None
         if not flags_line_found:
-            print("Warning: 'Flags:' line not found. Assuming data type is 'real'.")
+            logger.warning("Warning: 'Flags:' line not found. Assuming data type is 'real'.")
 
 
         # --- 3. Extract Data Points ---
@@ -228,14 +227,12 @@ class SpiceServer:
 
         # --- 4. Validate and Reshape Data ---
         if not data_points_flat:
-            print("Warning: No numerical data found after 'Values:'. Returning empty array.")
+            logger.warning("Warning: No numerical data found after 'Values:'. Returning empty array.")
             # Return an empty array with the correct number of columns and dtype
             return np.empty((0, num_variables), dtype=target_dtype)
 
         if len(data_points_flat) % num_variables != 0:
-            print(f"Error: The total number of data points found ({len(data_points_flat)}) "
-                  f"is not a multiple of the number of variables ({num_variables}). "
-                  "Data might be incomplete or corrupted.")
+            logger.error(f"Error: The total number of data points found ({len(data_points_flat)}) is not a multiple of the number of variables ({num_variables}).Data might be incomplete or corrupted.")
             return None
 
         num_rows = len(data_points_flat) // num_variables
@@ -246,7 +243,7 @@ class SpiceServer:
             data_array = np.array(data_points_flat, dtype=target_dtype).reshape(num_rows, num_variables)
             return data_array
         except Exception as e:
-            print(f"Error creating or reshaping NumPy array: {e}")
+            logger.error(f"Error creating or reshaping NumPy array: {e}")
             return None
 
 
@@ -263,7 +260,7 @@ class SpiceServer:
             if line.startswith('Error '):
                 error_found = True
                 # self._logger.error(os.linesep + line.decode('utf-8') + os.linesep + lines[line_index+1].decode('utf-8'))
-                print(f"Error found in stdout: {os.linesep + line + os.linesep + lines[line_index+1]}")
+                logger.error(f"Error found in stdout: {os.linesep + line + os.linesep + lines[line_index+1]}")
         if error_found:
             raise NameError("Errors was found by Spice")
 
@@ -285,8 +282,7 @@ class SpiceServer:
         number_of_points = None
         for line in stderr_lines:
             if line.startswith('Warning:'):
-                # self._logger.warning(line[len('Warning :'):])
-                print(f"Warning found in stderr: {line[len('Warning :'):]}")
+                logger.warning(f"Warning found in stderr: {line[len('Warning :'):]}")
             elif line == 'run simulation(s) aborted':
                 raise NameError('Simulation aborted' + os.linesep + stderr)
             elif line.startswith('@@@'):
@@ -312,53 +308,68 @@ class SpiceServer:
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
         input_ = str(spice_input).encode('utf-8')
-        stdout, stderr = process.communicate(input_)
-
-        stdout = stdout.decode('utf-8')
-        stderr = stderr.decode('utf-8')
-
-        # print(f"stderr:{stderr}")
-        # print(f"stdout:{stdout}")
-
-
-        self._parse_stdout(stdout)
-        number_of_points = self._parse_stderr(stderr)
         
-        if number_of_points is None:
-            raise NameError('The number of points was not found in the standard error buffer,'
-                            ' ngspice returned:' + os.linesep +
-                            stderr)
-        if len(self.data_points) != number_of_points:
-            logger.error('The number of points returned by ngspice does not match the number of points '
-                         'in the data array, ngspice returned:' + os.linesep +
-                         stderr)
-            # raise NameError('The number of points returned by ngspice does not match the number of points '
-            #                 'in the data array, ngspice returned:' + os.linesep +
-            #                 stderr)
-            self.error = 'The number of points returned by ngspice does not match the number of points ' \
-                         'in the data array, ngspice returned:' + os.linesep + stderr
+        try:
+            stdout, stderr = process.communicate(input_)
 
-        # TODO: handle error by simulator properly and create error mitigation by LLM strategy 
-        
-        # return result as a dictionary format 
-        formatted_variables = "\n".join([f"({item[0]}, '{item[1]}', '{item[2]}')" for item in self.variables])
+            stdout = stdout.decode('utf-8')
+            stderr = stderr.decode('utf-8')
 
-        result = {
-            "data":{"vars": self.variables, "data_points": self.data_points},
+            # print(f"stderr:{stderr}")
+            # print(f"stdout:{stdout}")
+
+            self._parse_stdout(stdout)
+            number_of_points = self._parse_stderr(stderr)
             
-            "description":{
-                "number of variables": len(self.variables),
-                "number of points": number_of_points,
-                "vars": formatted_variables,
-                "data_points": f"a 2D numpy array of shape {self.data_points.shape}",
-                "error": self.error
-            },
-            "error": self.error
-        }
+            if number_of_points is None:
+                raise NameError('The number of points was not found in the standard error buffer,'
+                                ' ngspice returned:' + os.linesep +
+                                stderr)
+            if len(self.data_points) != number_of_points:
+                logger.error('The number of points returned by ngspice does not match the number of points '
+                            'in the data array, ngspice returned:' + os.linesep +
+                            stderr)
+                raise NameError('The number of points returned by ngspice does not match the number of points '
+                                'in the data array, ngspice returned:' + os.linesep +
+                                stderr)
+            
+            # return result as a dictionary format 
+            # formatted_variables = "\n".join([f"({item[0]}, '{item[1]}', '{item[2]}')" for item in self.variables])
 
-        # the description is for the LLM to understand the output
+            # Create a DataFrame using the variable names as column headers
+            import pandas as pd
+            column_names = [f"{var[1]}" for var in self.variables]  # Format column names as "name (type)"
+            self.data_points_df = pd.DataFrame(self.data_points, columns=column_names)
+
+            result = {
+                "data":{"data_points_df": self.data_points_df},
+                
+                "description":{
+                    "number of variables": len(self.variables),
+                    "number of points": number_of_points,
+                    "data_points_df": f"A 2D pandas dataframe of shape {self.data_points_df.shape}",
+                    "data_points_df_column_names": self.data_points_df.columns.tolist(),
+                    "error": None
+                }
+            }
+            # the description is for the LLM to understand the output
+
+        except Exception as e:
+            logger.error(f"Error in running spice: {e}")
+            result = {
+                "data": None,
+                "description": {
+                    "number of variables": None,
+                    "number of points": None,
+                    "data_points_df": None,
+                    "data_points_df_column_names": None,
+                    "error": f"Simulator returned error. Please check the spice netlist and try again. Error Message: {str(e)}"
+                },
+            }
+            
 
         return result
+
 
 
 
@@ -410,7 +421,7 @@ V1 1 0 DC 10
 R1 1 2 1k
 R2 2 0 1k
 R3 2 0 2k
-.op
+.tran 0.1ms 10ms uic
 .end
     """
     import os
@@ -418,26 +429,24 @@ R3 2 0 2k
     load_dotenv()
 
     spice_exe_path = os.getenv("NGSPICE_PATH")
-
     spice_server = SpiceServer(spice_command = f"{spice_exe_path}")  # the ngspice_con.exe file should be in the same directory as this script
     
     sim_out = spice_server(spice_netlist)
     
+    print(sim_out)
+
+    # vars = sim_out["data"]["vars"]
+    # data_points = sim_out["data"]["data_points"]
+
+    # # Create a DataFrame using the variable names as column headers
+    # import pandas as pd
+    # column_names = [f"{var[1]} ({var[2]})" for var in vars]  # Format column names as "name (type)"
+    # df = pd.DataFrame(data_points, columns=column_names)
+
+
     import json
+    print("JSON output:")
     print(json.dumps(sim_out["description"], indent=0))
 
-    # print("Number of points:", len(data_points))
-    # print("Number of variables:", len(vars))
-    # print("Variables:")
-    # for i in range(len(vars)):
-    #     print(vars[i])
-
-    # print("data_Points[0:4]:")
-    # for i in range(5):
-    #     print(data_points[i])
-
-
-    # time_data = data_points[:, 0]
-    # print(time_data)
 
     #############################################################################################

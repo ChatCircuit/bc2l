@@ -1,0 +1,22 @@
+* Full Bridge Rectifier (Ngspice - Updated Diode Model)
+
+* AC voltage source (10V peak, 50Hz)
+V1 N001 0 SIN(0 10 50)
+
+* Bridge diodes
+D1 N002 N001 DMOD
+D2 N001 N003 DMOD
+D3 N002 0 DMOD
+D4 0 N003 DMOD
+
+* Load resistor
+RL N002 N003 1k
+
+* Realistic Diode Model
+.model DMOD D
+
+* Simulation control
+.tran 10u 40m 
+.options TEMP=27
+
+.end
