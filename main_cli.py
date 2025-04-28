@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import database.static_database as static_database
 import llm.llm_model as llm_model
 import database.database_query as database_query
-from python_interpreter import python_interpreter
+# from python_interpreter import python_interpreter
 
 from logger import get_logger
 logger = get_logger(__name__)
@@ -82,10 +82,13 @@ def main():
     spice_exe_path = os.getenv("NGSPICE_PATH")
     spice_server = SpiceServer(spice_command = f"{spice_exe_path}")  # the ngspice_con.exe file should be in the same directory as this script
 
+    from python_interpreter import Python_Interpreter
+    python_ipreter = Python_Interpreter()  # initialize the python interpreter
+    
     ##########################################
     ########Loop without maintaining database
     ##########################################
-    data = {"data_points_df":None} # initialize the data object to pass to the python interpreter
+    # data = {"data_points_df":None} # initialize the data object to pass to the python interpreter
 
 
     # take prompt from user on a loop and process
@@ -95,6 +98,9 @@ def main():
         # special commands to handle
         if prompt.lower() == 'quit':
             break
+        elif prompt.strip() == '':
+            # ignore empty prompt
+            continue
         elif prompt.lower() == 'show-netlist':
             # show the current netlist
             print("Current netlist: \n", prompt_manager.get_current_netlist())
@@ -167,11 +173,13 @@ def main():
                     result = spice_server(mod_netlist)  # run the simulator with the modified netlist
                     print("(simulation completed)")
 
-                    data = result["data"] # a dictionary object {"vars": [], "data_points": []}
+                    data = result["data"] # a dictionary object {"data_points_df": []}
+
                     sim_out_desc = result["description"] # a dictionary object
                     error = result["description"]["error"] # a string object
 
                     if error is not None:
+                        # there is error in the simulation, so we need to retry
                         sim_error_retry_count += 1
                         if sim_error_retry_count > int(os.getenv("SIM_ERROR_RETRY_LIMIT")):
                             logger.error(f"Error in simulation. LLM could not fix the error within the given try limit.")
@@ -180,7 +188,10 @@ def main():
                         else:
                             # retry the simulation with the same netlist
                             logger.info(f"Error in simulation. Retrying({sim_error_retry_count})... Error Message: {error}")
-                    
+                    else:
+                        # no error in the simulation, so we can append the data to the python interpreter
+                        python_ipreter.append_data(data)
+
                     prompt_manager.append(role="user", content = sim_out_desc, subrole="simulator")
                 else:
                     logger.error("Trying to simulate but modified netlist is None")
@@ -195,7 +206,8 @@ def main():
                 if python_code is not None:
                     # run the python code with the data from simulator
                     print("(analyzing data...)", end="") 
-                    ipreter_out = python_interpreter(python_code, data=data) # run the python code with the data from simulator
+                    # ipreter_out = python_interpreter(python_code, data=data) # run the python code with the data from simulator
+                    ipreter_out = python_ipreter.run_code(python_code) # run the python code with the data from simulator
                     print("(data analysis completed)")
 
 
