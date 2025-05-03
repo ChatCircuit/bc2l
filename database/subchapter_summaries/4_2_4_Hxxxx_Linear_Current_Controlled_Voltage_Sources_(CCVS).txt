@@ -1,0 +1,17 @@
+**Summary:**
+
+### Hxxxx: Linear Current-Controlled Voltage Sources (CCVS)
+
+- **General Form:**  
+  `HXXXXXXX N+ N- VNAM VALUE`
+
+- **Parameters:**  
+  - `N+`: Positive node.  
+  - `N-`: Negative node.  
+  - `VNAM`: Name of the voltage source controlling the current. The current flows from VNAM's positive node -> source -> VNAM's negative node.  
+  - `VALUE`: Transresistance in ohms (default theoretical characteristic).  
+
+- **Example:**  
+  `HX 5 17 VZ 0.5K`  
+
+- **Additional Info:** Instance parameters for CCVS can be referenced in Chapter 27.3.5.  

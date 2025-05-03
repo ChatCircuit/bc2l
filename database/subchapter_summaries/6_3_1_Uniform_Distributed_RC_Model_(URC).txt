@@ -1,0 +1,52 @@
+### Summary for Netlist Code Usage and Debugging (URC Model):
+
+The **Uniform Distributed RC (URC) Model** represents a transmission line as a network of lumped RC segments. Key aspects include:
+- **Structural Details**: RC segments are organized in geometric progression, increasing towards the middle of the line.
+- **Customization**: Resistors and capacitors are standard, but the capacitors can be replaced with reverse-biased diodes (when `ISPERL` is nonzero). 
+
+### Syntax and Parameters for URC Configuration:
+
+#### Key Parameters:
+1. **`K` (Propagation Constant)**:
+   - Units: None
+   - Default: `1.5`
+   - Example: `1.2`
+2. **`FMAX` (Maximum Frequency of Interest)**:
+   - Units: Hz
+   - Default: `1.0 G` (1 GHz)
+   - Example: `6.5 Meg` (6.5 MHz)
+3. **`RPERL` (Resistance per Unit Length)**:
+   - Units: Ω/m
+   - Default: `1000`
+   - Example: `10`
+4. **`CPERL` (Capacitance per Unit Length)**:
+   - Units: F/m
+   - Default: `10e-15` (10 femtofarads)
+   - Example: `1 p` (1 picofarad)
+5. **`ISPERL` (Saturation Current per Unit Length)**:
+   - Units: A/m
+   - Default: `0`
+   - Example: None
+6. **`RSPERL` (Diode Resistance per Unit Length)**:
+   - Units: Ω/m
+   - Default: `0`
+   - Example: None
+
+#### Notes on Parameters:
+- **ISPERL & RSPERL Usage**: If `ISPERL ≠ 0`, capacitors are converted to diodes, where `ISPERL` specifies the junction saturation current per meter and `RSPERL` the ohmic resistance of these diodes.
+
+#### Segment Calculation:
+- Number of segments (`N`) is derived using the formula:
+  ```
+  N = log | (Fmax * RPERL * CPERL * 2πL^2) / (K - 1) * K / 2 | / log(K)
+  ```
+
+This ensures the accuracy of the lumped approximation for the transmission line.
+
+### Theoretical Characteristics:
+- Designed for high-frequency applications.
+- Supports the modeling of resistive and capacitive loading effects.
+- When diodes are included, saturation current and resistance adjustments are key parameters.
+
+### Application for Netlist Code:
+Use the above syntax and parameter set when defining the URC model in Ngspice netlists. Adjust `K`, `FMAX`, `RPERL`, and `CPERL` to tailor the transmission line properties for specific use cases. If modeling diode effects, set `ISPERL` and optionally `RSPERL` for diode parameters.

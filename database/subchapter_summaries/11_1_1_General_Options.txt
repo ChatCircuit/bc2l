@@ -1,0 +1,45 @@
+**Ngspice General Options Summary (Section 11.1.1)**  
+
+- **SPARSE:** Selects the Sparse 1.3 matrix solver.  
+  - Default and standard if no option is specified.  
+  - Preferable for behavioral device model simulation.  
+  - Required for noise or CIDER simulations.  
+
+- **KLU:** Selects the KLU matrix solver.  
+  - Preferable for faster simulation of circuits with MOS devices.  
+  - Does not support noise or CIDER simulations.  
+
+- **ACCT / NOACCT:**  
+  - `ACCT`: Prints accounting and runtime statistics.  
+  - `NOACCT`: Suppresses runtime statistics and the "Initial Transient Solution."  
+
+- **NOINIT:** Suppresses only the "Initial Transient Solution." Can be combined with `ACCT`.  
+- **LIST:** Outputs a summary listing of input data.  
+- **NOMOD:** Suppresses model parameter output.  
+- **NOPAGE:** Suppresses page ejects in output.  
+- **NODE:** Prints the node table.  
+- **NOREFVALUE:** Suppresses printing of reference values (available with `--enable-ndev` configuration).  
+- **OPTS:** Prints the values of options selected.  
+
+- **SEED=val|random:**
+  - Sets the seed for the random number generator.  
+  - `val`: Any positive integer.  
+  - `random`: Sets seed to the current Unix epoch time.  
+- **SEEDINFO:** Prints the set seed value when assigned a new integer.  
+
+- **TEMP=x:** Operating temperature of the circuit (default: 27°C or 300K).  
+  - Device-specific temperature overrides device temperatures.  
+  - Overridden generally by `.TEMP` card.  
+
+- **TNOM=x:** Nominal temperature at which device parameters are measured (default: 27°C or 300K).  
+  - Can be overridden for specific devices.  
+
+- **WARN=1|0:** Enables (`1`) or disables (`0`, default) SOA voltage warnings.  
+- **MAXWARNS=x:** Maximum number of SOA warnings per model (default: 5).  
+
+- **SAVECURRENTS:** Saves currents through all terminals of devices (`M, J, Q, D, R, C, L, B, F, G, W, S, I`).  
+  - Recommended only for small circuits due to high memory and performance costs.  
+  - Supported only for `op`, `dc`, and `tran` simulations (not `ac`).  
+  - For `M` devices, MOS level 1 is fully supported; other MOS levels not fully reported.  
+  - Outputs may include empty zero-length vectors, which impede commands like `wrdata`.  
+  - Use command `remzerovec` before executing `wrdata` to remove zero-length vectors.

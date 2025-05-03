@@ -1,0 +1,65 @@
+### Summary of Behavioral Resistors (Ngspice)
+
+#### General Form:
+1. **Behavioral Resistor Syntax**:
+   ```
+   RXXXXXXX n+ n- R = 'expression' <tc1=value> <tc2=value> <noisy=0>
+   RXXXXXXX n+ n- 'expression' <tc1=value> <tc2=value> <noisy=0>
+   ```
+   - `n+ n-`: Nodes between which the resistor is connected.
+   - `expression`: Specifies resistance value dependent on a mathematical expression.
+   - `<tc1>` and `<tc2>`: Temperature coefficients for resistance.
+   - `<noisy>`: Use `noisy=1` to enable noise calculation. Default is `noisy=0` (noiseless).
+
+#### Default Characteristics:
+- The behavioral resistor is **noiseless by default** (`noisy=0`).
+- Noise evaluation uses **white noise** depending on resistance, temperature, and temperature coefficients (`tc1`, `tc2`).
+
+#### Expression Features:
+- Expressions may include:
+  - **Node voltages**.
+  - **Branch currents** in the form `i(vm)`.
+  - **Parameters** (e.g., `.param`) and special variables like `time`, `temper`, `hertz`.
+  - Similar syntax to B-sources (see Chapter 5.1).
+- Expressions allow advanced behavioral dependencies (e.g., threshold-based, temperature-based, etc.).
+
+#### Key Examples:
+1. **Threshold-based Resistance Control**:
+   ```
+   R1 rr 0 r = 'V(rr) < {Vt} ? {R0} : {2*R0}' tc1=2e-03 tc2=3.3e-06
+   ```
+   - Resistance = `{R0}` if `V(rr) < {Vt}`, otherwise = `{2*R0}`.
+   - Includes temperature coefficients `tc1` and `tc2`.
+
+2. **Temperature-dependent Resistance**:
+   ```
+   R2 r2 rr r = {5k + 50*TEMPER}
+   ```
+   - Resistance increases linearly with temperature (`TEMPER`).
+
+3. **Parameterized Resistor**:
+   ```
+   .param rp1 = 20
+   R3 no1 no2 r = '5k * rp1' noisy=1
+   ```
+   - Resistance proportional to parameter `rp1` with noise enabled (`noisy=1`).
+
+#### Non-linear Resistor Example Input File:
+```
+.param R0=1k Vi=1 Vt=0.5
+* resistor depending on control voltage V(rr)
+R1 rr 0 r = 'V(rr) < {Vt} ? {R0} : {2*R0}'
+* control voltage
+V1 rr 0 PWL(0 0 100u {Vi})
+.control
+unset askquit
+tran 100n 100u uic
+plot i(V1)
+.endc
+.end
+```
+- `R1`: Behavior depends on control voltage `V(rr)`.
+- `V1`: Voltage source with piece-wise linear (PWL) control voltage `Vi`.
+- `.control` defines the transient analysis (`tran 100n 100u uic`) and current plotting (`plot i(V1)`).
+
+This section provides syntax and usage guidance for implementing behavioral resistors in netlists, including expressions for dynamic resistance calculation, temperature effects, and small-signal noise modeling.

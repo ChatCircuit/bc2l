@@ -1,0 +1,13 @@
+**Ngspice Manual 5.1.2: Special B-Source Variables**  
+Important Variables:  
+1. **time**:  
+   - Represents actual simulation time during transient analysis.  
+   - Equals zero in AC analysis.  
+
+2. **temper**:  
+   - Reflects the circuit temperature (°C) during transient analysis.  
+
+3. **hertz**:  
+   - Used in AC analysis, represents frequency.  
+   - Equals zero during transient analysis.  
+   - Computational Cost: May increase CPU time for large circuits, as the operating point must be determined for each frequency before AC response computation.  

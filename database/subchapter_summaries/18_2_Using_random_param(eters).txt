@@ -1,0 +1,63 @@
+**Ngspice: Using Random Parameters for Netlist Code**
+
+1. **Commands and Supported Statistical Functions**:
+   - **`.param`**: Define parameters (evaluated upon startup).
+   - **`.func`**: Define functions (evaluated and replaced throughout the circuit).  
+   - **Built-in Statistical Functions**:
+     ```
+     gauss(nom, rvar, sigma): Nominal + variation based on Gaussian (mean=0, std=nom*rvar/sigma).
+     agauss(nom, avar, sigma): Nominal + variation based on Gaussian (mean=0, std=avar/sigma).
+     unif(nom, rvar): Nominal + uniformly distributed relative variation ±(nom*rvar).
+     aunif(nom, avar): Nominal + uniformly distributed absolute variation ±avar.
+     limit(nom, avar): Nominal ±avar, depending randomly on sign.
+     ```
+
+2. **Evaluation Rules**:
+   - `.param` and `.func` statements are evaluated **once at startup** before circuit simulation starts.
+   - New random values are created:
+     - **For device cards** (e.g., `v11 11 0 'agauss(1,2,3)'`) with each occurrence in the netlist.
+     - Using `.func`, like `rgauss`, where new results will be computed for different references.
+   - Values from `.param` remain constant throughout the circuit.
+
+3. **Example Using Random Parameters**:
+   ```
+   * Define random parameters
+   .param aga = agauss(1,2,3)
+   .param aga2 = '2*aga'
+   .param lim = limit(0,1.2)
+   .func rgauss(a,b,c) '5*agauss(a,b,c)'
+
+   * Constant random values
+   v1 1 0 'lim'       * Same value as v2
+   v2 2 0 'lim'       
+   * Device-level randomization
+   v3 3 0 'limit(0,1.2)'  * May differ from v1, v2
+   
+   * Always new random values
+   v11 11 0 'agauss(1,2,3)' 
+   v12 12 0 'agauss(1,2,3)'
+   
+   * Using .param-defined values
+   v14 14 0 'aga'          * Same value throughout
+   v15 15 0 'aga'
+
+   * Using .func-defined function
+   v17 17 0 'rgauss(0,2,3)'  * New random values
+   v18 18 0 'rgauss(0,2,3)'
+
+   .op
+   .control
+   run
+   print v(1) v(2) v(3) v(11) v(12) v(14) v(17)
+   .endc
+   .end
+   ```
+
+4. **Behavior of Parameters and Functions**:  
+   - If `agauss()` is defined in `.param`, its value remains constant (e.g., `aga`, `aga2`).
+   - Statistical functions introduced directly in device cards generate unique random numbers per use (e.g., `v11`, `v12`).
+   - Parameters set using `.func` evaluate dynamically to produce new values at every usage.
+
+5. **Applications**:
+   - Incorporate statistically distributed random values into devices or model parameters for simulation.
+   - Replace fixed numerical values with expressions like `.param` or `.func` to control starting conditions dynamically.

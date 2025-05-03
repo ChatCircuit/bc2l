@@ -1,0 +1,11 @@
+**Summary:**  
+**hfet1 (Level 5)**  
+- Component: Heterostructure Field Effect Transistor (HFET).  
+- Model source: "Semiconductor Device Modeling for VLSI" (K. Lee et al., Prentice Hall, 1993).  
+- Relevant details in AIM-Spice reference manual, section Device Models A (covers model parameters, equivalent circuit diagrams, and device equations).  
+
+**hfet2 (Level 6)**  
+- Simplified version of hfet1 (Level 5).  
+- Optimized for speed and suited for digital circuit simulation.  
+- Certain features of level 1 (hfet1) model are omitted to enhance simulation speed.  
+

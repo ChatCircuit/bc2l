@@ -1,0 +1,21 @@
+Monte-Carlo Simulation allows statistical variation of device or model parameters using specific functions and methodologies. Here's a concise extraction useful for netlist code generation, modification, debugging, and queries:
+
+1. **Functions for Randomization**:
+   - **sgauss(0):** Returns Gaussian distributed random numbers.
+   - **sunif(0):** Returns uniform distributed random numbers.
+   - These functions generate real numbers and store them in a vector.
+
+2. **Custom Random Functions**:
+   - You can define custom functions with `sgauss` or `sunif` to modify the mean or range of distributions.
+
+3. **Implementation**:
+   - Use `alter` (for instance parameters) or `altermod` (for model parameters) commands in combination with random parameters during a simulation loop.
+
+4. **Applicable Analyses**:
+   - Monte-Carlo simulation supports various analyses such as:
+     - **op**: Operating point analysis.
+     - **dc**: DC analysis.
+     - **ac**: AC analysis.
+     - **tran**: Transient analysis.
+
+This summary focuses on syntax and theoretical details relevant for implementing and modifying Monte-Carlo simulations within Ngspice netlists.

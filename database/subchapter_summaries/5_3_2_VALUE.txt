@@ -1,0 +1,13 @@
+VALUE-controlled sources in Ngspice can use the following syntax:
+
+`GXXXXXXX n+ n- value='expr' <m=val>`
+
+- `n+`, `n-` are the positive and negative nodes.
+- `value='expr'` specifies the controlling expression. 
+- The `=` sign is optional when specifying the value expression.
+- `<m=val>` optionally specifies a multiplier for the controlled source.
+
+Example:
+`G51 55 225 value = 'V(3)*V(3)-Offs'`
+
+In this example, the output current is controlled by the expression `V(3)*V(3)-Offs`.

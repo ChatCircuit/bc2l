@@ -1,0 +1,15 @@
+**Summary of 5.3 Gxxxx: Non-linear Current Source**
+
+Component: Non-linear Current Source  
+- Syntax: `Gxxxx n+ n– nc+ nc– poly(N) C0 C1 … CN <expression>`  
+  - `n+ n–`: Current source terminals.  
+  - `nc+ nc–`: Controlling voltage source terminals.  
+  - `poly(N)`: Specifies a polynomial current source of degree N.  
+  - `C0 C1 … CN`: Coefficients of the polynomial.  
+  - `<expression>`: Optional expression for defining complex non-linear dependencies of current.  
+
+Default Characteristics:  
+- If `poly(N)` and coefficients are used, the current is computed as a polynomial function of the controlling voltage.  
+
+Additional Notes:  
+- For advanced applications, `<expression>` can include any valid mathematical operation supported by Ngspice for defining non-linear behavior.  

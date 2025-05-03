@@ -1,0 +1,32 @@
+**Summary of Ngspice Manual (11.4.3 General Remarks):**
+
+- **Measurement Types:**  
+  `{DC|AC|TRAN|SP}` specifies the analysis type:
+  - **DC:** Used for DC analysis (voltage/current-based).  
+  - **AC:** Used for AC analysis (frequency-based).  
+  - **TRAN:** Used for transient simulation (time-based).  
+  - **SP:** For spectrum analysis via `spec` or `fft` commands (available in `.meas` commands only, see section 13.5.50).
+
+- **Key Variables:**  
+  - `result`: A vector containing the measurement result.  
+  - `trig_variable`, `targ_variable`, `out_variable`: Vectors derived from simulation output (e.g., voltage vector `v(out)`).
+
+- **Value Parameters:**
+  - **`VAL = val`:** Expects a real number (`val`) or a parameter (enclosed by `' '` or `{}`), which expands to a real number.  
+  - **`TD = td`:** Time value; used only in transient (`tran`) type. Ignored for `AC`, `SP`, and `DC`.  
+  - **`AT = time/frequency/voltage`:** 
+    - For `TRAN`: Expects a time value.  
+    - For `AC` and `SP`: Expects a frequency value.  
+    - For `DC`: Expects a voltage (or current), while `TD` is ignored.
+
+- **Event Counters:**  
+  - **`CROSS = #`:** Specifies the number of crossings; `#` must be an integer.  
+  - **`CROSS = LAST`:** Counts the last crossing. Compatible with `RISE` and `FALL`.
+
+- **Range of Values:**  
+  - Frequency and time values start at 0 and extend to positive real numbers.  
+  - Voltage/current values in DC analysis can start/end at arbitrary real numbers.
+
+- **Implementation Note:** Not all `.measure` commands are implemented.
+
+This section provides syntax templates, default requirements, and theoretical details essential for netlist code generation, debugging, and simulation analysis development.

@@ -1,0 +1,23 @@
+**Summary: Measurements After AC, DC, and Transient Analysis (Ngspice Manual)**
+
+1. **Purpose**: Ngspice allows users to perform measurements after AC, DC, or transient analysis to evaluate specific circuit characteristics.
+
+2. **Measurement Command Syntax**:  
+   `.measure <analysis> <result name> <type> <expression>`  
+   - `<analysis>`: Specifies the analysis type (`ac`, `dc`, `tran`).  
+   - `<result name>`: User-defined name for the measured result.  
+   - `<type>`: Type of measurement (e.g., `param` for evaluating expressions, `find`, `when`, `deriv`, etc.).  
+   - `<expression>`: Refers to the expression or condition to measure.  
+
+3. **Default Behavior**: Executes measurements for the last run analysis.  
+
+4. **Measurement Types**:  
+   - `param`: Evaluates a user-defined mathematical expression.  
+   - `find`: Finds the first occurrence of a specified condition (e.g., max or min).  
+   - `when`: Measures a quantity at a specific input condition.  
+   - `deriv`: Determines derivatives based on a waveform.  
+
+5. **Examples of Measurement Commands**:  
+   - `.measure tran rise_time when v(out) = 2.5 rtol=0.01`  
+   - `.measure ac gain_peak find vdb(out) at freq()`  
+

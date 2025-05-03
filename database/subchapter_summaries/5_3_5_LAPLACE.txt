@@ -1,0 +1,2 @@
+5.3.5 LAPLACE  
+The LAPLACE function in Ngspice is used for modeling transfer functions. Refer to E-Source Chapter 5.2.5 for equivalent code model replacements. No additional specific details, syntax, or unique examples are provided in this snippet.

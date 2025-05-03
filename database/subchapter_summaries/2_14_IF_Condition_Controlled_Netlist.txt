@@ -1,0 +1,50 @@
+**Summary: .IF Condition-Controlled Netlist (.IF-.ELSE-.ENDIF)**
+
+**Purpose:** Enables conditional execution of parts of the netlist based on boolean expressions.
+
+**General Structure:**
+```
+.if (boolean expression)
+...
+.elseif (boolean expression)
+...
+.else
+...
+.endif
+```
+
+**Key Details:**
+1. **Boolean Expression:** Defined using Chapter 2.10.5 syntax, evaluates to `1` (true) or `0` (false).
+2. **Usage:** Encloses netlist blocks (device instances or `.model` cards) to conditionally include them based on evaluation.
+3. **Nesting:** Supported with multiple `.elseif` and a single `.else` per block.
+4. **Restrictions:** Blocks do not support `.SUBCKT`, `.INC`, `.LIB`, and `.PARAM`.
+
+**Example 1 (Device Instances in `.IF-.ELSE`):**
+```
+.param ok=0 ok2=1
+v1 1 0 1
+R1 1 0 2
+.if (ok && ok2)
+R11 1 0 2
+.else
+R11 1 0 0.5   $ <-- selected
+.endif
+```
+
+**Example 2 (.MODEL Selection in `.IF-.ELSE`):**
+```
+.param m0=0 m1=1
+M1 1 2 3 4 N1 W=1 L=0.5
+.if(m0==1)
+.model N1 NMOS level=49 Version=3.1
+.elseif(m1==1)
+.model N1 NMOS level=49 Version=3.2.4  $ <-- selected
+.else
+.model N1 NMOS level=49 Version=3.3.0
+.endif
+```
+
+**Additional Notes:**
+- Selection occurs based on the first satisfied condition.
+- The specific version, level, or parameters chosen can change based on the logic inputs.
+- Test cases available in `ngspice/tests/regression/misc/if-elseif.cir`.

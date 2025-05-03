@@ -1,0 +1,38 @@
+**Summary of DC and OP (Operating Point) Solution Options**  
+
+**Options for .DC and .OP Solution Settings**
+- **ABSTOL=x:** Sets the absolute current error tolerance. Default = 1 pA.
+- **GMIN=x:** Sets the minimum conductance. Default = 1.0e-12.
+- **GMINSTEPS=x [*]:** Defines the number of Gmin stepping attempts. Default behavior: Gmin stepping is performed before source stepping unless `GMINSTEPS=0`.
+- **ITL1=x:** Sets the DC iteration limit. Default = 100.
+- **ITL2=x:** Sets the DC transfer curve iteration limit. Default = 50.
+- **KEEPOPINFO:** Preserves the operating point (OP) information when running AC, Distortion, or Pole-Zero analysis. Avoids redundant `.OP` runs in large circuits.
+- **NOOPITER:** Skips the first iteration and directly applies Gmin stepping.
+- **PIVREL=x:** Sets the relative pivot threshold for numerical pivoting in the matrix. Default = 1.0e-3.
+- **PIVTOL=x:** Sets the absolute minimum matrix entry for pivot acceptance. Default = 1.0e-13.
+- **RELTOL=x:** Sets the relative error tolerance. Default = 0.001 (0.1%).
+- **RSHUNT=x:** Activates resistors from each analog node to ground (XSPICE must be enabled). Resistor values should be high (e.g., 1.0e12 Ω) to avoid interfering with the circuit operation.
+- **VNTOL=x:** Sets the absolute voltage error tolerance. Default = 1 μV.
+
+---
+
+**Matrix Conditioning in Circuit Simulation**
+- Nodes without a DC path to ground (e.g., two capacitors in series or cascaded code models) can lead to simulation failures due to matrix singularity.
+- To address this, use `RSHUNT`:
+  ```
+  .option rshunt = 1.0e12
+  ```
+  - Typical value = 1 TΩ. In severe cases, reduce to 10 GΩ or 1 GΩ.
+- For inductors in parallel with voltage sources (causing AC analysis failures), add a small series resistor:
+  ```
+  .option rseries = 1.0e-4
+  ```
+  - Be cautious when using behavioral inductors, as results may become unpredictable.
+- To stabilize matrices, add a small capacitor to each voltage node in the circuit:
+  ```
+  .option cshunt = 1.3e-13
+  ```
+
+---
+
+This summary outlines the essential options, default values, and best practices for addressing convergence or matrix issues in `.OP`, `.DC`, and related simulations.

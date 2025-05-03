@@ -1,0 +1,10 @@
+1. **Digital Circuit Simulation in Ngspice**:
+   - **Key Difference from Analog Simulation**:
+     - Digital simulation does **not** require solving Kirchhoff's laws or performing matrix analysis.
+     - It focuses on detecting changes in the logic state of nodes (called `events`) and propagating these changes to connected elements.
+   - **Event-Based Analysis**:
+     - Only the circuit elements affected by the event are examined.
+   - **Advantages Over Analog Simulation**:
+     - Computational efficiency due to avoiding iterative solutions for the entire circuit.
+     - Significantly faster simulation speeds compared to analog simulators.
+

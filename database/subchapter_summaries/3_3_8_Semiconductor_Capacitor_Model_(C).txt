@@ -1,0 +1,66 @@
+### Extracted Summary for Netlist Code Generation, Modification, Debugging, and Queries:
+
+#### Semiconductor Capacitor Model (C) Overview:
+The capacitor model computes capacitance either from defined parameters or geometric/physical information.
+
+---
+
+#### **Key Parameters for .model Statement**:
+
+| **Name**   | **Parameter Description**          | **Units** | **Default Value** | **Example Value** |
+|------------|------------------------------------|-----------|-------------------|-------------------|
+| **CAP**    | Model capacitance                 | F         | 0.0               | 1e-06            |
+| **CJ**     | Junction bottom capacitance       | F/m²      | Not specified     | 5e-05            |
+| **CJSW**   | Junction sidewall capacitance     | F/m       | Not specified     | 2e-11            |
+| **DEFW**   | Default device width              | m         | 1e-6              | 2e-06            |
+| **DEFL**   | Default device length             | m         | 0.0               | 1e-06            |
+| **NARROW** | Narrowing due to side etching     | m         | 0.0               | 1e-07            |
+| **SHORT**  | Shortening due to side etching    | m         | 0.0               | 1e-07            |
+| **TC1**    | First-order temperature coeff.    | F/°C      | 0.0               | 0.001            |
+| **TC2**    | Second-order temperature coeff.   | F/°C²     | 0.0               | 0.0001           |
+| **TNOM**   | Parameter measurement temperature | °C        | 27                | 50               |
+| **DI**     | Relative dielectric constant      | F/m       | Not specified     | 1                |
+| **THICK**  | Insulator thickness               | m         | 0.0               | 1e-09            |
+
+---
+
+#### **Key Computation Formulas**:
+
+1. **Nominal Capacitance (C_nom):**
+   - If instance value is specified:  
+     `C_nom = value × scale × m`
+   - If model capacitance CAP is specified:  
+     `C_nom = CAP × scale × m`
+   - If neither is specified:  
+     ```
+     C₀ = CJ × (l - SHORT) × (w - NARROW)  
+          + 2 × CJSW × (l - SHORT + w - NARROW)
+     ```
+
+2. **Junction Bottom Capacitance (CJ):**
+   - If `THICK ≠ 0`:  
+     `CJ = DI × ε₀ / THICK` (if DI is specified)  
+     `CJ = ε_SiO2 / THICK` (otherwise)  
+
+   - Constants:  
+     `ε₀ = 8.854214871e-12 F/m`  
+     `ε_SiO2 = 3.4531479969e-11 F/m`
+
+3. **Adjusted Capacitance for Temperature:**
+   - Based on instance temperature `T`:  
+     ```
+     C(T) = C(TNOM) × [1 + TC1 × (T - TNOM) + TC2 × (T - TNOM)²]
+     ```
+
+   - Where:  
+     `C(TNOM) = C_nom`  
+     `T` can be set using `temp` or circuit temperature adjusted by `dtemp`.
+
+---
+
+#### **Additional Notes**:
+- `THICK = 0` results in a fallback to default dielectric constant (`ε_SiO2`).
+- `CJ`, `CJSW`, or geometric parameters must be provided or calculated based on conditions outlined above.
+- Instance-wide temperature values (`T`) can either:
+    - Be explicitly defined with the `temp` keyword.
+    - Inherit from the circuit temperature with optional `dtemp` adjustments.

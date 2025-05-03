@@ -1,0 +1,24 @@
+**Summary for 5.2.3 TABLE Component in Ngspice**
+
+1. **Purpose**:  
+   The TABLE function in Ngspice generates a corresponding y-value based on an x-value (provided by an expression), using a tabulated set of (x, y) pairs. Linear interpolation is applied between the tabulated points, with results clipped to the y-value boundaries if x is outside the table range (limiting function).
+
+2. **Key Characteristics**:  
+   - Data is entered as `(x, y)` pairs.
+   - `Expression`: May contain node voltages, branch currents (e.g., `i(vm)`), or other terms described under the B-source. Parameters are not allowed in the value pairs.
+   - Function delimiters: `'{ }'` or `' '` may delimit the expression.  
+   - Behavior outside range:
+     - If `x-value < x0`, returns `y0`.
+     - If `x-value > x2`, returns `y2`.
+
+3. **Syntax**:  
+   ```
+   Exxx n1 n2 TABLE {expression} = (x0, y0) (x1, y1) (x2, y2)
+   ```
+
+4. **Example (Simple Comparator)**:  
+   ```
+   ECMP 11 0 TABLE {V(10,9)} = (-5mV, 0V) (5mV, 5V)
+   ```
+   - Here, if the differential voltage `V(10,9)` lies between `-5mV` and `5mV`, linear interpolation is used. For values outside the range, it clips to `0V` or `5V`.
+

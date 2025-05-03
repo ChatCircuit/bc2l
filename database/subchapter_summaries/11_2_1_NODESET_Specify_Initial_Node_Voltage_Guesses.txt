@@ -1,0 +1,18 @@
+**Summary of Extracted Information:**
+
+**Command Overview:**
+- **`.nodeset`**: Specifies initial voltage guesses for nodes to aid in convergence during DC or initial transient solution simulations.
+
+**General Syntax:**
+- `.nodeset v(nodnum)=val v(nodnum)=val ...`
+- `.nodeset all=val`
+
+**Default/Application Notes:**
+- Useful for bistable or astable circuits to assist convergence.
+- Typically not necessary in general cases.
+- `.nodeset all=val` sets a uniform starting voltage for all nodes (except ground).
+
+**Examples & Important Unique Cases:**
+- `.nodeset v(12)=4.5 v(4)=2.23` — Sets specific initial voltages for node 12 and node 4.
+- `.nodeset all=1.5` — Sets all node starting voltages to 1.5 Volts.
+

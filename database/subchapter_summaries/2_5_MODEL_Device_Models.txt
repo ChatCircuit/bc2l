@@ -1,0 +1,53 @@
+**Summary of Ngspice `.MODEL` Device Models:**
+
+1. **General Syntax/Template**:  
+   `.model <modelname> <type>(<parametername1=value1 parametername2=value2 ...>)`  
+   Example: `.model MOD1 npn (bf=50 is=1e-13 vbf=50)`  
+
+   - `<modelname>`: Unique identifier for the model.
+   - `<type>`: Specifies the type of model, chosen from one of the predefined codes (see list below).
+   - `<parametername=value>`: Assigns values to parameters, which are optional and default to predefined values if not provided.
+
+---
+
+2. **Usage Guidance**:  
+   - `.model` defines a set of shared parameters for complex device models.
+   - Device elements reference `.model` names in their netlist lines.
+   - Some devices allow additional design parameters like geometric factors or initial conditions.
+
+---
+
+3. **Supported Model Types** (Code → Model Type):  
+   - `R`: Semiconductor resistor model  
+   - `C`: Semiconductor capacitor model  
+   - `L`: Inductor model  
+   - `SW`: Voltage controlled switch  
+   - `CSW`: Current controlled switch  
+   - `URC`: Uniform distributed RC model  
+   - `LTRA`: Lossy transmission line model  
+   - `D`: Diode model  
+   - `NPN`: NPN BJT model  
+   - `PNP`: PNP BJT model  
+   - `NJF`: N-channel JFET model  
+   - `PJF`: P-channel JFET model  
+   - `NMOS`: N-channel MOSFET model  
+   - `PMOS`: P-channel MOSFET model  
+   - `NMF`: N-channel MESFET model  
+   - `PMF`: P-channel MESFET model  
+   - `VDMOS`: Power MOS model
+
+---
+
+4. **Parameter Defaults**:  
+   - Parameters not explicitly defined are assigned default values based on device type.
+   - Exact default values and parameter definitions are provided in Chapter 27.
+
+---
+
+5. **Model Line Example**:  
+   - `.model MOD1 npn (bf=50 is=1e-13 vbf=50)`  
+     - `MOD1`: Model name.
+     - `npn`: Specifies the type.
+     - Parameters (`bf`, `is`, `vbf`) are custom-defined; unspecified parameters take default values.
+
+This summary preserves crucial syntax, tables, default behavior, and examples for generating/modifying/debugging netlist code related to `.MODEL`.

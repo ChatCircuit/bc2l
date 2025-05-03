@@ -1,0 +1,56 @@
+**Summary of Ngspice Manual (Temperature-related content):**
+
+1. **Temperature in Circuit Simulation:**
+   - Default circuit temperature is **27°C (300.15 K)**. 
+   - Can be altered using `.option TEMP` or `.TEMP` commands, with `.TEMP` having precedence.
+
+2. **Device-Specific Temperature Overrides:**
+   - Default temperature for measurements is the circuit nominal temperature unless overridden using:
+     - `TNOM` parameter in `.model` line.
+     - `TEMP` and `DTEMP` parameters in instance lines.
+     - Instance temperature logic:
+       - If `TEMP` specified: `instance_temperature = TEMP`.
+       - Else: `instance_temperature = circuit_temperature + DTEMP`.
+
+3. **Temperature Support for Devices:**
+   - Included: All devices except voltage/current sources (both independent and controlled) and BSIM models.
+   - BSIM models use their unique temperature adjustment scheme altering model parameters before computation.
+
+4. **Temperature Dependence Formulas:**
+   - **BJT Saturation Current:**
+     - \( I_S(T_1) = I_S(T_0) \cdot \left(\frac{T_1}{T_0}\right)^{XTI} \cdot \exp\left(\frac{Eg \cdot q \cdot (T_1 - T_0)}{k \cdot T_1 \cdot T_0}\right) \),
+       where:
+       - \( k \): Boltzmann's constant,
+       - \( q \): electronic charge,
+       - \( Eg \): energy gap,
+       - \( XTI \): saturation current temperature exponent (default: 3).
+
+   - **BJT Beta Temperature Dependence:**
+     - \( B(T_1) = B(T_0) \cdot \left(\frac{T_1}{T_0}\right)^{XTB} \),
+       where \( XTB \) is a user-supplied model parameter.
+
+   - **Junction Diode Saturation Current:**
+     - \( I_S(T_1) = I_S(T_0) \cdot \left(\frac{T_1}{T_0}\right)^{XTI} \cdot \exp\left(\frac{Eg \cdot q \cdot (T_1 - T_0)}{N \cdot k \cdot T_1 \cdot T_0}\right) \),
+       - For Schottky diodes: \( XTI \) = 2.
+
+   - **Junction Potential (Ngspice PHI):**
+     - \( U(T) = \frac{kT}{q} \cdot \ln\left(\frac{N_aN_d}{N_i(T)^2}\right) \),
+       where:
+       - \( N_a \): acceptor impurity density,
+       - \( N_d \): donor impurity density,
+       - \( N_i \): intrinsic carrier concentration.
+
+   - **MOSFET Surface Mobility:**
+     - \( M_0(T) = M_0(T_0) \cdot \left(\frac{T}{T_0}\right)^{1.5} \).
+
+   - **Temperature Effects on Passive Components:**
+     - **Resistors:**
+       - \( R(T) = R(T_0) \cdot [1 + TC_1 \cdot (T - T_0) + TC_2 \cdot (T - T_0)^2] \),
+         where:
+         - \( TC_1 \): First-order coefficient,
+         - \( TC_2 \): Second-order coefficient.
+
+5. **Key Notes for Usage:**
+   - Ensure netlist preparation for simulations involving multiple temperatures.
+   - Temperature explicitly influences elements such as BJTs, diodes, and MOSFETs. Voltage/current sources are unaffected.
+   - `.TEMP` command allows direct temperature override for circuits during simulations.

@@ -1,0 +1,35 @@
+### Summary of .PZ: Pole-Zero Analysis (Ngspice Manual)
+
+**General Syntax:**
+```
+.pz node1 node2 node3 node4 cur pol
+.pz node1 node2 node3 node4 cur zer
+.pz node1 node2 node3 node4 cur pz
+.pz node1 node2 node3 node4 vol pol
+.pz node1 node2 node3 node4 vol zer
+.pz node1 node2 node3 node4 vol pz
+```
+
+**Key Information:**
+- **Transfer Function Types:**
+  - **cur:** (output voltage) / (input current)
+  - **vol:** (output voltage) / (input voltage)
+- **Analysis Types:**
+  - **pol:** Pole analysis only
+  - **zer:** Zero analysis only
+  - **pz:** Full pole-zero analysis (both poles and zeros are determined)
+    - If one (poles or zeros) fails to converge, the other can still be computed.
+- **Nodes Description:**
+  - `node1` and `node2`: Input nodes.
+  - `node3` and `node4`: Output nodes.
+  - The configuration provides flexibility for defining input and output ports.
+
+**Interactive Mode:**
+- Replace `.pz` with `pz` in the syntax.
+- Use `print all` to display results.
+
+**Examples:**
+1. **`.pz 1 0 3 0 cur pol`**: Computes pole analysis for a (voltage)/(current) transfer function with input nodes `1` and `0`, output nodes `3` and `0`.
+2. **`.pz 2 3 5 0 vol zer`**: Computes zero analysis for a (voltage)/(voltage) transfer function with input nodes `2` and `3`, output nodes `5` and `0`.
+3. **`.pz 4 1 4 1 cur pz`**: Computes both poles and zeros (pole-zero analysis) for a (voltage)/(current) transfer function with input and output nodes both specified as `4` and `1`.
+

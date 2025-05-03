@@ -1,0 +1,26 @@
+**Summary:**
+
+1. **Purpose of Adding a Voltage Source in Series:**
+   - The ngspice matrix solver calculates node voltages and currents through independent voltage sources.
+   - A voltage source with `dc voltage 0` can be added in series to measure the current through a resistor.
+
+2. **Current Measurement Technique Using Voltage Source in Series:**
+   ```ngspice
+   * Original Circuit
+   V1 1 0 1
+   R1 1 0 5
+   R2 1 0 10
+
+   * Modified Circuit with Current Measurement
+   V1 1 0 1
+   R1 1 11 5
+   Vmeas 11 0 dc 0
+   R2 1 0 10
+   ```
+   - `Vmeas 11 0 dc 0` is added in series with `R1`.
+   - Current is accessible as `vmeas#branch` after simulation.
+
+3. **Key Notes for Current Measurement:**
+   - Voltage source added in series should have `dc voltage 0` to avoid altering the circuit behavior.
+   - Access current calculation through `vmeas#branch`.
+

@@ -1,0 +1,76 @@
+**Summary of Important Information for Netlist Code Generation and Diode Queries**
+
+- **Diode Model Characteristics**:
+  - **Forward Bias**: Anode is more positive than cathode, diode conducts large currents. Use series resistance (`RS`) to avoid convergence issues.
+  - **Reverse Bias**: Cathode is more positive than anode, diode conducts small leakage current.
+  - **Breakdown**: Modeled only if `BV` parameter is specified; exponential increase in current. **`BV` is positive**.
+  
+- **Key Parameters and Scaling**:
+  - `area`, `pj`, and multiplier `m` used for scaling parameters:
+    - `AREAeff = AREA × m`
+    - `PJeff = PJ × m`
+    - Example scaled parameters: `ISeff = IS × AREAeff + JSW × PJeff`.
+  
+- **DC, Transient, and AC Characteristics**:
+  - Bottom current model:  
+    ```
+    ID = IS × (exp(qVD/NkT) - 1) + VD × GMIM, if VD ≥ -3NkT/q
+    ```
+  - High injection effects modeled with `IK` and `IKR`:
+    ```
+    IDeff = ID / (1 + ID × IK), if VD ≥ -3NkT/q
+    ```
+  - Capacitance:
+    - Depletion: `Cdepletion = Cdeplbw + Cdeplsw`
+    - Diffusion: `Cdiffusion = TT × ∂IDeff/∂VD`
+
+- **Breakdown Region Behavior**:
+  - Description involves `BV` and current `IBV`. Transition from reverse bias uses:
+    ```
+    Ibdwn = -ISeff × (exp(-qBV/NkT) - 1)
+    ```
+  - Adjusted breakdown voltage algorithm:  
+    ```
+    BVeff = BV - N × Vt × ln(IBVeff / Ibdwn), if IBVeff ≥ Ibdwn
+    ```
+
+- **Temperature Dependence**:
+  - **Band-gap Energy**:
+    ```
+    EG(T) = 1.16 - (7.02e-4 × T^2) / (T + 1108.0)
+    ```
+  - **Leakage Current**:
+    ```
+    IS(T) = IS × elogfactor
+    ```
+    where `logfactor = (EGnom/Vt(TNOM) - EG(T)/Vt(T)) + XT × ln(T/TNOM)`
+  - **Contact Potentials**:  
+    ```
+    VJ(T) = VJ(TNOM) - Vt(T) × [3 × ln(T/TNOM) + EGnom/Vt(TNOM) - EG(T)/Vt(T)]
+    ```
+  - Changes in parameters due to temperature:
+    - Resistance: `RS(T) = RS × [1 + TRS × (T - TNOM)]`
+    - Capacitance: `CJ(T) = CJ × [1 + MJ × {4.0e-4 × (T - TNOM) - VJ(T)/VJ + 1}]`
+
+- **Noise Model**:
+  - **Thermal Noise** (due to `RS`):  
+    ```
+    i_RS^2 = 4 × k × T × Δf / RS
+    ```
+  - **Shot Noise** and **Flicker Noise** (parameters: `KF`, `AF`):  
+    ```
+    id^2 = 2 × q × ID × Δf + KF × ID^AF / f × Δf
+    ```
+
+- **Self-Heating Model**:
+  - A 3rd node (`tj`) and flag (`thermal`) added in the element line. Specify `RTH0` and `CTH0` parameters in the model.
+  - **General usage syntax**:
+    ```
+    DXXXXXXX n+ n- tj mname <off> <ic=vd> thermal
+    ```
+  - **Example model declaration**:
+    ```
+    .model DPWR D (bv=16 is=1e-10 n=1.03 rth0=50 cth0=1u)
+    ```
+
+This summary includes key equations, modeling behaviors, temperature effects, noise contributions, and self-heating implementations directly useful for diode-related netlist operations, debugging, and explanations.

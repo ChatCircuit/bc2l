@@ -1,0 +1,61 @@
+**Summary of Section 11.3: Analyses (Ngspice Manual)**
+
+Section 11.3 in the Ngspice manual covers analytical commands for simulating and analyzing circuits:
+
+1. **.OP (Operating Point Analysis)**  
+   - Captures circuit's DC operating point (node voltages, branch currents).
+   - Syntax: `.op`
+   - No user-specified parameters required.
+
+2. **.DC (DC Sweep Analysis)**  
+   - Sweeps a component's independent source over a specified range.
+   - Syntax: `.dc SRC_NAME START STOP STEP`
+   - Supports nested sweeps.
+
+3. **.AC (AC Small Signal Analysis)**  
+   - Analyzes frequency responses (e.g., gain, phase).
+   - Syntax: `.ac TYPE POINTS FSTART FSTOP`  
+     - `TYPE`: Decade, Octave, or Linear.  
+     - `POINTS`: Steps per frequency type.  
+     - `FSTART` and `FSTOP`: Frequency range.
+
+4. **.TRAN (Transient Analysis)**  
+   - Time-domain simulation for capturing dynamic behavior.  
+   - Syntax: `.tran TSTEP TSTOP [TSTART] [UIC]`  
+     - `TSTEP`: Time step.  
+     - `TSTOP`: Simulation end time.  
+     - `[TSTART]`: Optional, simulation start time.  
+     - `[UIC]`: Use Initial Condition flag (optional).
+
+5. **.FOUR (Fourier Analysis)**  
+   - Calculates Fourier coefficients for periodic waveforms.
+   - Syntax: `.four FREQ OUTVAR1 [OUTVAR2 ...]`  
+     - `FREQ`: Signal frequency.  
+     - `OUTVAR`: Circuit variables to process.
+
+6. **.NOISE (Noise Analysis)**  
+   - Computes noise-contribution of circuit components.
+   - Syntax: `.noise OUTVAR SRC_NAME POINTS FSTART FSTOP`  
+
+7. **.SENS (Sensitivity Analysis)**  
+   - Evaluates parameter sensitivities for circuit performance.
+   - Syntax: `.sens OUTVAR`
+
+8. **.DISTO (Distortion Analysis)**  
+   - Computes harmonic distortion at a specified frequency. 
+   - Syntax: `.disto HARMONIC_TYPE NUM_HARMONICS`  
+
+9. **.TEMP (Temperature Sweep)**  
+   - Sweeps circuit over a temperature range.
+   - Syntax: `.temp TEMP1 [TEMP2 ...]`  
+
+10. **Default Values or Characteristics:**  
+    - `.tran`: Default `TSTART = 0` if omitted.  
+    - `.ac`: Default scaling is logarithmic `Decade`.  
+    - `.temp`: Default ambient temperature used if no values specified.
+
+11. **Example Code Snippets Extracted:**  
+    - `.tran 0.01 10 UIC`  
+    - `.dc V1 0 5 0.1`  
+    - `.ac dec 10 1 1Meg`  
+    - `.four 1k V(5)`  

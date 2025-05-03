@@ -1,0 +1,35 @@
+**Summary of Ngspice "PULSE" Source for Netlist Applications:**
+
+**General Form:**
+`PULSE(V1 V2 TD TR TF PW PER NP)`
+
+**Parameter Definitions:**
+- **V1:** Initial value (unit: V, A, no default).
+- **V2:** Pulsed value (unit: V, A, no default).
+- **TD:** Delay time (default: `0.0 sec`).
+- **TR:** Rise time (default: `TSTEP`).
+- **TF:** Fall time (default: `TSTEP`).
+- **PW:** Pulse width (default: `TSTOP`).
+- **PER:** Period (default: `TSTOP`).
+- **NP:** Number of pulses (default: `unlimited`, setting `0` or omitting it specifies unlimited pulses).
+  - Note: In **compatibility mode** (`ngbehavior=xs` in `.spiceinit`), the 8th parameter can specify the **phase of the pulse signal** (measured in degrees). Positive values advance the signal, while negative values introduce delay. 
+
+**Pulse Waveform Characteristics:**
+- A single pulse without repetitions follows this timeline:
+  - At `0`: Value = `V1`.
+  - At `TD`: Value = `V1`.
+  - At `TD + TR`: Value = `V2`.
+  - At `TD + TR + PW`: Value = `V2`.
+  - At `TD + TR + PW + TF`: Value = `V1`.
+  - At `TSTOP`: Value = `V1`.
+- Linear interpolation is applied for intermediate points.
+
+**Example:**
+`VIN 3 0 PULSE(-1 1 2NS 2NS 2NS 50NS 100NS 5)`
+- Defines a pulse with:
+  - Initial value `-1V`, Pulsed value `1V`.
+  - Delay time: `2 ns`, Rise time: `2 ns`, Fall time: `2 ns`.
+  - Pulse width: `50 ns`, Period: `100 ns`.
+  - Number of pulses: `5`.
+
+Use the above structure and details for **netlist code generation**, **debugging**, or understanding the behavior of PULSE sources.

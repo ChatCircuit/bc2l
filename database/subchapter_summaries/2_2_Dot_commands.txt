@@ -1,0 +1,63 @@
+**Summary of Dot Commands for Ngspice Netlist Code Generation/Modification/Debugging and Component/Model/Command Queries**
+
+1. **Simulation Commands**:  
+   - `.AC`: Start AC simulation.  
+   - `.DC`: Start DC simulation.  
+   - `.DISTO`: Start distortion analysis simulation.  
+   - `.NOISE`: Start noise analysis simulation.  
+   - `.OP`: Perform operating point analysis.  
+   - `.PSS`: Periodic steady-state analysis.  
+   - `.PZ`: Pole-zero analysis simulation.  
+   - `.SENS`: Sensitivity analysis.  
+   - `.SP`: S-parameter analysis.  
+   - `.TF`: Transfer function analysis.  
+   - `.TRAN`: Transient simulation.
+
+2. **Conditional Branching**:  
+   - `.IF`, `.ELSEIF`, `.ELSE`, `.ENDIF`: Conditional branching in netlist.  
+
+3. **Subcircuit Commands**:  
+   - `.SUBCKT`: Start subcircuit definitions.  
+   - `.ENDS`: End subcircuit definition.  
+
+4. **Initial Conditions**:  
+   - `.IC`: Set initial conditions.  
+   - `.NODESET`: Set node-specific initial conditions.  
+
+5. **Analysis Output**:  
+   - `.FOUR`: Fourier analysis of transient simulation output.  
+   - `.MEAS`: Measure simulation parameters.  
+   - `.PLOT`: Printer plot during batch simulation.  
+   - `.PRINT`: Tabular listing during batch simulation.  
+   - `.PROBE`: Save device currents, voltages, and differential voltages.  
+   - `.SAVE`: Name simulation result vectors for saving.
+
+6. **Parameter and Function Definitions**:  
+   - `.FUNC`: Define functions.  
+   - `.PARAM`: Define parameter(s).  
+   - `.CSPARAM`: Define control section parameters.  
+
+7. **Netlist Structure**:  
+   - `.TITLE`: Set netlist title.  
+   - `.END`: End netlist file.  
+   - `.CONTROL`: Start control section.  
+   - `.ENDC`: End control section.  
+
+8. **Library and File Inclusion**:  
+   - `.INCLUDE`: Include netlist parts.  
+   - `.LIB`: Include device or model libraries.  
+
+9. **Device Models**:  
+   - `.MODEL`: Define device model parameters.
+
+10. **Global Nodes and Temperature**:  
+   - `.GLOBAL`: Define global nodes.  
+   - `.TEMP`: Set circuit temperature.  
+
+11. **Simulator Options**:  
+   - `.OPTIONS`: Set simulator options.  
+
+12. **Printer Plot Settings**:  
+   - `.WIDTH`: Width of printer plot.
+
+This summary retains the essential syntax and theoretical context for the dot commands to ensure precise use in netlist manipulation and debugging tasks.

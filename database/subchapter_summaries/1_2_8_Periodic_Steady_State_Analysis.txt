@@ -1,0 +1,6 @@
+Periodic Steady-State (PSS) Analysis:  
+- **Purpose**: Radio frequency periodic large-signal analysis for autonomous circuits (e.g., oscillators, VCOs).  
+- **Methodology**: Time-domain shooting method using transient analysis. It predicts the fundamental frequency and harmonic amplitudes of oscillators.  
+- **Convergence**: Based on minimizing the error vector, defined as the difference of RHS vectors between two estimated period occurrences. Convergence is achieved when the mean error vector drops below a specified threshold.  
+- **Output**: Serves as the basis for analyses like Periodic AC (PAC) and Periodic Noise (PNoise).  
+- **Current Stage**: Experimental and in early development, limited to autonomous circuits only.  

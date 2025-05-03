@@ -1,0 +1,18 @@
+**Summary for Netlist Code Generation/Modification/Debugging and Component/Command Queries**
+
+**.MEASURE Command with `par('expression')`:**
+- **Purpose:** Allows use of algebraic expressions in `.measure` statements.
+- **Syntax:**
+  - `.MEASURE {DC|TRAN|AC|SP} result`
+    - `+ FIND par('expression') AT=val`
+  - Example:
+    - `.measure tran vtest find par('(v(2)*v(1))') AT=2.3m`
+      - Returns the product of two voltage values (`v(2)` and `v(1)`) at **time point 2.3ms (TRAN analysis)**.
+- **Rules:** The `par('expression')` syntax behaves as a vector evaluated using the rules of the `B-source`. For AC analysis mode, expressions operate on **complex values**.
+
+**Key Limitations:**
+- **Not usable in `.control` section with the `.meas` command.**
+- **Alternatives in `.control`:** Use `let` (e.g., `.let result = expression`) for similar functionality.
+
+**Note:**
+- Ensure proper distinction between `param` and `par` in usage contexts.

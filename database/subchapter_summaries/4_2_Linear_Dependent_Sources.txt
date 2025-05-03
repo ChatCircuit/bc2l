@@ -1,0 +1,9 @@
+4.2 Linear Dependent Sources in Ngspice:
+
+Ngspice supports four types of linear dependent sources, defined by these equations:
+- `i = g*v` (transconductance, g)
+- `v = e*v` (voltage gain, e)
+- `i = f*i` (current gain, f)
+- `v = h*i` (transresistance, h)
+
+Constants `g`, `e`, `f`, and `h` represent the respective characteristics of each source.

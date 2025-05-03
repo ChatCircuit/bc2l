@@ -1,0 +1,13 @@
+**2.6.3 Subcircuit Calls**  
+**General Form:**  
+`XYYYYYYY N1 <N2 N3 ...> SUBNAM`  
+
+**Example Code:**  
+`X1 2 4 17 3 1 MULTI`  
+
+**Key Details:**  
+- Subcircuits are invoked using pseudo-elements beginning with the letter **X**.  
+- **SUBNAM** specifies the name of the subcircuit to be expanded.  
+- Nodes (N1, N2, etc.) listed after **XYYYYYYY** correspond to the circuit nodes used for subcircuit expansion.  
+- Subcircuit calls can be modified if parameters are used (see section **2.10.3**).  
+

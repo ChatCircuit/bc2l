@@ -1,0 +1,25 @@
+18 Statistical Circuit Analysis (Summary for Netlist Usage/Debugging):
+
+Ngspice supports statistical circuit analysis by enabling users to model variations in circuit parameters. The analysis can include variations in resistances, capacitances, process parameters, and other device properties. Key components and features for statistical analysis:
+
+- **MC (Monte Carlo) Analysis Command**:
+  - **.mc**: Initiates a Monte Carlo analysis.
+    - Syntax: `.mc <num_runs> <analysis> <param_name=dist(mean,std)>`
+    - `<num_runs>`: Number of Monte Carlo runs.
+    - `<analysis>`: Specifies the analysis type (e.g., `.tran`, `.ac`).
+    - `<param_name=dist>`: Assigns statistical distributions for parameters.
+      - Types of distributions supported: uniform (`u(min,max)`), normal (`n(mean,std)`).
+      
+- **Example**:
+  - Define tolerances/random variations:
+    - `.param r1val=1k r2val=500`
+    - `.param tol1=n(0,0.05)` (normal distribution with standard deviation 0.05).
+  - Reference parameters in subcircuit:
+    - `R1 node1 node2 {r1val*(1+tol1)}`
+  - Monte Carlo simulation:
+    - `.tran 1ms 10ms`
+    - `.mc 100 tran v(out)` (100 runs on transient analysis tracking output voltage).
+
+Default behaviors:
+- If no parameter variation is defined, values are considered deterministic.
+- Measurement of results (e.g., `.meas` commands) can also be used with Monte Carlo simulations for statistical reporting.

@@ -1,0 +1,16 @@
+**Noise Analysis (Ngspice)**
+
+- **Purpose**: Measures device-generated noise in a circuit by calculating the noise contributions at the output port and equivalent input noise.
+
+- **Key Processes**:
+  - Calculates noise spectral densities for each frequency point in a specified range.
+  - Spectral density corresponds to the circuit variable as a stationary Gaussian stochastic process.
+  - Integrates spectral densities over the frequency range to compute total noise voltage and current.
+
+- **Theoretical Characteristics**:
+  - Calculated total noise values represent the variance of circuit variables modeled as stationary Gaussian processes.
+
+- **Inputs Required**:
+  - An input source for analysis.
+  - An output port for noise measurement.
+

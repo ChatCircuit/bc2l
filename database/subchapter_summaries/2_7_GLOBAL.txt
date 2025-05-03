@@ -1,0 +1,7 @@
+**Summary:**
+
+**`.GLOBAL` Statement**  
+- General form: `.GLOBAL nodename1 [ nodename2 ... ]`  
+- Purpose: Defines global nodes accessible across all circuit and subcircuit blocks, regardless of circuit hierarchy.  
+- Example: `.GLOBAL gnd vcc`  
+- Functionality: Ensures nodes defined in `.GLOBAL` are accessible from the top level after circuit parsing.  

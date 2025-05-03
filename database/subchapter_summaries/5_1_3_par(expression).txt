@@ -1,0 +1,3 @@
+5.1.3 par('expression')  
+- The `par('expression')` function allows the use of algebraic expressions in output commands like `.plot`.  
+- Refer to Chapter 11.6.6 for details on usage with outputs.  

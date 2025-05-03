@@ -1,0 +1,9 @@
+**Summary: Non-linear Dependent Sources (Behavioral Sources)**
+
+1. **Components:**  
+   - **B Source:** Allows generation of voltages or currents based on mathematical expressions. Used in behavioral modeling and analysis.  
+   - **E and G Sources:** Specialized variants for generating voltages (E) or currents (G). Internally converted to the general B source.  
+
+2. **Purpose:** Enables the use of mathematical expressions to define voltage/current relationships for behavioral modeling and analysis.
+
+No specific syntax, default values, or theoretical characteristics were provided in the excerpt.

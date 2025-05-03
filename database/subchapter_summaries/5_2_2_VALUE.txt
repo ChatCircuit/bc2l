@@ -1,0 +1,9 @@
+VALUE-controlled sources in Ngspice can use a value specified as an expression (`value={expr}`). Here's the key detail from the text:
+
+- Syntax: `EXXXXXXX n+ n- value={expr}`  
+  - `n+`, `n-`: Nodes.
+  - `value={expr}`: The expression that specifies the source behavior. The `=` sign is optional.
+
+**Example provided:**  
+`E41 4 0 value = {V(3)*V(3)-Offs}`  
+This defines a source where the output is determined by the expression `(V(3)*V(3)-Offs)`. The `=` sign is not mandatory.

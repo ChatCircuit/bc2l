@@ -1,0 +1,68 @@
+### Summary of Section 11.4.5 from Ngspice Manual:
+#### .MEASURE Command
+- **Purpose:** Measures differences in DC voltage, frequency, or time between two points selected from one or two output vectors. It is applicable to transient (`TRAN`), AC (`AC`), spectrum (`SP`), or DC analyses.
+
+#### General Syntax:
+```
+.MEASURE {DC|AC|TRAN|SP} result TRIG trig_variable VAL=val
++ <TD=td> <CROSS=# | CROSS=LAST> <RISE=# | RISE=LAST>
++ <FALL=# | FALL=LAST> <TRIG AT=time> TARG targ_variable
++ VAL=val <TD=td> <CROSS=# | CROSS=LAST> <RISE=# | RISE=LAST>
++ <FALL=# | FALL=LAST> <TARG AT=time>
+```
+- **Parameters:**
+  - `result`: Name assigned to the measurement result.
+  - `TRIG`: Specifies the trigger condition (variable, value, rise, fall, cross, or fixed time point).
+  - `TARG`: Specifies the target condition (similar options as `TRIG`).
+  - `<TD=td>`: Optional delay time for analysis start.
+  - `<RISE=#>`: Specifies the rising slope occurrence.
+  - `<FALL=#>`: Specifies the falling slope occurrence.
+  - `<CROSS=#>`: Specifies the crossing occurrence on any slope.
+  - `<TRIG AT=time>`: Fixed trigger time point.
+  - `<TARG AT=time>`: Fixed target time point.
+
+#### Example Codes:
+1. **Measure Signal Period:**
+   ```
+   .measure tran tdiff TRIG v(1) VAL=0.5 RISE=1 TARG v(1) VAL=0.5 RISE=2
+   ```
+   - Measures time between the first rising slope and the second rising slope of `v(1)` crossing `0.5 V`.
+
+   **Output:** 
+   ```
+   tdiff = 1.000000e-003 targ= 1.083343e-003 trig= 8.334295e-005
+   ```
+
+2. **Measure Two Periods:**
+   ```
+   .measure tran tdiff TRIG v(1) VAL=0.5 RISE=1 TARG v(1) VAL=0.5 RISE=3
+   ```
+   - Measures time between the first rising slope and the third rising slope of `v(1)` crossing `0.5 V`.
+
+3. **Measure Rising to Falling Slope:**
+   ```
+   .measure tran tdiff TRIG v(1) VAL=0.5 RISE=1 TARG v(1) VAL=0.5 FALL=1
+   ```
+   - Measures time between the first rising slope and the first falling slope of `v(1)` crossing `0.5 V`.
+
+4. **Measure Trigger vs Target on Different Nodes:**
+   ```
+   .measure tran tdiff TRIG v(1) VAL=0 FALL=3 TARG v(2) VAL=0 FALL=3
+   ```
+   - Time difference between the third falling slope of `v(1)` reaching `0 V` and the third falling slope of `v(2)` reaching `0 V`.
+
+5. **Crossing Slopes:**
+   ```
+   .measure tran tdiff TRIG v(1) VAL=-0.6 CROSS=1 TARG v(2) VAL=-0.8 CROSS=1
+   ```
+   - Time difference between the first crossing of `v(1)` at `-0.6 V` and `v(2)` at `-0.8 V` (any slope).
+
+6. **Trigger at Fixed Time Point:**
+   ```
+   .measure tran tdiff TRIG AT=1m TARG v(2) VAL=-0.8 CROSS=3
+   ```
+   - Time difference between `1 ms` and the third crossing of `v(2)` at `-0.8 V` (any slope).
+
+#### Notes:
+- **Default Values:** Not explicitly stated; behavior depends on the syntax (e.g., first occurrence for `RISE`, `FALL`, or `CROSS` if unspecified).
+- **Use Cases:** Debugging netlists, analyzing transient behavior, and extracting signal timing characteristics in simulations.

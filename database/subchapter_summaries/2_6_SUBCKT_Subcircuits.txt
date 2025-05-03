@@ -1,0 +1,43 @@
+**Summary for Netlist Code Generation/Modification/Debugging/Explanation**
+
+1. **Subcircuits Overview**:
+   - Subcircuits are a hierarchical modeling feature in ngspice, allowing repeated circuit sections to be easily represented.
+   - Defined using `.subckt` and `.ends` cards (or alternative keywords specified with `substart` and `subend` options).
+   - Subcircuits are textually expanded during parsing, removing the hierarchical structure post-input processing.
+
+2. **Syntax and Usage**:
+   - **Definition**:  
+     `.subckt <name> <port1> <port2> ...`  
+     Example: `.subckt vdivide 1 2 3`
+     - `name`: Subcircuit name (`vdivide` in example).
+     - `portX`: External connection points (e.g., `1`, `2`, `3`).
+   - **Component Cards within Subcircuit**:  
+     Each component has standard definitions within `.subckt` boundaries.  
+     Example:
+     ```
+     r1 1 2 10K    ; Resistor R1 between port `1` and `2` (value: 10 kOhms)
+     r2 2 3 5K     ; Resistor R2 between port `2` and `3` (value: 5 kOhms)
+     ```
+   - **Terminating Definition**: `.ends`
+   - **Instance Card**:  
+     Used to instantiate the subcircuit in a design, starts with `X`.  
+     Example:
+     ```
+     xdiv1 10 7 0 vdivide    ; Instantiates subcircuit `vdivide`. Ports mapped as: `1=10`, `2=7`, `3=0`.
+     ```
+
+3. **Default Characteristics & Features**:
+   - Ports are mapped to specific nodes in the main circuit as defined by the instance card.
+   - No limits on size or complexity.
+   - Nested subcircuits (subcircuits within subcircuits) are supported.
+
+4. **Example of Unique Lines**:
+   ```
+   xdiv1 10 7 0 vdivide
+   .subckt vdivide 1 2 3
+   r1 1 2 10K
+   r2 2 3 5K
+   .ends
+   ```
+
+This information helps in defining, instantiating, debugging subcircuits in a netlist and interpreting hierarchical designs effectively in ngspice.

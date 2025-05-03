@@ -1,0 +1,65 @@
+**Ngspice Manual Summary: AC Coupled Transistor Amplifier (Section 17.1)**  
+
+1. **Circuit Description Overview**:  
+   - A one-transistor amplifier with AC coupling.  
+   - Amplification gain is approximately `-(Rc/Re) = -3.9` where `Rc = 3.9kΩ` and `Re = 1kΩ`.  
+   - Includes a `sinewave input (node "1")` and an output on `node "coll"`.  
+   - Compatible with Berkeley SPICE3 components.  
+
+2. **Netlist Code Example**:  
+   ```
+   * AC coupled transistor amplifier  
+   .tran 1e-5 2e-3  
+   vcc vcc 0 12.0  
+   vin 1 0 0.0 ac 1.0 sin(0 1 1k)  
+   ccouple 1 base 10uF  
+   rbias1 vcc base 100k  
+   rbias2 base 0 24k  
+   q1 coll base emit generic  
+   rcollector vcc coll 3.9k  
+   remitter emit 0 1k  
+   .model generic npn  
+   .end  
+   ```  
+
+3. **Simulation Commands**:  
+   - **Run Transient Analysis**: `.tran 1e-5 2e-3` for 2ms total simulation time with a max timestep of 10μs.  
+   - **Start Simulation**: `$ ngspice xspice_c1.cir`  
+   - **View Circuit Description**: `listing`  
+   - **Run Simulation**: `run`  
+   - **Plot Output Nodes**:  
+     - `plot v(1) base`  
+     - Expressions like `plot (base - v(1))` enable relative voltage calculations.  
+
+4. **Special Notes on Plotting**:  
+   - Numeric node labels (e.g., `1`) require `v()` enclosures (e.g., `plot (base - v(1))`).  
+   - Branch currents through voltage sources are plotted with `#branch` suffix (e.g., `plot vcc#branch`).  
+
+5. **DC Operating Point Analysis**:  
+   - Command: `op` (direct from ngspice prompt without editing input files).  
+   - Example to print DC voltage bias of internal nodes:  
+     ```
+     print emit base coll  
+     emit = 1.293993  
+     base = 2.074610  
+     coll = 7.003393  
+     ```  
+
+6. **AC Analysis**:  
+   - Command: `ac dec 10 0.01 100`  
+     - Steps: Logarithmic sweep with 10 points per decade from 0.01 Hz to 100 Hz.  
+     - Plot frequency response at node `coll`: `plot coll`  
+   - Bode plots:  
+     - Magnitude and phase gain using built-in functions:  
+       `plot db(coll) ph(coll)`  
+
+7. **Swept DC Analysis**:  
+   - Command: `dc vcc 0 15 0.1`  
+     - Sweeps supply voltage `vcc` from 0 to 15V in 0.1V steps.  
+   - Plot node voltages: `plot emit base coll`  
+
+8. **Final Notes**:  
+   - Simulator Exit: `quit`.  
+   - Example data files (`xspice_c1.cir`) may be found in `/examples/xspice/`.  
+
+This summary provides the relevant codes, commands, theoretical characteristics, and analysis procedures to understand, modify, simulate, and debug AC coupled transistor amplifier circuits in Ngspice.

@@ -1,0 +1,20 @@
+### 5.1 Bxxxx: Nonlinear Dependent Source (ASRC)
+
+- **Purpose**: Models an Arbitrary Source (ASRC) with voltage or current controlled by an arbitrary nonlinear equation.
+
+- **Syntax**:  
+  `Bxxxx n+ n- <V=expression> | <I=expression>`  
+  - `n+`, `n-`: Positive and negative nodes of the source.
+  - `<V=...>`: Defines the voltage-controlled ASRC.
+  - `<I=...>`: Defines the current-controlled ASRC.
+
+- **Expression Characteristics**:  
+  The expression can include node voltages, branch currents (through current-controlled sources), and previously defined parameters (e.g., `V(n1)`, `I(R1)`).
+
+- **Default Behavior**: No default expression; must explicitly define either voltage (`V=...`) or current (`I=...`).
+
+- **Example**:
+  ```
+  B1 3 0 V=(V(1,2)^2 + 2*I(R5))
+  ```
+

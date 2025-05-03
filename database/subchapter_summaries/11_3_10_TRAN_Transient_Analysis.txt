@@ -1,0 +1,41 @@
+**11.3.10 .TRAN: Transient Analysis**  
+General form:  
+`.tran tstep tstop <tstart <tmax>> <uic>`  
+
+Examples:  
+1. `.tran 1ns 100ns`  
+2. `.tran 1ns 1000ns 500ns`  
+3. `.tran 10ns 1us`  
+
+### Component Details:  
+**Parameters**  
+- **tstep**:  
+  - Increment for printing or plotting.  
+  - Suggested computing increment for post-processor.  
+
+- **tstop**:  
+  - Final simulation time for transient analysis.  
+
+- **tstart** (optional):  
+  - Initial simulation time. Defaults to zero if omitted.  
+  - Analysis starts from time zero, with the circuit analyzed but outputs not stored in [zero, tstart).  
+
+- **tmax** (optional):  
+  - Maximum step size used by Ngspice.  
+  - Default value: `min(tstep, (tstop - tstart) / 50.0)`.  
+  - Ensures a computing interval smaller than the printing increment (`tstep`).  
+
+- **uic** (optional):  
+  - Specifies "use initial conditions".  
+  - Prevents Ngspice from solving for a quiescent operating point before analysis.  
+  - Initial conditions are derived from values set with `IC=...` on elements.  
+  - If `.ic` control line exists (see Section 11.2.2), node voltages on `.ic` are used for device initialization.  
+  - Priority hierarchy: `IC=...` → `.ic` control line → zero assumed if neither is defined.  
+
+### Theoretical Characteristics:  
+- **Initial Transient Operating Point (time zero)**:  
+  - Independent voltages and currents applied at their time zero values.  
+  - Capacitances treated as open.  
+  - Inductances treated as shorted.  
+  - Nonlinear device equations solved iteratively.
+

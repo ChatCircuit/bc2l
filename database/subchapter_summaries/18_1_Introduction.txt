@@ -1,0 +1,17 @@
+1. **Introduction to Parameter Variability**:  
+   - Real circuits operate under varying device parameters, power supply conditions, and environmental factors.
+   - Physical parameters affecting circuits (e.g., MOS source/drain resistance, threshold voltage, transconductance) often follow **Gaussian distributions (mean `μ` and standard deviation `σ`)**.
+
+2. **Simulation with Parameter Spreads**:  
+   - Simulating circuits under distributed parameters ensures reliable operation under variation.
+   - Ngspice uses a pseudo-random number generator for this purpose, controlled by a **seed value**.
+
+3. **Seed Value Management**:  
+   - Default initialization: `rndseed` is set to **1** at startup if no seed is provided.
+   - **`option SEED=nn`**: Allows setting the seed value at startup (`nn` must be an integer > 0).  
+   - **`option SEED=random`**: Uses the Unix epoch time (seconds since 01.01.1970) as a seed.  
+   - Recommended placement for these commands is in the **.spiceinit** file.
+   - **`setseed` command (chapter 13.5.78)**: Allows setting a new seed during runtime (`nn` must be an integer > 0).
+
+4. **Statistical Methods**:  
+   - Ngspice provides multiple methods for statistical simulation due to compatibility requirements with other simulators and historical development reasons.  

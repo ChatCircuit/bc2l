@@ -1,0 +1,20 @@
+**Summary:**
+
+**Continuation Lines in Ngspice:**
+
+- **General Syntax:**  
+    `<any command>`  
+    `+ <continuation of any command> ; some comment`  
+    `+ <further continuation of any command>`  
+
+- **Purpose:**  
+If command lines are overly long, they can be split for better readability. Internally, they will merge into a single line. 
+
+- **Continuation Line Rules:**  
+    - Each continuation line must begin with a `+` followed by a space.  
+    - Continuation lines must immediately follow the previous line.  
+    - **Alternative Method:** Lines can also be continued by ending with two backslashes (`\\`), similar to Unix shell syntax.  
+
+- **Exclusions:**  
+Continuation lines cannot be used with `.title`, `.lib`, and `.include` commands.  
+

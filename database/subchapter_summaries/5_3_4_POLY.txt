@@ -1,0 +1,3 @@
+**Summary: POLY source in Ngspice**  
+- The POLY component details refer to section 5.5 under E-Source in the Ngspice manual.  
+- No additional or unique syntax, templates, variables, or code examples are provided in the given text.

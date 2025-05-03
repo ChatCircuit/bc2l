@@ -1,0 +1,46 @@
+11.7.3 Using Option `savecurrents` (Ngspice Manual Summary for Netlist Code Generation)
+
+**Purpose**  
+- The `.options savecurrents` command enables measurement of device terminal currents by adding `.save` commands internally during circuit parsing. This adds new vectors for the currents, avoiding extra nodes.
+
+**Key Information**
+- Syntax: `.options savecurrents`
+- Automatically adds `.save` lines like:
+  ```
+  .save @r1[i]
+  .save @r2[i]
+  ```
+  These vectors store device terminal currents.
+- Supported Devices: M, J, Q, D, R, C, L, B, F, G, W, S, I (detailed in Chapter 2.3). Devices in subcircuits are also supported.
+- **Not Supported in AC Simulations**: Complex data cannot be processed. Resultant vectors will be empty.
+- Memory Impact: Each device adds 1–4 output vectors, which may cause high memory usage in large circuits. Data is delayed by one time step for transient simulations.
+
+**Special MOSFET Options** (for MOS1, BSIM3, BSIM4 models):
+- `.options savecurrents_mos1`
+- `.options savecurrents_bsim3`
+- `.options savecurrents_bsim4`  
+  These enable saving all currents for respective transistor models.
+
+**Limitations and Observations**
+- Does not impact AC analysis.
+- Existing internal nodes are used, no additional nodes are created.
+- Memory usage can increase significantly in large circuits.
+  
+**Example**  
+```spice
+* Measure currents through R1 and R2
+V1 1 0 1
+R1 1 0 5
+R2 1 0 10
+.options savecurrents
+```
+
+- Auto-generated equivalent `.save` lines:
+  ```
+  .save @r1[i]
+  .save @r2[i]
+  ```
+
+**Usage Caution**
+- Validate memory constraints for large circuits.
+- For AC simulations, alternative methods like `.probe` or series voltage sources should be used.

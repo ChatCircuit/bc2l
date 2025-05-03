@@ -1,0 +1,15 @@
+**Summary: Analysis at Different Temperatures in Ngspice**
+
+- **Purpose**: Temperature analysis in Ngspice allows investigating circuit behavior at varying temperatures.
+- **Command Syntax**: `.options temperature=<temp_value>`  
+  - `<temp_value>` specifies the operating temperature in degrees Celsius.
+  - By default, the analysis is done at 27°C unless otherwise specified.
+
+- **Example Line**:  
+  - `.options temperature=50`  *(Example specifying operation at 50°C).*
+
+- **Device Model Behavior**:
+  - Device characteristics may change based on temperature (e.g., resistor values, diode parameters). Careful attention is required to model changes in SPICE simulations.
+
+- **Note**: The operating temperature affects the parameters provided in `TEMP` for models or components (if applicable).
+

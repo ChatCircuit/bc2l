@@ -1,0 +1,5 @@
+**MOSFETs in Ngspice:**
+
+- **Model Support:** Ngspice includes all MOSFET models from SPICE3f5 and most newer open-source models.
+- **Availability:** Supports both bulk and SOI (Silicon on Insulator) MOSFET models.
+- **Numerical Models:** When compiled with the "cider option," it enables a four-terminal numerical model simulation for MOSFETs. Refer to numerical modeling documentation for further details.

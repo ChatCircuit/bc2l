@@ -1,0 +1,9 @@
+Convergence in Ngspice is achieved using the Newton-Raphson (NR) algorithm, which iteratively solves nonlinear equations based on the following criteria:  
+
+1. Nonlinear branch currents converge to the larger of:
+   - 0.1% tolerance, or
+   - 1 picoamp (1.0e-12 A).  
+
+2. Node voltages converge to the larger of:
+   - 0.1% tolerance, or
+   - 1 microvolt (1.0e-6 V).  

@@ -1,0 +1,21 @@
+Semiconductor Capacitors (Ngspice Manual 3.3.7)
+
+**General Syntax:**
+`CXXXXXXX n+ n- <value> <mname> <l=length> <w=width> <m=val> + <scale=val> <temp=val> <dtemp=val> <ic=init_condition>`
+
+**Key Parameters:**
+- `value`: Directly defines the capacitance; overrides process and geometrical information.
+- `mname`: Specifies the model for capacitance computation when `value` is not provided.
+- `l (length)` and `w (width)`: Geometrical parameters for capacitance calculation using the model.
+- Optional: `m`, `scale`, `temp`, `dtemp`, `ic` for additional configuration.
+
+**Characteristics:**
+- If `value` is provided, the capacitor behaves as a fixed capacitance ignoring geometry or process model.
+- If `value` is omitted, the capacitance is computed using `mname` and geometrical dimensions (`l` and `w`) based on the model definition.
+
+**Examples:**
+1. `CLOAD 2 10 10P` - Simple capacitor with fixed 10pF capacitance.
+2. `CMOD 3 7 CMODEL L=10u W=1u` - Capacitance derived from the `CMODEL` model with given length (10 µm) and width (1 µm). 
+
+**Notes:**
+- For models where geometry is not provided (`l` and `w` omitted), the capacitance can be solely defined in the `.model` statement.

@@ -1,0 +1,15 @@
+End-of-line Comments in Ngspice:
+
+General Syntax (for adding comments):
+- `<any command> $ <any comment>`  
+- `<any command> ; <any comment>`  
+- `<any command> // <any comment>`
+
+Examples:
+- `RF2=1K $ Gain should be 100`
+- `C1=10p ; Check open-loop gain and phase margin`
+- `.param n1=1 // new value`
+
+Notes:
+1. Comments can use `$`, `;`, or `//`. For readability, precede these characters with a space.
+2. When PSPICE compatibility mode is enabled, `$` is treated as a regular character and no longer acts as a comment delimiter.

@@ -1,0 +1,39 @@
+**Summary from Ngspice Manual - Section 11.4.4 Input:**
+
+1. **Key Commands and Syntax**:  
+   - `.measure` statement explained with syntax and examples.  
+   - `.measure tran ...` used for transient simulation results analysis.  
+
+2. **Netlist Creation with Two Sines**:  
+   **Input File Example `simple-meas-tran.sp`:**
+   ```spice
+   * Simple .measure examples
+   * transient simulation of two sine signals with different frequencies
+   vac1 1 0 DC 0 sin(0 1 1k 0 0)  ; Sine signal with 1kHz freq., 1V amplitude
+   vac2 2 0 DC 0 sin(0 1.2 0.9k 0 0)  ; Sine signal with 0.9kHz freq., 1.2V amplitude
+   .tran 10u 5m  ; Transient simulation with step size of 10µs and total duration 5ms
+   *
+   .measure tran ...  ; Placeholder for measurement examples
+   *
+   .control
+   run  ; Executes the simulation
+   plot v(1) v(2)  ; Plots voltage at nodes 1 and 2
+   .endc
+   .end
+   ```
+
+3. **Description of Characteristics and Features**:  
+   - `.tran` command: Handles transient analysis; specifies step size (`10u`) and simulation duration (`5m`).  
+   - `sin` specification: Syntax for defining sinusoidal voltage sources (`vac`). Key parameters include amplitude, frequency, and phase.  
+
+4. **Utilization for Debugging/Modification**:  
+   - Key measurement commands (`.measure tran`) can be used to analyze transient simulation outputs.  
+   - Example serves as a template for generating netlist files involving sinusoidal voltage sources and transient analysis.  
+
+5. **Components' Theoretical Characteristics**:
+   - Voltage source definitions include both DC offsets and sinusoidal properties.  
+
+**Not explicitly stated features in the known database**:
+   - Example integration of `.measure tran ...` with transient simulation outputs for specific netlist debugging/modifications.  
+   - Unique input parameters of sinusoidal voltage definitions such as `sin(0 1.2 0.9k 0 0)`.  
+   - The provided example demonstrates plotting multiple node voltages; useful for debugging/visual analysis.

@@ -1,0 +1,30 @@
+11.4.7 AVG|MIN|MAX|PP|RMS|MIN_AT|MAX_AT  
+Measure statements are used to analyze simulation results based on specified criteria. The syntax and functionality provided enable computation of various metrics over time intervals.  
+
+**General form:**  
+`.MEASURE {DC|AC|TRAN|SP} <result_name>`  
+`+ {AVG|MIN|MAX|PP|RMS|MIN_AT|MAX_AT}`  
+`+ <out_variable> <TD=td> <FROM=val> <TO=val>`  
+
+**Key functions and their descriptions:**  
+1. **AVG** returns the average value over the specified time interval.  
+2. **MIN** returns the minimum value.  
+3. **MAX** returns the maximum value.  
+4. **PP** calculates the peak-to-peak value (difference between max and min).  
+5. **RMS** computes the root mean square value.  
+6. **MIN_AT** returns the time point of the minimum value.  
+7. **MAX_AT** returns the time point of the maximum value.  
+
+**Syntax examples with practical explanation:**  
+- `.measure tran ymax MAX v(2) from=2m to=3m`  
+  Finds the **maximum value** of `v(2)` from 2 ms to 3 ms.  
+- `.measure tran tymax MAX_AT v(2) from=2m to=3m`  
+  Determines the **time point** of the maximum value of `v(2)` within 2 ms to 3 ms.  
+- `.measure tran ypp PP v(1) from=2m to=4m`  
+  Calculates the **peak-to-peak value** of `v(1)` from 2 ms to 4 ms.  
+- `.measure tran yrms RMS v(1) from=2m to=4m`  
+  Computes the **root mean square (RMS)** value of `v(1)` between 2 ms and 4 ms.  
+- `.measure tran yavg AVG v(1) from=2m to=4m`  
+  Retrieves the **average value** of `v(1)` in the interval of 2 ms to 4 ms.  
+
+Note: In these examples, `from` specifies the lower limit of the time interval and `to` sets the upper limit.

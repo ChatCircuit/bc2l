@@ -1,0 +1,23 @@
+- **Batch Mode and Interactive Mode Differences**:
+  - `.meas` commands *cannot be used in batch mode* (`-b` flag) if an output (.raw) file is also specified with the `-r` flag, as the simulation output is written directly to the output file and isn't kept in memory for further analysis.
+  - To execute `.meas` during batch-like operations, include a `.control ... .endc` section in the input file and run ngspice in *interactive mode* (e.g., `ngspice inputfile`).
+
+- **Interactive Mode Setup Example**:
+  ```
+  *input file
+  ...
+  .tran 1ns 1000ns
+  ...
+  *********************************
+  .control
+  run
+  write outputfile data
+  .endc
+  *********************************
+  .end
+  ```
+
+- **Capabilities of `.meas`**:
+  - Outputs user-defined analysis data directly to the standard output.
+  - Includes calculations of delay, rise time, fall time, peak-to-peak voltage, min/max voltage, integral/derivative over a specific period, and other user-defined values.
+

@@ -1,0 +1,43 @@
+**11.3.8 .SP S-Parameter Analysis**
+
+**General Form & Syntax:**
+- `.sp dec nd fstart fstop <donoise>`
+- `.sp oct no fstart fstop <donoise>`
+- `.sp lin np fstart fstop <donoise>`
+
+**Purpose:**
+- Simulates linear S-Matrix to calculate Scattering (S), Admittance (Y), and Impedance (Z) matrices for RF circuits.  
+- Outputs matrix dimensions are `nport x nport` (where `nport` = RF port count).  
+
+**Key Optional Parameter:**  
+- `donoise` (0 | 1)  
+   - `donoise = 0`: SP simulation ends after S|Y|Z outputs are provided.  
+   - `donoise = 1`: SP simulation includes noise analysis with additional outputs.  
+
+**Outputs & Descriptions:**
+1. **S-Matrix (Scattering Parameters):** `S_i_j` (i, j = port integer IDs based on `portnum` in VSRC).  
+2. **Y-Matrix (Admittance Parameters):** `Y_i_j`  
+3. **Z-Matrix (Impedance Parameters):** `Z_i_j`  
+
+**Noise Analysis Outputs (`donoise = 1`):**
+- Noise Current Correlation Matrix: `Cy_i_j = <in(i), in*(j)>` (correlation between noise at ports i and j; `*` = conjugate).  
+- For 2-port networks (provides additional characteristics):  
+  - `Rn`: Input noise resistance (unnormalized).  
+  - `NF (dB)`: Noise figure of the 2-port network.  
+  - `NFmin (dB)`: Minimum achievable noise figure.  
+  - `SOpt`: Optimum input reflection coefficient for noise.  
+
+**Frequency Sweep Types (Similar to `.AC` Analysis):**
+1. **Decade Sweep:** `.sp dec nd fstart fstop`
+2. **Octave Sweep:** `.sp oct no fstart fstop`
+3. **Linear Sweep:** `.sp lin np fstart fstop`
+
+**Examples:**
+1. `.sp dec 10 1 10K`  
+2. `.sp dec 10 1K 100MEG 1`  
+3. `.sp lin 100 1 100HZ`  
+
+**Notes:**
+- Ensure proper setup of independent voltage source `VSRC` (see 4.1.11).  
+- `.SP` syntax is identical to `.AC` with the addition of the `donoise` parameter.  
+- Touchstone file export (as of now) remains yet to be implemented.  

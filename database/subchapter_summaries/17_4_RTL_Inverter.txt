@@ -1,0 +1,44 @@
+**Ngspice Manual - Summary for RTL Inverter**  
+
+**Purpose:** Analyze the DC transfer curve and transient response of a simple RTL inverter.
+
+**Circuit Components and Parameters:**  
+1. **Power Supply:** `VCC 4 0 5`  
+   Voltage source supplying 5V to the circuit.  
+
+2. **Pulse Input Signal:** `VIN 1 0 PULSE 0 5 2NS 2NS 2NS 30NS`  
+   - Pulse Voltage: 0V to 5V.  
+   - Rise Time: 2ns.  
+   - Fall Time: 2ns.  
+   - Delay: 2ns.  
+   - Pulse Width: 30ns.  
+
+3. **Resistors:**  
+   - Input Resistor: `RB 1 2 10K` (10 kΩ).  
+   - Collector Resistor: `RC 3 4 1K` (1 kΩ).  
+
+4. **Transistor:** `Q1 3 2 0 Q1`  
+   - Associated with the **model** definition below.
+
+5. **Model Definition for Transistor:** `.MODEL Q1 NPN BF 20 RB 100 TF .1NS CJC 2PF`  
+   - Type: NPN.  
+   - **Parameters:**
+     - Beta (BF): 20.  
+     - Base Resistor (RB): 100 Ω.  
+     - Forward Transit Time (TF): 0.1 ns.  
+     - Collector-Base Junction Capacitance (CJC): 2 pF.  
+
+**Simulation Commands:**  
+1. **DC Analysis:** `.DC VIN 0 5 0.1`  
+   - Sweeps the input voltage `VIN` from 0V to 5V in 0.1V steps.  
+
+2. **Transient Analysis:** `.TRAN 1NS 100NS`  
+   - Time range: 0 to 100 ns.  
+   - Time step for results: 1 ns.  
+
+3. **End of Simulation:** `.END`  
+
+**Key Notes:**  
+- Transient response evaluates pulse behavior within the specified range.  
+- Printing occurs at 1 ns intervals.  
+

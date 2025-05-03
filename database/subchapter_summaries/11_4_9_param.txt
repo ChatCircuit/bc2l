@@ -1,0 +1,31 @@
+**Summary for Netlist Code Generation/Modification/Debugging**
+
+1. **Command Syntax**:
+   - General Form:  
+     `.MEASURE {DC|AC|TRAN|SP} result param='expression'`
+
+2. **Description**:
+   - The `param` expression evaluates parameters during Ngspice startup.  
+   - The evaluated expressions can include `.param` definitions or results from previous `.meas` commands.  
+
+3. **Default Characteristics**:
+   - It cannot handle direct simulation vectors like `v(10)` within expressions but can use `.meas` commands for simulating such vectors indirectly.
+
+4. **Code Templates and Examples**:
+   - **Defining a Parameter**:  
+     `.param fval=5`
+
+   - **Measurement Using a Parameter**:  
+     `.measure tran yadd param='fval + 7'`  
+     *Evaluates `fval + 7`, output `12`.*
+
+   - **Ternary Function Example**:  
+     `.param vout_diff=50u`  
+     `.measure tran tdiff TRIG AT=1m TARG v(2) VAL=-0.8 CROSS=3`  
+     `.meas tran bw_chk param='(tdiff < vout_diff) ? 1 : 0'`  
+     *Output `1` if `tdiff` < `vout_diff`.*
+
+5. **Theoretical Limitations**:
+   - Expression `param` must not involve direct vectors like `v(10)`. Use `.meas` substitutes for such operations.  
+
+This structured information provides guidance for `.param` and `.meas` usage in netlist development.

@@ -1,0 +1,1 @@
+Ngspice supports both analog and digital simulation algorithms through its XSPICE framework, enabling mixed-mode simulation. This feature facilitates the modeling of circuits with various abstractions, making it efficient for analyzing and modifying designs without needing to handle the physical circuit directly.

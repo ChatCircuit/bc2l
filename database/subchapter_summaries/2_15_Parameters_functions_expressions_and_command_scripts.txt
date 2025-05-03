@@ -1,0 +1,4 @@
+**Ngspice Manual - Parameters, Functions, and Expressions (Section 2.15)**
+
+Ngspice provides multiple methods to describe functional dependencies using three independent function parsers, which operate at different stages of simulation: before, during, and after the simulation. Each parser plays distinct roles in handling functional relationships and processing expressions. Detailed interdependence between these parsers is important for effective usage during netlist generation or analysis. Full specifics can be explored for targeted applications. 
+
