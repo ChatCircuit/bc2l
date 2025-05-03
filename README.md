@@ -6,7 +6,7 @@ https://github.com/user-attachments/assets/658b35f8-ab26-4b78-84f7-7b0ceaa8bfd9
 A proprietary dataset has been developed for training the models. It is the largest circuit component dataset created to date and is not included in this repository.
 
 # Contributors
-I am having quite some trouble keeping up with the project by myself. If you are interested in contributing to the project, please knock me at touhid1.6021@gmail.com.
+We are having quite some trouble keeping up with the project. If you are interested in contributing to the project, please knock us at touhid1.6021@gmail.com, abtahimajeed144@gmail.com .
 
 # License
 [![CC BY-NC 4.0][cc-by-nc-shield]][cc-by-nc]
