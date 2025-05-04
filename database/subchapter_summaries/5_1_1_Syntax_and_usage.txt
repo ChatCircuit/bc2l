@@ -1,0 +1,100 @@
+### Summary of Ngspice Manual - Section 5.1.1: Nonlinear Dependent Sources (B Source)
+
+#### General Form
+**Syntax:**
+```
+BXXXXXXX n+ n- <i=expr> <v=expr> <tc1=value> <tc2=value> + <temp=value> <dtemp=value>
+```
+- `n+` and `n-`: Positive and negative nodes of the source.
+- **Parameters**:
+  - `V`: Voltage source across the device.
+  - `I`: Current source through the device.
+  - Exactly one of `V` or `I` must be specified.
+  - `tc1`, `tc2`: Temperature coefficients (linear and quadratic).
+  - `temp`: Explicit instance temperature.
+  - `dtemp`: Temperature difference added to the circuit temperature.
+
+#### Temperature Behavior
+The device's temperature behavior is modeled as:
+```
+I(T) = I(TNOM) * (1 + TC1 * (T - TNOM) + TC2 * (T - TNOM)^2)
+V(T) = V(TNOM) * (1 + TC1 * (T - TNOM) + TC2 * (T - TNOM)^2)
+```
+- If both `temp` and `dtemp` are defined, `dtemp` is ignored.
+
+#### Supported Functions for Expressions
+- **Trigonometric:** `cos`, `sin`, `tan`, `acos`, `asin`, `atan`.
+- **Hyperbolic:** `cosh`, `sinh`, `acosh`, `asinh`, `atanh`.
+- **Exponential/Logarithmic:** `exp`, `ln`, `log`, `log10`.
+- **Others:** `abs`, `sqrt`, `floor`, `ceil`, `u`, `u2`, `uramp`.
+- **Binary Functions:** `min`, `max`, `pow`, `**`, `pwr`, `^`.
+- **Ternary Function:** `a ? b : c`.
+
+#### Core Notes
+- **Undefined Function Handling**: Functions like `log(x)` handle negative arguments by using absolute values. Division by zero results in errors.
+- **Functions & Operators:**
+  - Arithmetic: `+`, `-`, `*`, `/`, `^`, unary `-`.
+  - Logical: `!=`, `<>`, `>=`, `<=`, `==`, `>`, `<`, `||`, `&&`, `!`.
+  - Ternary: `<condition> ? <true> : <false>`.
+
+#### Nonlinear Component Synthesis
+Nonlinear resistors, capacitors, and inductors can use dependent sources to simulate behavior.
+
+##### Example: Nonlinear Capacitor
+```
+.Subckt nlcap pos neg
+Bx 1 0 V = f(v(pos,neg)) ; Define nonlinear voltage function
+Cx 2 0 1                 ; Linear capacitance
+Vx 2 1 DC 0Volts         ; Ammeter to measure current
+Fx pos neg Vx 1          ; Feedback to the circuit
+.ends
+Bx 1 0 V = v(pos,neg)*v(pos,neg) ; Nonlinear voltage function example
+```
+
+##### Example: Nonlinear Resistor
+```
+.Subckt nlres pos neg rb=rbase
+Bx   1    0    V = -1 / {rb} / sqrt(HERTZ) * v(pos,neg) ; Define nonlinear voltage function
+Rx   2    0   1                  ; Linear resistance
+Vx   2    1    DC 0Volts         ; Ammeter to measure current
+Fx   pos  neg  Vx 1              ; Feedback to the circuit
+.ends
+Xres 33 10 nlres rb=1k           ; Instantiate resistor subcircuit
+```
+
+#### Debugging and Analysis Example
+**Ternary Function Example (Clamped Voltage Source):**
+```
+.param Vhigh = 4.6
+.param Vlow = 0.4
+Vin1 1 0 DC 0 PWL(0 0 1u 5)
+Bcl 2 0 V = V(1) < Vlow ? Vlow : V(1) > Vhigh ? Vhigh : V(1)
+.control
+unset askquit
+tran 5n 1u
+plot V(2) vs V(1)
+.endc
+.end
+```
+
+#### Notes for Debugging:
+- Use `.param` to define parameters (`{Vlow}`, `{Vhigh}`) for dynamic adjustments.
+- Monitor time-based behavior with integration of current through a capacitor and check initial voltage setup.
+
+#### AC Analysis Example:
+```
+.control
+define check(a,b) vecmax(abs(a - b))
+ac lin 10 100 1k
+print v(1) v(2) v(3)
+if check(v(1), frequency) < 1e-12
+echo "INFO: ok"
+end
+plot vres#branch
+.endc
+.end
+```
+
+### Important Notes:
+1. Parameters (`{}`) are evaluated during circuit setup, while vectors like `V(n)` are evaluated during simulation.
+2. Expression convergence issues may arise, especially with functions like `exp` or partial derivatives in undefined regions.

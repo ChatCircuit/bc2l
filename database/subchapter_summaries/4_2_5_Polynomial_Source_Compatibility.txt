@@ -1,0 +1,24 @@
+**Summary of the provided text:**
+
+**Dependent Polynomial Sources in Ngspice (SPICE2G6 Compatibility):**  
+- Ngspice supports dependent polynomial sources using the XSPICE extension. Instances are defined as specified in the following forms.
+
+**Instance Card Syntax for Polynomial Sources:**  
+1. **POLYNOMIAL VCVS (Voltage-Controlled Voltage Source):**  
+   `EXXXXXXX N+ N- POLY(ND) NC1+ NC1- P0 (P1...)`
+
+2. **POLYNOMIAL VCCS (Voltage-Controlled Current Source):**  
+   `GXXXXXXX N+ N- POLY(ND) NC1+ NC1- P0 (P1...)`
+
+3. **POLYNOMIAL CCCS (Current-Controlled Current Source):**  
+   `FXXXXXXX N+ N- POLY(ND) VNAM1 !VNAM2...? P0 (P1...)`
+
+4. **POLYNOMIAL CCVS (Current-Controlled Voltage Source):**  
+   `HXXXXXXX N+ N- POLY(ND) VNAM1 !VNAM2...? P0 (P1...)`
+
+**Key Notes:**  
+- Polynomial sources are used for complex dependency representation.
+- Syntax: POLY(ND) signifies a polynomial dependency with ND terms.
+- Parameters `P0, P1...` define polynomial coefficients starting with constant term `P0`.
+
+For further theoretical details or more advanced applications, Chapter 5.5 could be consulted.

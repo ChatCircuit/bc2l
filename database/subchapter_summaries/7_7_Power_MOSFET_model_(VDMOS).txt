@@ -1,0 +1,85 @@
+### Summary of VDMOS Ngspice Model
+
+#### General Features
+- **VDMOS:** 3-terminal power MOSFET model (Drain, Gate, Source).
+- Current equations partially based on modified MOS1 model. 
+- Supports optional 5-node electro-thermal modeling with thermal nodes **TJ** (junction temperature) and **TCASE** (case temperature).
+
+#### Key Characteristics:
+- No **level parameter**; called with the `VDMOS` token on the `.model` line.
+- **Channel type:** Default is n-channel unless specified with `PCHAN` or `NCHAN`.
+- Standard MOS parameters `W` and `L` are not supported.
+- Thermal modeling uses `RTHJC`, `CTHJ`, `TJ`, and `TCASE`.
+
+---
+
+#### **Basic Syntax**
+- **Instance Line:**  
+  `MXXXXXXX nd ng ns mname <m=val> <temp=t> <dtemp=t>`
+- **Model Definition:**  
+  `.model mname VDMOS <Pchan> <parameters>`
+
+---
+
+#### **Instance Parameters**  
+(Default values are provided in parentheses)  
+- `m` (Device multiplier, default = `1`)
+- `off` (Initially off, default = `0`)
+- `icvds` (Initial Drain-Source voltage, default = `0.0 V`)
+- `icvgs` (Initial Gate-Source voltage, default = `0.0 V`)
+- `temp` (Device temperature, default = `27°C`)
+- `dtemp` (Temperature difference, default = `0.0°C`)
+- `thermal` (Activates electro-thermal model for 5 nodes, if specified)
+
+---
+
+#### **Key Model Parameters**
+(Default values in parentheses)
+- **Electrical Parameters:**
+  - `VTO` (Threshold voltage, default = `0.0 V`)
+  - `KP` (Transconductance, default = `1.0 A/V²`)
+  - `LAMBDA` (Channel length modulation, default = `0.0`)
+  - `RD`, `RS`, `RG` (Drain, Source, Gate resistance, default = `0.0 Ω`)
+  - `CJO` (Body diode zero-bias capacitance, default = `0.0 F`)
+  - `CGS`, `CGDMAX`, `CGDMIN` (Capacitances, CGDMAX/MAX default = `0.0 F`)
+  - `MTRIODE` (Triode region conductance multiplier, default = `1.0`)
+  - `KSUBTHRES` (Subthreshold slope, default = `0.1`)
+  - `BV`, `IBV`, `NBV` (Breakdown characteristics, `BV` default = ∞)
+  - `IS` (Body diode saturation current, default = `1e-14 A`)
+
+- **Thermal Parameters:**
+  - `RTHJC` (Junction-to-case resistance, default = `1.0 K/W`)
+  - `CTHJ` (Thermal capacitance, default = `10 µJ/K`)
+  - `TEXP0`, `TEXP1` (Temperature exponents for resistances)
+
+---
+
+#### **Electro-Thermal Model Syntax**
+- **Instance Line (5-node):**  
+  `MXXXXXXX nd ng ns tj tc mname thermal <m=val> <temp=t> <dtemp=t>`
+- Activates thermal behavior with `thermal` keyword. Nodes **TJ** and **TCASE** represent internal junction temperature and case temperature, respectively.
+
+### Example
+**Electro-Thermal VDMOS Model with Heat Sink:**
+```
+M1 24 2 0 tj tc IXTH48P20P thermal
+rcs tc 1 0.1
+csa 1 0 30m
+rsa 1 amb 1.3
+VTamb tamb 0 25
+.MODEL IXTH48P20P VDMOS Pchan Vds=200 VTO=-4 KP=10 Lambda=5m
++ Mtriode=0.3 Ksubthres=120m Rs=10m Rd=20m Rds=200e6
++ Cgdmax=6000p Cgdmin=100p A=0.25 Cgs=5000p Cjo=9000p
++ Is=2e-6 Rb=20m BV=200 IBV=250e-6 NBV=4 TT=260e-9
++ Rthjc=0.4 Cthj=5e-3
+```
+- `Rcs`: Case-to-sink thermal resistance (`0.1 K/W`)  
+- `Csa`: Sink thermal capacitance (`30 mF`)  
+- `Rsa`: Sink-to-ambient thermal resistance (`1.3 K/W`)  
+
+---
+
+#### Additional Notes:  
+- Electro-thermal model also includes feedback and additional circuit matrix elements for better accuracy.
+- Heat dissipation can be directed via heat sink connections on **TCASE**.
+

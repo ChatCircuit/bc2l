@@ -1,0 +1,1 @@
+The SOI3 model (level 60) is defined in the Ngspice manual, with a key reference to literature citation [18] for its detailed description. There is no directly extractable or unique code/syntax provided in this section, nor are any theoretical characteristics or examples included; the location of the reference material is the only notable aspect.

@@ -1,0 +1,1 @@
+From the provided text snippet, the header “7 Device Models” indicates that the section will likely discuss device models in Ngspice, their characteristics, syntax, and parameters. As no further content is present in the provided text, there is no specific information, syntax, or examples available to summarize or extract.

@@ -1,0 +1,54 @@
+**Capacitor or Inductor with Initial Conditions**
+
+1. **Purpose**: Ngspice supports specifying voltage or current initial conditions for capacitors and inductors, respectively, using special code models. These models differ from the standard SPICE3 models and can be used when realistic initial conditions are required.
+
+2. **Capacitor Syntax**:
+   - `a<name> <node+> <node-> cap`
+   - `.model <model_name> capacitoric (c=<capacitance> ic=<initial_voltage>)`
+   - Example:
+     ```
+     a1 1 0 cap
+     .model cap capacitoric (c=1000uf ic=1)
+     ```
+
+3. **Inductor Syntax**:
+   - `a<name> <node+> <node-> ind`
+   - `.model <model_name> inductoric (l=<inductance> ic=<initial_current>)`
+   - Example:
+     ```
+     a2 2 0 ind
+     .model ind inductoric (l=1H ic=1)
+     ```
+
+4. **Theoretical Behavior**:
+   - Realistic initial conditions are simulated with an **exponential decay** occurring with a predefined time constant, e.g., 1-second in the example.
+
+5. **Resistors for Decay**:
+   - Parallel resistors are added to the capacitor and inductor to implement the exponential decay. Example:
+     ```
+     r1 1 0 1k
+     r2 2 0 1.0
+     ```
+
+6. **Example Circuit and Simulation**:
+   ```
+   a1 1 0 cap
+   .model cap capacitoric (c=1000uf ic=1)
+   r1 1 0 1k
+   a2 2 0 ind
+   .model ind inductoric (l=1H ic=1)
+   r2 2 0 1.0
+   .control
+   tran 0.01 3
+   plot v(1) v(2)
+   .endc
+   .end
+   ```
+
+7. **Commands used**:
+   - `tran <time_step> <end_time>`: Executes transient analysis.
+   - `plot <nodes>`: Plots node voltages.
+
+**Key Notes**:
+- Use "capacitoric" and "inductoric" models instead of standard SPICE3 models for realistic initial condition modeling.
+- `.model` lines define the component (`c` for capacitance or `l` for inductance) and the initial condition (`ic`).

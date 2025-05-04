@@ -1,0 +1,22 @@
+**Summary** for netlist code generation/modification/debugging/explanation and component/model/command queries:
+
+1. **Mixed-Signal Simulation**:
+   - **Definition**: Mixed-mode simulation combines analog and digital algorithms for circuits with mixed analog/digital components.
+   - **Implementation Methods**:
+     - **Native Mode**: Both analog and digital algorithms implemented in the same executable. Ngspice uses this mode.
+     - **Glued Mode**: Two separate executables (analog and digital simulators) communicate via an input/output protocol but face speed/accuracy trade-offs.
+   - **Ngspice Characteristics**:
+     - Implements analog and event-based simulation within one executable.
+     - Uses XSPICE Code Model Subsystem, supporting all standard SPICE models.
+     - Provides built-in analog and digital functions and supports extensions for additional models.
+
+2. **User-Defined Nodes**:
+   - **Purpose**: Allows propagation of non-standard data types (beyond voltages, currents, or digital states) at nodes.
+   - **Characteristics**:
+     - Operates event-driven like digital nodes but supports arbitrary data types (e.g., real, integer, digital data vectors, or non-electronic data).
+     - Enables complex applications such as simulation of digital signal processing filter algorithms.
+   - **Digital Simulation** in Ngspice:
+     - A specific case of User-Defined Nodes.
+     - Digital data structure includes Boolean logic state and strength value.
+
+No additional code, templates, or unique examples were provided in the text beyond the theoretical explanation of mixed-signal simulation and user-defined nodes within Ngspice.

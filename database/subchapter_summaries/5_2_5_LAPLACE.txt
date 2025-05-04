@@ -1,0 +1,53 @@
+5.2.5 LAPLACE  
+Ngspice does not provide a direct E-Source element with the LAPLACE option. Instead, the XSPICE model `s_xfer` is used for implementing Laplace transforms. XSPICE must be enabled, and Laplace transformations are compatible with AC and transient analyses.
+
+### Conversion of E-Source with Laplace Transform to `s_xfer`
+#### Original Example (Using E-Source):
+```
+ELOPASS 4 0 LAPLACE {V(1)}
++                   {5 * (s/100 + 1) / (s^2/42000 + s/60 + 1)}
+```
+
+#### Replacement Using `s_xfer`:
+```
+AELOPASS 1 int_4 filter1
+.model filter1 s_xfer(gain=5
++                    num_coeff=[{1/100} 1]
++                    den_coeff=[{1/42000} {1/60} 1]
++                    int_ic=[0 0])
+ELOPASS 4 0 int_4 0 1
+```
+
+- `int_4`: Intermediate output node.
+- The voltage on node `1` is the input, passed through the filter model `s_xfer` and buffered to `ELOPASS` for further processing.
+- Use an E-Source as a buffer to retain the original name (`ELOPASS`), if required for subsequent references.
+
+---
+
+### E-Source with Complex Controlling Expression
+For cases with more complex controlling expressions (beyond a simple voltage), use a B-Source for preprocessing before feeding into the A-device.
+
+#### Original Example (Complex Control):
+```
+ELOPASS 4 0 LAPLACE {V(1)*v(2)} {10 / (s/6800 + 1)}
+```
+
+#### Replacement:
+```
+BELOPASS int_1 0 V=V(1)*v(2)
+AELOPASS int_1 int_4 filter1
+.model filter1 s_xfer(gain=10
++                    num_coeff=[1]
++                    den_coeff=[{1/6800} 1]
++                    int_ic=[0])
+ELOPASS 4 0 int_4 0 1
+```
+
+---
+
+### Key Points:
+1. Use `s_xfer` for Laplace-related operations.
+2. Explicitly define `num_coeff` (numerator coefficients) and `den_coeff` (denominator coefficients) for the Laplace transform.
+3. Use initial conditions `int_ic` as needed.
+4. For complex expressions, preprocess using B-Sources and feed output into `s_xfer`.
+5. Buffer the output using E-Source if the original element name needs to be preserved.

@@ -1,0 +1,39 @@
+**Ngspice Summary for Code Generation/Modification/Debugging and Queries**
+
+**Varying Model or Instance Parameters: Monte-Carlo Example**
+
+- **Monte-Carlo Simulation Setup**:
+  - **Netlist Code**:
+    ```
+    V1 1 0 1
+    R1 1 0 rmod
+    .model rmod res (r={gauss(2, 0.03, 1)} TC1=3.3e-3)
+    R2 1 0 rmod
+    R3 1 0 R = {gauss(2, 0.03, 1)}
+    R4 1 0 R = {gauss(2, 0.03, 1)}
+    .save @R1[i] @R2[i] @R3[i] @R4[i]
+    ```
+  - Explanation of Code:
+    - **Nominal Resistance**:
+      - All resistances are nominally 2 ohms.
+    - **Shared Model `rmod`** (`R1` and `R2`):
+      - Resistor `R1` and `R2` will always have the same resistance value because they use the same model (`rmod`).
+      - Syntax: `.model rmod res (r={gauss(2, 0.03, 1)} TC1=3.3e-3)`
+        - `gauss`: Defines resistance variation using Gaussian distribution: `gauss(mean, stddev, seed)`.
+        - `TC1`: Temperature coefficient.
+    - **Individual Resistances (`R3` and `R4`)**:
+      - `R3` and `R4` have individually defined resistances using the `gauss` function.
+        - Syntax: `R = {gauss(2, 0.03, 1)}`.
+
+- **Simulation Result**:
+  - Example of Operating Point Results (current through resistors, typical values):
+    ```
+    @r1[i] = 5.044575e-01
+    @r2[i] = 5.044575e-01
+    @r3[i] = 5.418674e-01
+    @r4[i] = 4.942051e-01
+    ```
+    - Results indicate R1 and R2 share resistance values due to the model, while R3 and R4 vary.
+
+- **Usage Note**:
+  - Multiple ngspice runs are required to generate statistical distributions based on circuit performance.

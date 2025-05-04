@@ -1,0 +1,42 @@
+### Summary for `.CSPARAM` (Ngspice Manual - Section 2.12)
+
+#### Purpose:
+The `.CSPARAM` command helps create constant vectors from parameters in the `plot const`. These vectors:
+- Are of length one.
+- Have real values.
+- Are generated during circuit parsing and cannot be modified later.
+
+#### General Syntax:
+`.csparam <ident> = <expr>`
+
+#### Key Notes:
+- `.csparam` vectors can be used in Ngspice scripts and `.control` sections.
+- Functionality of `.csparam` is experimental and requires testing.
+- Vectors defined via `.csparam` are added to the list of constants available in `plot const`.
+
+#### Examples:
+1. **Parameter Creation:**
+   ```
+   .param pippo = 5
+   .param pp = 6
+   .csparam pippp = {pippo + pp}   ; Creates vector pippp with value 11
+   ```
+
+2. **String Expression:**
+   ```
+   .csparam pap = 'pp + p'         ; Expression as a string
+   ```
+
+3. **Usage in Scripts:**
+   ```
+   * test csparam
+   .param TEMPS = 27
+   .csparam newt = {3 * TEMPS}     ; Creates vector newt with value 81
+   .csparam mytemp = '2 + TEMPS'   ; Evaluates as a string
+   .control
+   echo $&newt $&mytemp            ; Outputs constant values during simulation
+   .endc
+   .end
+   ```
+
+This syntax allows flexible vector creation based on parameters and supports its use in control sections, but due to its experimental nature, users must validate its results carefully.

@@ -1,0 +1,17 @@
+**Summary of the given text:**  
+
+**Element-specific options:**  
+1. **BADMOS3**: Enables the older MOS3 model featuring the `kappa` discontinuity.  
+2. **DEFAD=x**: Resets the MOS drain diffusion area; default = 0.  
+3. **DEFAS=x**: Resets the MOS source diffusion area; default = 0.  
+4. **DEFL=x**: Resets the MOS channel length; default = 100 μm.  
+5. **DEFW=x**: Resets the MOS channel width; default = 100 μm.  
+6. **SCALE=x**: Sets scaling factors for geometric parameters (default unit: meters). Example:  
+   - `scale=1u`, `W=10` results in a width of 10 μm.  
+   - `AD=20` results in an area of 20e-12 m².  
+  
+**Instance parameters affected by scaling:**  
+- **Resistors/Capacitors**: W, L  
+- **Diodes**: W, L, Area  
+- **JFET/MESFET**: W, L, Area  
+- **MOSFET**: W, L, AS, AD, PS, PD, SA, SB, SC, SD

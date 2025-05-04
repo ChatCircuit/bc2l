@@ -1,0 +1,27 @@
+**Summary for `.PLOT` Lines in Ngspice**
+
+1. **Purpose**:
+   `.plot` generates printer plot outputs for up to eight variables in a chosen analysis mode.
+
+2. **Syntax**:
+   `.plot pltype ov1 <(plo1, phi1)> <ov2 <(plo2, phi2)> ... ov8>`
+   
+   - **pltype**: Specifies the type of analysis (`DC`, `AC`, `TRAN`, `NOISE`, or `DISTO`).
+   - **ov i**: Output variables to plot (identical syntax to `.print` and interactive `plot` commands).
+
+3. **Key Characteristics**:
+   - Outputs can overlap; overlaps are denoted by the letter "X".
+   - The first variable is both printed and plotted if multiple variables are listed.
+   - To print all variables, include a companion `.print` line.
+   - Supports algebraic expressions via `par(expression)`.
+
+4. **Examples**:
+   - `.plot dc v(4) v(5) v(1)`
+   - `.plot tran v(17, 5) (2, 5) i(vin) v(17) (1, 9)`
+   - `.plot ac vm(5) vm(31, 24) vdb(5) vp(5)`
+   - `.plot disto hd2 hd3(R) sim2`
+   - `.plot tran v(5, 3) v(4) (0, 5) v(7) (0, 10)`
+
+5. **Additional Notes**:
+   - Unlimited `.plot` lines can be specified per analysis type. 
+   - Utilize `.print` for detailed printouts of all variables.

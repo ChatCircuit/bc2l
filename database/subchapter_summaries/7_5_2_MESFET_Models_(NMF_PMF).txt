@@ -1,0 +1,6 @@
+MESFET Models (NMF/PMF):  
+- Model Syntax: `.model <model_name> <type> level=<level_number>`  
+- Example Syntax:
+  - `.model ZM1 NMF level=1`  
+  - `.model MZMOD PMF level=4`  
+- Default: Level 1 parameters for MESFET models.

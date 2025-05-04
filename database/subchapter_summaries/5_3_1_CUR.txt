@@ -1,0 +1,25 @@
+**Summary for Netlist Code Generation/Modification/Debugging**
+
+1. **CUR Syntax and General Form**:  
+   `GXXXXXXX n+ n- cur='expr' <m=val>`  
+   - `GXXXXXXX`: Unique label for the current source (prefix G).  
+   - `n+`, `n-`: Positive and negative nodes.  
+   - `cur='expr'`: Expression that defines the current output.  
+   - `<m=val>`: Optional multiplier for the output current.
+
+2. **Expression (`'expr'`)**:  
+   - Can include node voltages, branch currents (e.g., `i(vm)`), and other terms described for the B source.  
+   - Supports parameters and special variables.  
+
+3. **Parameter `m`**:  
+   - Optional multiplier for the current source.  
+   - Evaluated at runtime and must reference only other parameters (no node voltages or branch currents).  
+
+4. **Example**:  
+   `G51 55 225 cur='V(3)*V(3)-Offs'`  
+   - Defines a current through nodes 55 and 225 based on `V(3) * V(3) - Offs`.  
+   - `Offs` may be a parameter defined elsewhere in the simulation.
+
+Key Characteristics:  
+- The expression can dynamically depend on voltages and currents, but `m=val` is pre-evaluated.  
+- Useful for dynamic, expression-based current definitions in netlists.

@@ -1,0 +1,28 @@
+**Summary for Netlist Code Generation/Modification/Debugging and Components/Model/Command Queries:**
+
+1. **Control Command Scripts Structure:**
+   - Command scripts are enclosed within `.control` and `.endc` lines.
+   - They can work with simulation output vectors (such as node voltages, branch currents), as well as user-defined vectors and variables.
+   - Scripts allow post-simulation manipulation using expressions (syntax details in Chapt. 13.2).
+
+2. **Parameter Usage in Scripts:**
+   - Parameters defined in `.param` statements (Chapt. 2.10.1) **cannot** be used directly in expressions within `.control` scripts.
+   - Use `.csparam` (Chapt. 2.12) for parameter definitions within control scripts.
+   - Alternative: Define a voltage source with the parameter value. After running a transient simulation, use its output as a vector.
+
+3. **Restrictions & Notes:**
+   - Feedback from control script-extracted values back into `.param` parameters is **not possible**.
+   - Non-linear sources from previous simulations cannot be accessed within a control script.
+   - You **can** run an initial simulation within the control script, evaluate its output, and adjust element or model parameters using `alter` and `altermod` commands (Chapt. 13.5.3) before starting a new simulation.
+
+4. **Scripting Commands for Parameter Adjustment:**
+   - `alter`: Used to modify element parameters.
+   - `altermod`: Used to modify model parameters.
+
+5. **Expression Syntax:**
+   - Expressions within `.control` scripts follow a different syntax than parameters (`.param`) or B sources (`2.10.1` and Chapt. 5.1). Reference Chapt. 13.2 for exact syntax.
+
+6. **Examples (Chapt. 17):**
+   - For further examples of expressions and command script usage, see Chapt. 17 (examples will be regularly updated).
+
+This condensed summary ensures critical syntax, theoretical characteristics, and functionality insights for debugging, modifying, or generating netlist codes.

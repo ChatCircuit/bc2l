@@ -1,7 +1,7 @@
 import os
-import database.static_database as sd
+import static_database as sd
 import json
-import llm.llm_model as llm_model
+import llm_model
 
 SQLITE_DB_PATH = "DB/netlist.db"
 GRAPH_DB_PATH = "DB/netlist_graph.gpickle"

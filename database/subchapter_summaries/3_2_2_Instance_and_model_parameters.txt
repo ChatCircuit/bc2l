@@ -1,0 +1,24 @@
+- **Instance Parameters**: These are parameters specific to a device instance and are defined directly on the device line. They can also be included in the `.model` line but can be overridden for a particular device instance on its instance line.
+
+- **Model Parameters**: Found in the `.model` line and describe the characteristics of the model being used by devices. Complex models may have over 100 parameters, e.g., transistor models.
+
+- **Device Line Syntax (Instance)**:  
+  `DeviceName Node1 Node2 [Value] ModelName [InstanceParam=Value]`  
+  **Example**: `Lload 1 2 1u ind1 dtemp=5`  
+  - `Lload`: Inductor (device type inferred from the first letter, `L`)
+  - `1, 2`: Connected nodes
+  - `1u`: Inductance value
+  - `ind1`: Name of associated model
+  - `dtemp=5`: Instance parameter (temperature difference)
+
+- **Model Line Syntax**:  
+  `.MODEL ModelName ModelType [ModelParameters]`  
+  **Example**: `.MODEL ind1 L tc1=0.001`  
+  - `ind1`: Model name
+  - `L`: Model type (inductor)
+  - `tc1=0.001`: Model parameter (temperature coefficient)
+
+- **Parameter Behavior**:  
+  - Parameters in `.model` are shared by all instances referencing that model unless overridden on the instance line.  
+  - Instance parameters override model parameters for specific devices.
+

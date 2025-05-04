@@ -1,0 +1,51 @@
+### Diode Model (D) in Ngspice
+
+- **General Form**: `.model mname D(pname1=pval1 pname2=pval2 ...)`
+- **Basic Model Statement**: `.model DMOD D` (uses internal default parameters)
+
+#### Key Parameters and Defaults:
+1. **DC Characteristics**:
+   - `IS`: Saturation current, default = 1.0e-14 A
+   - `N`: Emission coefficient, default = 1
+   - `RS`: Ohmic resistance, default = 0 Ω
+
+2. **Reverse Breakdown**:
+   - `BV`: Reverse breakdown voltage, default = ∞ (unlimited)
+   - `IBV`: Current at breakdown voltage, default = 1.0e-3 A
+   - `NBV`: Breakdown emission coefficient, default = Same as `N`
+
+3. **Junction Capacitors**:
+   - `CJO`: Zero-bias bottom-wall capacitance, default = 0 F
+   - `VJ`: Junction potential, default = 1 V
+   - `M`: Area junction grading coefficient, default = 0.5
+   - `TT`: Transit time, default = 0 sec
+
+4. **Temperature Dependence**:
+   - `TNOM`: Measurement temperature, default = 27°C
+   - `EG`: Activation energy, default = 1.11 eV
+   - `XTI`: Saturation current temperature exponent, default = 3
+
+5. **Noise Modeling**:
+   - `KF`: Flicker noise coefficient, default = 0
+   - `AF`: Flicker noise exponent, default = 1
+
+#### Junction DC Parameters Table:
+- Summary includes saturation current (`IS`), breakdown settings (`BV`, `IBV`), tunneling effects (`JTUN`, `NTUN`), and recombination attributes (`ISR`, `NR`).
+
+#### Junction Capacitance Parameters Table:
+- Captures zero-bias capacitance (`CJO`, `CJP`), grading coefficients (`M`, `MJSW`), and potential settings (`VJ`).
+
+#### Temperature Effects Table:
+- Variables for adjustment based on temperature, like `TCV` (breakdown voltage tempco), `XTITUN`, and `TLEV`.
+
+#### Metal/Polysilicon Overlap Parameters:
+- Includes dimensions (`LM`, `WM`) and oxide thicknesses (`XOM`, `XOI`).
+
+---
+
+#### Key Example:
+```plaintext
+.model DIODE1 D (bv=50 is=1e-13 n=1.05)
+```
+This specifies a diode with a breakdown voltage of 50 V, saturation current of \(1e^{-13} \, \text{A}\), and an emission coefficient of 1.05.
+

@@ -1,0 +1,9 @@
+**Summary:**  
+
+Transient analysis in Ngspice extends DC analysis into the time domain to analyze time-varying system behavior. It begins with a DC solution as the starting point and incrementally resolves time-dependent behavior using simulation algorithms. Time-dependent node waveforms are consistent across the specified simulation interval. Sources without time dependence, such as power supplies, are fixed to their DC values.  
+
+**Key Syntax**:  
+- `.TRAN <Tstep> <Tstop>`  
+    - `<Tstep>`: Time step for results output.  
+    - `<Tstop>`: Total simulation time.  
+

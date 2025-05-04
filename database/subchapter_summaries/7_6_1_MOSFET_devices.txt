@@ -1,0 +1,36 @@
+**Summary of MOSFET Devices in Ngspice Netlists**
+
+**General Form:**
+```
+MXXXXXXX nd ng ns nb mname <m=val> <l=val> <w=val>
++ <ad=val> <as=val> <pd=val> <ps=val> <nrd=val>
++ <nrs=val> <off> <ic=vds,vgs,vbs> <temp=t>
+```
+
+**Explanation of Parameters:**
+- **nd, ng, ns, nb:** Drain, gate, source, and bulk (substrate) nodes.
+- **mname:** Model name.
+- **m:** (Multiplier) Parameter simulating 'm' parallel devices.
+- **l, w:** Channel length and width (meters). Defaults are used if unspecified.
+- **ad, as:** Drain and source diffusion areas (m²), defaults are used.
+- **pd, ps:** Drain and source junction perimeters (meters). Default = 0.0.
+- **nrd, nrs:** Equivalent number of diffusion squares for drain and source. Default = 1.0.
+- **off:** Indicates initial conditions for DC analysis.
+- **ic=vds,vgs,vbs:** Initial conditions for transient analysis (only with `.tran` using `uic`).
+- **temp:** Device operating temperature (overrides `.option`). Only valid for MOSFET levels 1, 2, 3, and 6.
+
+**Special Parameters for BSIM3/BSIM4/BSIMSOI Models:**
+| Name   | Parameter                             | Units | Default | Example |
+|--------|---------------------------------------|-------|---------|---------|
+| delvto | Threshold voltage shift               | V     | 0       | 0.07    |
+| mulu0  | Low-field mobility multiplier (U₀)    | -     | 1       | 0.9     |
+
+**Additional Notes:**
+- Default units: `u` = microns (1e-6 m), `p` = square micrometers (1e-12 m²).
+- The temperature parameter does **not** apply to level 4 or 5 (BSIM) devices.
+- Drain and source resistance are influenced by `nrd` and `nrs` which multiply the sheet resistance (`rsh`) in the `.model` control line.
+
+**Examples:**
+1. `M1 24 2 0 20 TYPE1`
+2. `M31 2 17 6 10 MOSN L=5U W=2U`
+3. `M1 2 9 3 0 MOSP L=10U W=5U AD=100P AS=100P PD=40U PS=40U`

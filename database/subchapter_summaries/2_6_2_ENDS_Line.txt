@@ -1,0 +1,11 @@
+.**ENDS Line**  
+Syntax: `.ENDS <SUBNAM>`  
+
+- The `.ENDS` line terminates a subcircuit definition.  
+- `<SUBNAM>` is the subcircuit name being terminated.  
+  - **Optional**: If omitted, all currently open subcircuits are terminated.  
+  - **Required**: If nested subcircuit definitions are used, to specify which subcircuit to terminate.  
+- **Position**: Must always be the last line of a subcircuit definition.  
+
+**Example:**  
+`.ENDS OPAMP`  

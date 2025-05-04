@@ -1,0 +1,1 @@
+POLY: The section refers to the use of the `POLY` element in Ngspice. For more details, see the "E-Source" in Chapter 5.5. No additional unique syntax, templates, or examples have been provided in this excerpt.

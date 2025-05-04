@@ -1,0 +1,29 @@
+Ngspice MOS Models via OpenVAF/OSDI (Section 7.6.7):
+
+Ngspice integrates an OSDI interface and the OpenVAF compiler, enabling Verilog-A compact MOS models. Visit the [VA-Models GitHub repository](https://github.com/) for sources. Key models include:
+
+**1) PSP Model (7.6.7.1):**  
+- Purpose: Compact MOSFET model for digital, analog, and RF design.  
+- Developer: NXP Semiconductors Research, universities, and CEA-Leti.  
+- Characteristics:
+  - Based on surface potential.
+  - Models key deep-submicron CMOS effects:
+    - Mobility reduction, velocity saturation, DIBL, gate current.
+    - Lateral doping gradients, STI stress.
+  - Integrated JUNCAP2 source/drain junction model.  
+- Documentation: Available on the [CEA-Leti website](https://www.leti-cea.com).
+
+**2) BSIM-BULK Model (7.6.7.2):**  
+- Successor to BSIM4 with enhanced accuracy across all operational regions.  
+- Features symmetry for analog and RF applications.
+
+**3) BSIM-CMG Model (7.6.7.3):**  
+- Purpose: Compact model for multi-gate FETs (e.g., FinFETs, Nanowire, Gate-All-Around transistors).  
+
+**4) EKV3 Model (7.6.7.4):**  
+- Characteristics:
+  - Charge-based compact model suitable for CMOS scaling.
+  - Adapts to planar bulk, double-gate, and FinFET technologies.
+  - Designed for high-frequency, analog, and RF IC applications.
+
+For details on model implementation and performance, refer to documentation in respective sources.

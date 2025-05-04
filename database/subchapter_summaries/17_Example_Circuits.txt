@@ -1,0 +1,15 @@
+17 Example Circuits
+
+- **Basic Features of Ngspice Explored in Examples:**  
+  - Invoking the simulator.  
+  - Running simulations in various analysis modes.  
+  - Printing and plotting analog results.  
+  - Examining status (execution time, memory usage).  
+  - Exiting the simulator.  
+
+- **Example 1: One-Transistor Amplifier Circuit (Fig. 17.1):**  
+  This example demonstrates basic concepts with a simple amplifier circuit created entirely using ngspice-compatible devices.  
+
+- Subsequent examples (Chapters 17.1 to 17.7) outline additional "classical" SPICE circuits included in any ngspice distribution. These example circuits serve as references for simulation tasks and are widely regarded as standard examples for using ngspice.  
+
+No explicit codes, syntax, default values, or theoretical characteristics were provided in the given text.

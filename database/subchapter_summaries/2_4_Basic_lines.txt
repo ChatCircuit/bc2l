@@ -1,0 +1,12 @@
+**Ngspice Manual Summary - Section 2.4 "Basic lines"**
+
+- **Comment Lines**: Start with a "*" in the first column. Entire line is ignored.
+
+- **Control Lines**: Keywords start in column 1. Direct ngspice behavior or simulation. Examples include `.control`, `.endc`.
+
+- **Continuation Lines**: End previous line with `+` in column 1. Continues the command or statement from the previous line.
+
+- **Netlist Lines**: Describe circuit elements, nodes, and models. Must be valid for simulation processing.
+
+- **Blank Lines**: Ignored entirely; add for readability.
+

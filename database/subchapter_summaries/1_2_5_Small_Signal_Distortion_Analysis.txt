@@ -1,0 +1,21 @@
+**Small-Signal Distortion Analysis (Ngspice 1.2.5)**  
+
+- **Purpose:** Computes steady-state harmonic and intermodulation products for small input signal magnitudes.  
+- **Input Signals:**
+  - Single frequency: Complex values of second and third harmonics are calculated at every circuit point.
+  - Two frequencies: Computes:
+    - Sum and difference of input frequencies.
+    - Difference of the smaller frequency from the second harmonic of the larger frequency.  
+
+- **Supported Nonlinear Devices for Distortion Analysis:**
+  - **Diodes:** DIO
+  - **BJTs**
+  - **JFET:** Level 1
+  - **MOSFETs:** Levels 1, 2, 3, 9, BSIM1
+  - **MESFET:** Level 1  
+
+- **Other Device Behavior:**
+  - All linear devices are automatically supported.
+  - Switches are supported **only if they do not change state** under small excitation.  
+
+- **For Unsupported Models:** Use Fourier or FFT statements and process output manually.  

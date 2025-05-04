@@ -1,0 +1,38 @@
+**Summary for Netlist Code Generation/Modification/Debugging**:
+
+**6.1 Lossless Transmission Lines**
+
+**General Form** (Netlist Syntax):
+```
+TXXXXXXX N1 N2 N3 N4 Z0=VALUE <TD=VALUE> <F=FREQ <NL=NRMLEN>> <IC=V1, I1, V2, I2>
+```
+
+**Parameter Descriptions**:
+- **N1, N2**: Nodes at port 1.
+- **N3, N4**: Nodes at port 2.
+- **Z0**: Characteristic impedance (mandatory).
+- **TD=VALUE**: Transmission delay (optional, directly specified).
+- **F=FREQ**: Frequency (optional, used for normalized length calculation).
+- **NL=NRMLEN**: Normalized electrical length (optional, defaults to 0.25 if omitted when frequency is specified).
+
+**Important Characteristics**:
+- **Transmission Delay Calculation** (if `F` and `NL` are used):  
+  `TD = NL/F`.
+- If neither `TD` nor (`F` and `NL`) is specified, the transmission line cannot be modeled.
+- No `.model` line is required for lossless transmission lines.
+  
+**Initial Conditions (IC)**:
+- Syntax: `IC=V1, I1, V2, I2`.
+- Specifies initial voltage and current at each port.
+- Active only when the `UIC` option is used on the `.TRAN` control line.
+
+**Key Notes**:
+- Models only one propagating mode; for circuits with four distinct nodes (two modes), two transmission-line elements are required.
+- Lossless transmission lines’ implementation may exhibit less accuracy compared to a lossy transmission line model with zero loss.
+
+**Example Code**:
+```
+T1 1 0 2 0 Z0=50 TD=10NS
+```
+- Defines a transmission line with characteristic impedance of 50Ω and delay of 10ns.
+

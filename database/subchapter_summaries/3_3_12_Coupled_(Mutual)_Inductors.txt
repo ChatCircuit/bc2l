@@ -1,0 +1,41 @@
+**Summarized Information:**
+
+**Component: Coupled (Mutual) Inductors**
+
+**General Form:**  
+`KXXXXXXX LYYYYYYY LZZZZZZZ value`
+
+- `LYYYYYYY` and `LZZZZZZZ` are the names of coupled inductors.  
+- `value` is the coupling coefficient \( K \), where \( 0 < K \leq 1 \).  
+
+**Key Notes:**  
+- The `dot` convention for coupled inductors places a `dot` at the first node of each inductor.  
+- Pairwise coupling is allowed for more than 2 inductors. 
+
+**Example Code (Pairwise coupling):**  
+```
+L1 1 0  10u  
+L2 2 0  11u  
+L3 3 0  10u  
+K12 L1 L2 0.99  
+K23 L2 L3 0.99  
+K13 L1 L3 0.98  
+```
+> Note: Physically impossible coupling combinations are flagged by `ngspice`.
+
+**Coupling of More than Two Inductors in a Single Statement:**  
+- All coupling constants are equal.
+  
+**Example Code (Multi-inductor statement):**  
+```
+L1 1 0  10u  
+L2 2 0  11u  
+L3 3 0  10u  
+K123 L1 L2 L3 0.97  
+```
+
+---
+
+**Theoretical Characteristics:**
+- Coupling coefficient \( K \) should satisfy \( 0 < K \leq 1 \).  
+- Proper coupling constants must conserve energy; non-physical configurations are flagged by `ngspice`.

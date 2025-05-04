@@ -1,0 +1,33 @@
+### Summary: Analysis and Output Control (Batch Mode) in Ngspice
+
+1. **Batch Mode Execution**:
+   - Command to invoke batch mode:
+     ```
+     ngspice -b -r rawfile.raw circuitfile.cir
+     ```
+     or use file redirection:
+     ```
+     ngspice < circuitfile.cir
+     ```
+   - In batch mode:
+     - `.ac`, `.tran`, or other analysis specified in the input file are executed automatically.
+     - If `-r rawfile.raw` is used, simulation data is written to a rawfile, which can later be loaded in interactive mode:
+       ```
+       load
+       ```
+     - Internal device variables can be saved using `.save` (see Chapter 11.6, Appendix 27 for details).
+
+2. **Output Control**:
+   - If no rawfile is specified:
+     - Results can be printed in "line-printer" format or tables using:
+       - `.print`
+       - `.plot`
+       - `.four` (Fourier analysis)
+   
+3. **Interactive Mode Behavior**:
+   - Command to start in interactive mode:
+     ```
+     ngspice circuitfile.cir
+     ```
+   - If no `.control ... .endc` section is provided, the dot commands inside the circuit file will not execute automatically. They require the `run` command to be issued manually.
+

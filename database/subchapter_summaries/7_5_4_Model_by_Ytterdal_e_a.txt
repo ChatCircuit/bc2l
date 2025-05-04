@@ -1,0 +1,7 @@
+Summary for netlist code generation/modification/debugging/explanation related to Model by Ytterdal e.a.:  
+
+**GaAs MESFET Model (level 2, 3, 4)**  
+- Developed by: T. Ytterdal, K. Lee, M. Shur, and T.A. Fjeldly (Copyright 1993).  
+- Theoretical Background: Unified GaAs MESFET Model for Circuit Simulation (source: "Unified GaAs MESFET Model for Circuit Simulation," Int. Journal of High Speed Electronics, vol. 3, no. 2, pp. 201-233, 1992).  
+
+- Usage Notes: Specific syntax, model parameters, or template coding details for netlist generation not provided in the text above. Further information needed from full documentation for practical implementation.  

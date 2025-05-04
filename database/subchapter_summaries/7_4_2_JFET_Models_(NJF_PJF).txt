@@ -1,0 +1,26 @@
+**Ngspice Manual Summary: JFET Models (NJF/PJF)**
+
+- **JFET Model Types**: NJF (N-channel) and PJF (P-channel)
+
+- **JFET Theoretical Characteristics**:
+  - Models the behavior of Junction Field Effect Transistor (JFET), including current-voltage equations, gate control, and saturation characteristics.
+
+- **Model Syntax**: 
+  ```
+  .model <modelname> <type> (param1=value1 param2=value2 ...)
+  ```
+  `<type>`: NJF or PJF.
+
+- **Key Parameters & Default Values**:
+  - *VT0* (default = 0.0): Pinch-off voltage.
+  - *BETA* (default = 0.0): Transconductance parameter (I_D = BETA * (V_GS - VT0)^2 in saturation).
+  - *LAMBDA* (default = 0.0): Channel length modulation parameter.
+  - *IS* (default = 1e-14): Saturation current.
+  - *CGD* & *CGS* (default = 0.0 pF): Gate-drain and gate-source capacitances.
+  - *KF* (default = 0.0): Flicker noise coefficient.
+  - *AF* (default = 1.0): Flicker noise exponent.
+  
+- **Example**:
+  ```
+  .model myJFET NJF (VT0=-2 BETA=1e-3 LAMBDA=0.01 CGS=1e-12 CGD=2e-12)
+  ```

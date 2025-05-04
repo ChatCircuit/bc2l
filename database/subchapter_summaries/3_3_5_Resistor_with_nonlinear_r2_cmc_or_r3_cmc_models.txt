@@ -1,0 +1,8 @@
+Resistor with Nonlinear `r2_cmc` or `r3_cmc` Models:  
+
+These 2-terminal resistor models are developed by the resistor subcommittee of the CMC and are made accessible through the OSDI interface by loading OpenVAF-compiled Verilog-A models. These models aim to provide:  
+- Standard 2-terminal resistor models.  
+- Standardized parameter names.  
+- Numerically stable nonlinearity behavior.  
+
+For more details on implementation, refer to Chapter 9.2 of the Ngspice manual.

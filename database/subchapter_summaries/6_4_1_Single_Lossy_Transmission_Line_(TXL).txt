@@ -1,0 +1,30 @@
+**Summarized Information:**
+
+**Single Lossy Transmission Line (TXL)**
+
+**General Netlist Syntax:**
+`YXXXXXXX N1 0 N2 0 mname <LEN=LENGTH>`
+
+- `YXXXXXXX`: Transmission line identifier.
+- `N1` and `N2`: Nodes of the two ports.
+- `mname`: TXL model name.
+- `LEN`: Optional instance parameter specifying the length of the line in multiples of a unit (typically meters).
+
+**Example Netlist:**
+```
+Y1 1 0 2 0 ymod LEN=2
+.MODEL ymod txl R=12.45 L=8.972e-9 G=0 C=0.468e-12 length=16
+```
+
+- `LEN` overrides the model parameter `LENGTH` for the specific instance.
+
+**TXL Model Parameters Table:**
+- `R`: Resistance per length (Ω/unit). Default = 0.0.
+- `L`: Inductance per length (H/unit). Default = 0.0.
+- `G`: Conductance per length (mhos/unit). Default = 0.0.
+- `C`: Capacitance per length (F/unit). Default = 0.0.
+- `LENGTH`: Total length of the line (unit). *No default value*.
+
+**Additional Notes:**
+- `LENGTH` in the model must explicitly be specified in multiples of the chosen unit (typically meters).
+- Used in transient simulations.

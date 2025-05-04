@@ -1,0 +1,4 @@
+FREQ Component Summary:
+
+- The `FREQ` component in Ngspice is associated with the E-Source and references Chapter 5.2.6 of the manual for a code model replacement.
+- No detailed syntax, templates, default values, or unique examples are provided in this excerpt for netlist usage or debugging.

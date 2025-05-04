@@ -1,0 +1,30 @@
+**Summary:**
+
+**Piece-Wise Linear (PWL):**
+
+**General Form:**  
+`PWL(T1 V1 <T2 V2 T3 V3 ...>) <r=value> <td=value>`
+
+- Represents voltage or current source values at specific time points, `(T, V)`, using linear interpolation for intermediate times.  
+
+**Parameters:**  
+- `(T, V)`: Specifies the value (`V` in Volts or Amps) of the source at the given time (`T`).  
+- `r`: Determines repeat behavior.  
+  - `r = -1` or not provided: Sequence runs once, output remains at final value.  
+  - `r = 0`: Entire sequence from time `0` to `Tn` repeats indefinitely.  
+  - `r > 0`: Sequence between `r` and `Tn` repeats indefinitely. `r` must be one of the time points in the PWL sequence.  
+- `td`: Delays the entire sequence by the specified time.  
+- **Note:** `r` and `td` are only available with voltage sources, **not with current sources.**  
+
+**Example Code:**  
+```
+VCLOCK 7 5 PWL(0 -7 10NS -7 11NS -3 17NS -3 18NS -7 50NS -7)
++ r=0 td=15NS
+```
+
+- This defines a voltage source (`VCLOCK`) with time-value pairs `(T, V)` using a PWL pattern.  
+- Sequence starts at `0` and repeats indefinitely (`r=0`), with a delay of `15ns` (`td=15NS`).  
+
+**Behavior:**  
+- Linear interpolation is used for intermediate values of time.  
+- Source will output specific values at defined times `(T, V)` and repeat or delay as specified by `r` and `td`.

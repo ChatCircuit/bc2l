@@ -1,0 +1,64 @@
+### Summary on Ngspice MOSFET Models (NMOS/PMOS)
+
+#### General Information
+- **Models:** Ngspice supports all MOSFET models from Spice3f and additional models developed by UC Berkeley and other groups.
+- **Syntax:** Models are invoked using `.model` card.
+  ```
+  .model <model_name> <type> level=<level_number> version=<version>
+  Example: .model MOSN NMOS level=8 version=3.3.0
+  ```
+  - `<type>`: `NMOS` for n-channel, `PMOS` for p-channel transistors.
+  - `<level_number>`: Defines specific model level.
+  - `<version>`: Denotes the model's version.
+
+- **Default Parameters:** Users can override defaults using `.model` parameters.
+- **Storage for Model Cards:** Model cards can be stored in external files and included via `.include` command in the netlist.
+
+#### Available MOSFET Models (based on Table 7.3)
+- **Level 1:** Classic quadratic model (Shichman-Hodges), long-channel devices, non-charge conserving.
+- **Level 2:** Short-channel effects, velocity saturation, Meyer C-V model (non-charge conserving).
+- **Level 3:** Robust semi-empirical model used in digital design, optional use of `badmos3` for parameter fitting adjustments.
+- **Level 6:** Short-channel MOSFETs down to 0.25 µm, allows analytical treatments for circuit behaviors in submicron regimes.
+- **BSIM Models:**
+  - BSIM3 (Level 8, 49): Modern model for technologies down to 0.25 µm.
+  - BSIM4 (Level 14, 54): For sub-0.25 µm technologies.
+  - HiSIM and HiSIM_HV: Advanced models for high-voltage MOS devices.
+- **VDMOS:** For power MOSFETs, supports self-heating effects.
+- **OSDI Models:** Allow use of MOS models written in Verilog-A (e.g., BSIMBULK, BSIM-CMG, PSP).
+
+#### MOSFET Models Parameters (Levels 1–6)
+Parameter characteristics include:
+- **Key Electrical Parameters:**
+  - `VTO` (Threshold Voltage): Default = 0 V.
+  - `KP` (Transconductance Parameter): Default = 2.0e-5 A/V².
+  - `GAMMA` (Bulk Threshold Parameter): Default = 0.
+  - `PHI` (Surface Potential): Default = 0.6 V.
+  - `LAMBDA` (Channel Length Modulation): Default = 0.
+  - `TOX` (Oxide Thickness): Default = 1e-7 m.
+  - `RD`/`RS` (Drain/Source Resistance): Default = 0 Ω.
+  - Noise Parameters: `KF` (Flicker Noise Coeff.), `AF` (Flicker Noise Exponent), `NLEV` (Noise Equation Selector), `GDSNOI` (Channel Noise Coeff.).
+  - `DELTA`: Width Effect on Threshold Voltage.
+  - `TNOM`: Measurement Temperature; Default = 27°C.
+- **Capacitances:**
+  - Overlap Capacitances: `CGSO`, `CGDO`, `CGBO`.
+  - Zero-bias Capacitances: `CBD`, `CBS`, `CJ`, `CJSW`.
+- **Process-Dependent Parameters:**
+  - Substrate doping (`NSUB`) and surface state density (`NSS`, `NFS`).
+
+- **Defaults for Key Charge Modeling:**
+  - Charge storage is based on Meyer’s piecewise linear, voltage-dependent capacitance (non-charge conserving for Level 1).
+
+#### Supported Features Across Models
+- **Level 1–3:** Suitable for long-channel or limited short-channel effects.
+- **Level 6:** Faster simulation and supports submicron circuit design.
+- **Advanced Models (BSIM, HiSIM):** Designed for modern submicron and high-power applications.
+- **Verilog-A Models (OSDI):** Enable use of advanced custom MOS models compiled through OpenVAF.
+
+#### Example Template for Netlist
+- Defining a MOSFET with a custom model:
+  ```
+  M1 <Drain> <Gate> <Source> <Bulk> MOSN L=<length> W=<width>
+  .model MOSN NMOS level=8 version=3.3.0 VTO=0.7 KP=3.1e-5
+  ```
+
+This summary is tailored for MOSFET-related netlist design, modification, debugging, and parameter exploration in **Ngspice**.

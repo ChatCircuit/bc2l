@@ -1,0 +1,8 @@
+2.10.2 Brace Expressions in Circuit Elements:
+
+- General Form: `{ <expr> }`
+- Usage: Allowed in `.model` lines and device lines.
+- Limitations: 
+  1. Brace expressions cannot parameterize node names or parts of names.
+  2. All identifiers inside `<expr>` must have known values during evaluation; otherwise, an error occurs.
+- SPICE Numbers: Float with optional scaling suffix (details in Chapter 2.10.5).

@@ -1,0 +1,34 @@
+### Summary of .IC Command in Ngspice for Netlist Usage
+**Purpose**: The `.ic` command sets initial conditions for transient simulation. It is distinct from `.nodeset`, which aids DC convergence but doesn't affect the final bias solution.
+
+#### General Form
+`.ic v(node)=value v(node)=value ...`
+
+#### Examples:
+`.ic v(11)=5 v(4)=-5 v(2)=2.2`
+
+---
+
+### Interpretation of `.IC` Based on `.tran`'s `uic` Parameter:
+1. **With `uic` Specified in `.tran`**:
+   - Node voltages defined in `.ic` are used to calculate initial conditions for capacitors, diodes, BJTs, JFETs, and MOSFETs.
+   - Equivalent to using the `ic=` parameter in individual device lines, but `.ic` is more convenient.
+   - Device-specific `ic=` values **override** corresponding `.ic` values.
+   - No DC bias (initial transient) is computed before the transient analysis.
+   - Ensure all DC source voltages contributing to device initial conditions are specified in `.ic`.
+
+2. **Without `uic` Specified in `.tran`**:
+   - A DC bias solution is computed before transient analysis.
+   - `.ic` enforces specific initial values for node voltages during the bias solution phase only.
+   - During transient analysis, constraints on node voltages are lifted.
+   - Preferred method as it provides consistent DC solutions.
+
+---
+
+### Helpful Command
+- **`wrnodev` Command (Section 13.5.108)**:
+  - Saves node voltages in `.ic` format for reuse with `.include`.
+
+---
+
+By understanding these detailed `.ic` settings, transient simulations can be more effectively configured, and netlist debugging becomes more intuitive, especially when combined with `.tran` settings.

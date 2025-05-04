@@ -1,0 +1,48 @@
+### Summary for `.OP` and Transient OP Commands in Ngspice
+
+#### **.OP Command: Operating Point Analysis**
+- **Purpose**: Calculates the DC operating point with inductors shorted and capacitors opened. Useful for initializing transient analysis and linearization for AC, noise, and pole-zero analysis.
+- **Convergence Aids**: Helps when a DC solution is difficult due to issues like floating nodes or non-conducting active devices.
+  - **.option noopiter**: Disables initial DC iteration.
+  - **GMIN Stepping (gminsteps)**:
+    - Inserts small conductances across active devices.
+      - `gminsteps = 0`: No gmin.
+      - `gminsteps = 1` *(Default)*: Two gmin stepping processes.
+      - `gminsteps = 2`: Original SPICE 3 gmin.
+    - Dynamic gmin stepping is enabled by default (`1e-3` initial conductance), but exclusive use can be forced via `dyngmin`.
+  - **Source Stepping (srcsteps)**:
+    - Dynamically ramps supply voltages/currents from 0 to 100%.
+      - `srcsteps = 0`: No source stepping.
+      - `srcsteps = 1` *(Default)*: Gillespie source stepping.
+      - `srcsteps = 2`: Original SPICE 3 source stepping.
+
+#### **Transient Operating Point Analysis (optran)**
+- **Purpose**: Uses transient simulation results to establish operating points for other analyses like TRAN, AC, Noise, etc.
+- **Command Format**:  
+  `optran !noopiter gminsteps srcsteps tstep tstop supramp`
+  - `noopiter`: Disable initial guess iteration.
+  - `gminsteps`: Control gmin stepping.
+  - `srcsteps`: Control source stepping.
+  - `tstep`: Transient step time (default: `10n`).
+  - `tstop`: Total transient simulation time (default: `10u`).
+  - `supramp`: Currently unused.
+
+- **Defaults**:
+  - Initial iteration, gmin, and source stepping are enabled.
+  - Example:  
+    `optran 0 0 0 100n 10u 0` - Turn off iterations and stepping, uses specified step and stop times.
+
+- **Notes**:
+  - Automatically performed before transient analysis (unless `uic` is used), and prior to AC, Noise, or PZ analyses.
+  - Results are not stored, except when `KEEPOPINFO` (Sec. 11.1.2) is enabled to produce OP plots alongside TRAN, AC, Noise, or PZ plots.
+
+#### **Example Commands**:
+1. `optran 0 0 0 100n 10u 0`  
+   - Disables initial iteration, gmin, and source stepping; directly performs transient op with specified step/stop times (`100n`, `10u`).
+2. `optran 1 1 1 100n 10u 0`  
+   - Restores initial conditions with all stepping and iterations enabled.
+
+#### **Default Behavior Summary**
+- Gmin stepping starts at `1e-3`, then switches dynamically.
+- Source stepping starts from `0` and ramps up to `100%`.
+- Transient OP uses internal defaults (`tstep = 10n`, `tstop = 10u`) unless overwritten.

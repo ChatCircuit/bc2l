@@ -1,0 +1,31 @@
+**Summary of 17.3 MOSFET Characterization (Ngspice manual):**
+
+1. **Description**: The section computes the output characteristics of a MOSFET for a range of VDS (0-10V) and VGS (0-5V).
+
+2. **Important syntax and code elements**:
+    - `.OPTIONS NODE NOPAGE`: Customizes simulation options for Ngspice.
+    - Voltage sources:  
+      `VDS 3 0` defines VDS between nodes 3 (drain) and 0 (ground).  
+      `VGS 2 0` defines VGS between nodes 2 (gate) and 0 (ground).
+    - MOSFET instance:  
+      `M1 1 2 0 0 MOD1 L=4U W=6U AD=10P AS=10P` defines a MOSFET (`M1`) with key parameters:  
+        - L (channel length) = 4µm, W (channel width) = 6µm.  
+        - AD (drain area) = 10p, AS (source area) = 10p.
+    - Model definition:  
+      `.MODEL MOD1 NMOS VTO=-2 NSUB=1.0E15 UO=550` specifies the NMOS model "MOD1" with:  
+        - Threshold voltage (VTO) = -2V.  
+        - Substrate doping (NSUB) = 1.0E15 cm^-3.  
+        - Mobility (UO) = 550 cm^2/V·s.
+    - Sweep command:  
+      `.DC VDS 0 10 .5 VGS 0 5 1` performs a DC analysis:
+        - Sweeps VDS from 0V to 10V in steps of 0.5V.  
+        - Sweeps VGS from 0V to 5V in steps of 1V.
+
+3. **Key theoretical characteristics**:
+    - MOSFET output characteristics are determined by sweeping drain-source voltage (VDS) against gate-source voltage (VGS).
+    - The model includes specifications for carrier mobility, threshold voltage, and doping concentration.
+
+4. **Unique syntax in example**:
+    - `VIDS 3 1`: Measures the current (ID) flowing through VDS, using specified nodes 3 (drain) and 1 (source).
+
+This code example and parameters can be directly referenced for generating or debugging a netlist that characterizes MOSFET output behavior.

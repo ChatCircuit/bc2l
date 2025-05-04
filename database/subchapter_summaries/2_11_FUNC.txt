@@ -1,0 +1,17 @@
+**Summary on `.FUNC` (Ngspice Manual Section 2.11):**
+
+- `.FUNC` keyword is used to define functions in Ngspice netlists.
+- **Syntax Forms**:
+  - `.func <ident> {<expr>}`
+  - `.func <ident> = {<expr>}`
+  
+- **Examples**:
+  - `.func icos(x) {cos(x) - 1}`: Defines a function `icos(x)` to replace occurrences of `icos(x)` with `cos(x) - 1`.
+  - `.func f(x,y) {x*y}`: Replaces occurrences of `f(x, y)` with `x * y`.
+  - `.func foo(a,b) = {a + b}`: Defines a function `foo(a,b)` that replaces occurrences of itself with `a + b`.
+
+- **Operational Details**:
+  - Replacement occurs after input files are read and before parameter evaluation.
+  - `.FUNC` supports nested function definitions, though the depth limit is unspecified (t.b.d.).
+
+This is relevant for defining reusable expressions or debugging netlist code through parameter replacement operations.

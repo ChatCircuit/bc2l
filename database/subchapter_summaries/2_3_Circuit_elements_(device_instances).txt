@@ -1,0 +1,37 @@
+- **Circuit Element Syntax in ngspice**:  
+Each element in a netlist corresponds to a device instance with the following structure:  
+  - **Name**: The first letter specifies the type of element (e.g., "R" for resistors).  
+  - **Nodes**: Specify connection points to the circuit.  
+  - **Parameters**: Determine electrical characteristics of the device.  
+Examples of valid resistor names: `R`, `R1`, `RSE`, `ROUT`, `R3AC2ZY`.  
+
+---
+
+- **Table of Element Types**:
+  - **A**: XSPICE code model (Analog 8.2, Digital 8.4, Mixed Signal 8.3).  
+  - **B**: Behavioral (arbitrary) source (5.1).  
+  - **C**: Capacitor (3.3.6).  
+  - **D**: Diode (7).  
+  - **E**: Voltage-controlled voltage source (VCVS); linear (4.2.2), non-linear (5.2).  
+  - **F**: Current-controlled current source (CCCS); linear (4.2.3).  
+  - **G**: Voltage-controlled current source (VCCS); linear (4.2.1), non-linear (5.3).  
+  - **H**: Current-controlled voltage source (CCVS); linear (4.2.4).  
+  - **I**: Current source (4.1).  
+  - **J**: Junction Field Effect Transistor (JFET) (7.4).  
+  - **K**: Coupled (Mutual) Inductors (3.3.12).  
+  - **L**: Inductor (3.3.10).  
+  - **M**: MOSFET; includes BSIM3 (7.6.3.3) and BSIM4 (7.6.3.4).  
+  - **N**: Verilog-A Compact Device Models (9).  
+  - **O**: Lossy transmission line (6.2).  
+  - **P**: Coupled Multiconductor Line (CPL) (6.4.2).  
+  - **Q**: Bipolar Junction Transistor (BJT) (7.3).  
+  - **R**: Resistor (3.3.1).  
+  - **S**: Voltage-controlled switch (3.3.15).  
+  - **T**: Lossless transmission line (6.1).  
+  - **U**: Uniformly distributed RC line (6.3); basic digital elements (10).  
+  - **V**: Voltage source (4.1).  
+  - **W**: Current-controlled switch (3.3.15).  
+  - **X**: Subcircuit (2.6.3).  
+  - **Y**: Single lossy transmission line (TXL) (6.4.1).  
+  - **Z**: MESFET (7.5).  
+

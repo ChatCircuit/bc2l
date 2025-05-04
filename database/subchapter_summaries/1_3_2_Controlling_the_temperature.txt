@@ -1,0 +1,36 @@
+1. **Default Temperature**
+   - Default temperature is 27 °C.
+
+2. **Setting Temperature**
+   - Command: `.temp <value>`  
+     Example: `.temp 40` sets the overall temperature to 40 °C.
+   - Command: `.options temp=<value>`  
+     Example: `.options temp=60` sets the overall temperature to 60 °C.  
+   - Notes: `.temp` overrides `.options temp`.
+
+3. **Device-specific Temperature**
+   - Parameter `temp`: Sets specific temperature for a device.  
+     Example:  
+     `M1 d g s b MOSN temp=35` sets the temperature of MOS device `M1` to 35 °C.
+   - Parameter `dtemp`: Sets a delta temperature above overall temperature.  
+     Example:  
+     `M2 d g s b MOSN dtemp=20` sets `M2` to 20 °C above the overall temperature.
+
+4. **Temperature Sweep**
+   - Command to sweep the temperature during simulation:  
+     `.dc temp <start> <stop> <step>`  
+     Example: `.dc temp 25 49 2` sweeps temperature from 25 °C to 49 °C in steps of 2 °C.
+
+5. **Accessing Current Temperature**
+   - Variable `TEMPER`: Assesses the overall temperature dynamically.  
+     Example used in a behavioral source:  
+     `Bt1 1 2 V='5 + TEMPER*TEMPER'`
+
+6. **Nominal Temperature (Reference Temperature)**
+   - Command: `.options tnom=<value>`  
+     Example: `.options tnom=25` sets the reference temperature to 25 °C.
+   - Can also be set as a model parameter in a `.model` line (dependent on device class/model parameter set). 
+
+**Key Notes:**
+- Temperatures set via `.temp`, `.options temp`, `temp`, or `dtemp` are static throughout the simulation.
+- `.temp` and `.options temp` control overall simulation temperature, while `temp` and `dtemp` refine temperatures for specific devices.

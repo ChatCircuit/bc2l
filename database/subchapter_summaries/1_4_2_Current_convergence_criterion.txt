@@ -1,0 +1,16 @@
+**Summary for Netlist Code and Debugging in Ngspice:**
+
+1. **Current Convergence Criterion**:
+   - Ngspice ensures convergence on non-linear branches by evaluating the difference between:
+     a. The current computed for the last voltage iteration.
+     b. The linear approximation of the same current computed using the actual voltage.
+
+   - Criterion formula:
+     | \(i_{\text{branch}}^{k+1} - i_{\text{branch}}^k\) | ≤ RELTOL × \(i_{\text{branch},\text{max}}\) + ABSTOL
+
+     Where:
+     - \(i_{\text{branch},\text{max}}\) = max(\(i_{\text{branch}}^{k+1}\), \(i_{\text{branch}}^k\)).
+     - \(i_{\text{branch}}^{k+1}\): Linear approximation of the current.
+     - RELTOL and ABSTOL are user-defined tolerances. 
+
+This information is useful for debugging convergence issues in non-linear components within a netlist. For precise control, ensure RELTOL and ABSTOL values are appropriately set in simulation commands.

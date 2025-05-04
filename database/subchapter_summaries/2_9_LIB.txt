@@ -1,0 +1,20 @@
+### Extracted Summary for .LIB Command in Ngspice  
+
+**General Form:**  
+`.LIB filename libname`  
+
+**Example:**  
+`.LIB /users/spice/common/mosfets.lib mos1`  
+
+**Purpose:**  
+The `.LIB` command is used to include library descriptions into the input netlist.  
+
+**Details:**  
+- Inside the referenced `.lib` file, a specific library section (`libname`) is selected.  
+- Statements for each library are enclosed using `.LIB libname ... .ENDL`.  
+- The file search behavior for `.LIB` is the same as for `.include`.  
+
+**Compatibility Mode Syntax:**  
+- Setting compatibility mode to `ps` (`set ngbehavior=ps`) allows the simplified syntax:  
+  `.LIB filename`  
+- In this case, the `filename` is directly included, issuing only a warning.  

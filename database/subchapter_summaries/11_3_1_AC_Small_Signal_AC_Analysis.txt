@@ -1,0 +1,48 @@
+**Summary - `.AC: Small-Signal AC Analysis`**
+
+**General Form:**
+1. `.ac dec nd fstart fstop`  
+   - `dec`: Decade sweep (log scale).
+   - `nd`: Number of points per decade.
+2. `.ac oct no fstart fstop`  
+   - `oct`: Octave sweep (log scale).
+   - `no`: Number of points per octave.
+3. `.ac lin np fstart fstop`  
+   - `lin`: Linear frequency variation.
+   - `np`: Number of points.
+
+**Parameters:**
+- `fstart`: Starting frequency of analysis.
+- `fstop`: Final frequency of analysis.
+
+**Important Notes:**
+- At least one independent source must have an `ac` value to perform AC analysis. Typically, only one AC source is recommended.
+- All non-linear devices are linearized at their DC operating point. Capacitance (C) and Inductance (L) values are frequency-dependent during the analysis.
+- Output data (e.g., node voltages, branch currents) are complex and analyzed relative to the AC input source.
+
+**Usage and Options:**
+- Use `.plot` to graph results. Example: `vdb(node)` calculates magnitude in dB.
+- For large **linear circuits** (e.g., R, L, C, I, V, E, G, F, H — simplified versions only), the `noopac` option skips DC operating point calculation for faster simulation.
+- AC analysis does not support output parameters like `@m1[cgs]` or `@r1[i]`.
+
+**Example: Basic RC Circuit**
+```plaintext
+r 1 2 1.0
+c 2 0 1.0
+vin 1 0 dc 0 ac 1  $ <--- the AC source
+.options noacct
+.ac dec 10 .01 10
+.plot ac vdb(2) xlog
+.end
+```
+
+- The `.ac` statement performs a sweep from `fstart=0.01 Hz` to `fstop=10 Hz` with 10 points per decade.
+- `vdb(2)` plots the magnitude in decibels at node 2.
+
+**Key Theoretical Notes:**
+- AC analysis uses the superposition principle if multiple AC sources are included, making interpretation complex.
+- Use linear models only; polynomial or behavioral components are incompatible with `noopac`.
+
+**Efficient Simulation:**
+- Use `noopac` for time savings with exclusively linear circuits (e.g., R, C, L, simple E, G, F, H).
+

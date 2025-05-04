@@ -1,0 +1,5 @@
+**Summary:**  
+1. **Command:** `.end`  
+2. **Purpose:** The `.end` line must always be the last line in the input file.  
+3. **Syntax:** The period (`.`) is an integral part of the `.end` command name.  
+4. **Example:** `.end`  

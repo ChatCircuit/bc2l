@@ -1,0 +1,8 @@
+Topological constraints in Ngspice:  
+- **Loop Restrictions:** Circuits cannot include a loop of voltage sources and/or inductors.  
+- **Cut-Set Restrictions:** Circuits cannot have a cut-set of current sources and/or capacitors.  
+- **Node Requirements:**  
+  - Each node must have a DC path to ground.  
+  - Every node requires at least two connections, except:  
+    - **Transmission line nodes:** Allow unterminated transmission lines.  
+    - **MOSFET substrate nodes:** Internally have two connections.

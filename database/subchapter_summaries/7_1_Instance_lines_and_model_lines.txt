@@ -1,0 +1,28 @@
+Instance lines and `.model` lines are essential for adding devices in Ngspice netlists. Two main components are required:
+
+**Instance Line Syntax**:  
+`QXXXXXXX node1 node2 node3 modelname <instpar1=val> <instpar2=val> <off>`  
+- `QXXXXXXX`: Unique device name (prefix determines device type; e.g., Q for bipolar transistors).  
+- `node1`, `node2`, `node3`: Device connection nodes.  
+- `modelname`: Reference to an associated `.model` line.  
+- `<instpar1=val>`: (Optional) Instance-specific parameters.  
+- `<off>`: (Optional) Specifies if the device starts in an off state.  
+
+**.model Line Syntax**:  
+`.model modelname modeltype mpar1=val mpar2=val ...`  
+- `modelname`: Links to devices in the netlist.  
+- `modeltype`: Defines the type of device (e.g., `NPN`, `PNP` for bipolar transistors; other types available in documentation).  
+- Model parameters specify device characteristics, with defaults used if not provided. Some models may require hundreds of parameters.  
+
+**Key Notes**:  
+- `level` and `version` parameters specify sub-categories of models.
+- Device models support various complexities; e.g., BSIM3 for MOSFETs.
+
+**Example Code** (Integrated NMOS transistor using BSIM3 model):  
+```
+M1 dnode1 gnode1 snode1 bnode1 mosnb3 L=0.35u W=2u
+.model mosnb3 NMOS level=8 version=3.3.0 tox=6.5n nch=2.4e17 nsub=5e16 vth0=0.3
+```
+Important details:  
+- Instance line `M1`: Defines an NMOS transistor connected to 4 physical nodes.  
+- `.model` line `mosnb3`: Specifies parameters such as `level=8` (BSIM3), `version=3.3.0`, oxide thickness (`tox=6.5n`), and doping concentrations (`nch`, `nsub`).  

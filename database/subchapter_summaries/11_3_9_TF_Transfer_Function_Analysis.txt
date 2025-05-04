@@ -1,0 +1,19 @@
+.tf: Transfer Function Analysis
+
+General Syntax: `.tf outvar insrc`
+
+Definitions:
+- `outvar`: Small-signal output variable.
+- `insrc`: Small-signal input source.
+
+Functionality:
+- Computes:
+  1. DC small-signal transfer function (output/input ratio).
+  2. Input resistance at `insrc`.
+  3. Output resistance at `outvar`.
+
+Examples:
+1. `.tf v(5, 3) VIN`  
+   - Computes: Ratio of V(5, 3) to VIN, input resistance at VIN, and output resistance between nodes 5 and 3.
+2. `.tf i(VLOAD) VIN`
+   - Computes: Ratio of i(VLOAD) to VIN, input resistance at VIN, and output resistance at VLOAD.

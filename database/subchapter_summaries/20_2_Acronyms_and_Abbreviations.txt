@@ -1,0 +1,13 @@
+**Ngspice - Acronyms and Abbreviations for Netlist Development/Components**  
+- **CCCS**: Current Controlled Current Source  
+- **CCVS**: Current Controlled Voltage Source  
+- **MNA**: Modified Nodal Analysis  
+- **MOSFET**: Metal Oxide Semiconductor Field Effect Transistor  
+- **PWL**: Piece-Wise Linear  
+- **SPICE**: Simulation Program with Integrated Circuit Emphasis (origin of ngspice).  
+- **SPICE3**: Version 3 of SPICE.  
+- **VCVS**: Voltage Controlled Voltage Source  
+- **VCCS**: Voltage Controlled Current Source  
+- **XSPICE**: Extended SPICE option in ngspice, integrates user-defined code models for event-driven mixed-signal simulation.
+
+Useful for clarifying components, modifications, debugging, and mixed-signal command templates in netlist code creation.

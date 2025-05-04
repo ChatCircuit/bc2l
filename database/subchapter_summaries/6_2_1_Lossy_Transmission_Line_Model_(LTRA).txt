@@ -1,0 +1,50 @@
+**Summarized Information for Netlist Code Generation/Modification/Debugging and Component/Command Queries:**
+
+**LTRA Model Overview**:  
+The Lossy Transmission Line Model (LTRA) simulates uniform constant-parameter distributed transmission lines. It is faster and more accurate compared to older models (`URC`, `TRA`) and operates on the convolution of impulse responses with inputs.
+
+**Supported Line Types**:  
+1. **RLC**: Series loss only.  
+2. **RC**: Uniform RC line.  
+3. **LC**: Lossless transmission line.  
+4. **RG**: Distributed resistance and parallel conductance only.  
+> *Other combinations yield erroneous results.*
+
+**Mandatory Parameter**:  
+- **LEN**: Length of the transmission line (*must be specified, no default value*).
+
+**LTRA Model Parameters**:  
+| **Name**        | **Description**                                                | **Units/Type** | **Default** | **Example**   |
+|------------------|---------------------------------------------------------------|----------------|-------------|---------------|
+| **R**           | Resistance per unit length                                    | Ω/unit         | 0.0         | 0.2           |
+| **L**           | Inductance per unit length                                    | H/unit         | 0.0         | 9.13e-9       |
+| **G**           | Conductance per unit length                                   | mhos/unit      | 0.0         | 0.0           |
+| **C**           | Capacitance per unit length                                   | F/unit         | 0.0         | 3.65e-12      |
+| **LEN**         | Length of the transmission line                               | unit           | no default  | 1.0           |
+| **REL**         | Breakpoint control (Relative)                                 | Arbitrary unit | 1           | 0.5           |
+| **ABS**         | Breakpoint control (Absolute)                                 | -              | 1           | 5             |
+| **NOSTEPLIMIT** | Removes default restriction on time-step smaller than line delay | Flag           | Not set     | Set           |
+| **NO CONTROL**  | Prevents time-step limit based on convolution errors          | Flag           | Not set     | Set           |
+| **LININTERP**   | Uses linear interpolation instead of quadratic                | Flag           | Not set     | Set           |
+| **MIXEDINTERP** | Adapts between linear and quadratic interpolation based on metric | Flag           | Not set     | Set           |
+| **COMPACTREL**  | Special reltol for history compaction (used with `.OPTIONS`)   | RELTOL         | 1.0e-3      | -             |
+| **COMPACTABS**  | Special abstol for history compaction (used with `.OPTIONS`)   | ABSTOL         | 1.0e-9      | -             |
+| **TRUNCNR**     | Switches to Newton-Raphson time-step control                  | Flag           | Not set     | Set           |
+| **TRUNCDONTCUT**| Removes default time-step cuts for impulse-response errors    | Flag           | Not set     | Set           |
+
+**Flags and Options**:  
+1. **NOSTEPLIMIT**: Removes default restriction on small time-steps for RLC.  
+2. **NO CONTROL**: Prevents convolution error-based limiting of time-step (`RC`, `RLC`). Speeds up simulation but may decrease accuracy.  
+3. **LININTERP**: Activates linear interpolation (default is quadratic).  
+4. **MIXEDINTERP**: Uses linear interpolation selectively when quadratic is inappropriate.  
+5. **TRUNCDONTCUT**: Eliminates default time-step cuts for impulse-response accuracy.  
+6. **REL**: Breakpoint control (default = 1). Higher values (>2) eliminate breakpoints but may reduce simulation accuracy.  
+7. **COMPACTREL** and **COMPACTABS**: Control compaction of history values for convolution when `TRYTOCOMPACT` is active in `.OPTIONS`.  
+   - Legal range for `COMPACTREL`: 0 to 1; larger values lower accuracy but improve speed.  
+
+**Simulation Speed vs. Accuracy**:  
+- **Increase Speed**: Use options like `REL > 2`, `NO CONTROL`, `NOSTEPLIMIT`, `TRUNCDONTCUT`, and larger values of `COMPACTREL`.  
+- **Maintain Accuracy**: Avoid large values (>1) for `COMPACTREL`, and set `LEN` properly.
+
+**Examples** (*Unique Lines to Database*):  
+- `R=0.2 L=9.13e-9 G=0.0 C=3.65e-12 LEN=1 REL=0.5 ABS=5 NOSTEPLIMIT=Set LININTERP=Set`.  

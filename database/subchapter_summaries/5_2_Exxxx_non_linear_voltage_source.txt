@@ -1,0 +1,21 @@
+**Ngspice Manual Extract:**
+
+**Exxxx: Non-linear Voltage Source:**
+- **Purpose:** Defines a voltage source whose voltage depends on a user-specified expression or behavioral branch current model.
+- **Syntax:**  
+  `Exxxxx n+ n- FUNC <expression>`  
+  `Exxxxx n+ n- VALUE = value`  
+- **Parameters:**
+  - `n+`, `n-`: Positive and negative terminals of the voltage source.
+  - `FUNC <expression>`: Expression defining voltage behavior.
+  - `VALUE = value`: Assign a constant voltage source value directly.
+
+**Characteristics:**
+- Supports user-defined mathematical expressions for modeling non-linear voltage behavior.
+- Useful for simulating complex dependent voltage sources.
+
+**Examples:** Relevant and important codes (after analysis of example uniqueness):  
+  ```
+  E1 1 0 FUNC {SIN(TIME*2*pi)}
+  E2 2 0 VALUE = 5
+  ```

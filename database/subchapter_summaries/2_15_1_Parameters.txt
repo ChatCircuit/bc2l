@@ -1,0 +1,7 @@
+Parameters and functions in Ngspice (`.param` and `.func`) are evaluated before any simulation begins—during the setup of the circuit. As a result:
+
+- **Simulation data (voltage/current vectors)** cannot be used within `.param` or `.func` because they are not yet available during evaluation.
+- **Replacement and Evaluation:** During circuit setup, parameters and functions are computed, and resulting numerical values are substituted in the netlist.
+- **Immutability:** Once parameters are evaluated, they cannot be modified based on feedback during or after the simulation process.
+
+For detailed syntax, refer to Chapter 2.10.5.

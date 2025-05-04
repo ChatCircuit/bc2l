@@ -1,0 +1,9 @@
+**Summary**  
+- `.model JM1 NJF level=1`  
+- `.model JMOD2 PJF level=2`  
+
+Defines basic JFET models.  
+- `NJF` specifies an N-channel JFET.  
+- `PJF` specifies a P-channel JFET.  
+- `level`: Specifies the level of the JFET model (e.g., `1`, `2`).
+

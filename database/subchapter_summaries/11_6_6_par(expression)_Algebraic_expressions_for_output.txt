@@ -1,0 +1,36 @@
+### Summary of Ngspice Section 11.6.6: `par('expression')` for Algebraic Expressions in Output
+
+#### General Description:
+- **`par('expression')`** allows incorporating algebraic expressions into output lines like `.four`, `.plot`, `.print`, `.save`, and `.measure`. These expressions can include vectors, predefined functions, numerical values, constants, simulator outputs (`v(n1)`, `i(vdb)`), parameters (`.param`), and predefined variables (`hertz`, `temper`, `time`).  
+- Operates on **complex values** in AC analysis mode.
+
+#### Internals:
+- Internally, each `par('expression')` generates a voltage node named `pa_00` to `pa_99`. These nodes are produced by a B-source. An error will occur if these reserved node names are manually used in the input file.
+- Limited to **99 `par('...')` instances** per input file.
+
+#### Syntax Rules:
+- Strict syntax for **`par('expression')`**:
+  - No spaces between `par` and `('`.
+  - `('` and `')` are mandatory.
+  - Input errors may result in unexpected behavior with little error-handling mechanisms.
+
+#### Alternate Syntax (for `.four`, `.plot`, `.print`, `.save` but not `.measure`):
+- **`output=par('expression')`** is also possible.
+  - `output` becomes the name of the new node replacing the expression.
+  - `output` must be **unique** and a valid node name.
+  - Syntax for this is strict (follows the same rules as above).
+
+#### Theoretical Characteristics:
+- Values of type **complex** processed by B-source in AC mode.
+- Expressions are valid if applicable to B-source characteristics (see Chapter 5.1 for details).
+
+#### Examples:
+- **Netlist Examples**:
+  1. `.four 1001 sq1=par('v(1)*v(1)')`
+  2. `.measure tran vtest find par('(v(2)*v(1))') AT=2.3m`
+  3. `.print tran output=par('v(1)/v(2)') v(1) v(2)`
+  4. `.plot dc v(1) diff=par('(v(4)-v(2))/0.01') out222`
+
+#### Notes and Limitations:
+- `.measure` does not support `output=par('expression')`.
+- Minimal error checking: typos can lead to unpredictable behaviors.

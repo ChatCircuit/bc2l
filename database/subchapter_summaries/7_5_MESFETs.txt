@@ -1,0 +1,31 @@
+**Summary on MESFETs (Ngspice Manual Section 7.5)**
+
+1. **Component Overview**:  
+   MESFETs (Metal-Semiconductor Field-Effect Transistors) are represented in Ngspice with precision for simulating semiconductor behavior.  
+
+2. **Syntax for MESFET**:  
+   ```
+   Mxxx nd ng ns [sb] mname [L=val] [W=val] [AD=val] [AS=val]
+   ```
+   - `nd`: Drain node.  
+   - `ng`: Gate node.  
+   - `ns`: Source node.  
+   - `sb`: Optional substrate (bulk) node.  
+   - `mname`: Model name.  
+   - Optional parameters:  
+     - `L`: Gate length (default=0).  
+     - `W`: Gate width (default=0).  
+     - `AD`, `AS`: Area of drain/source diffusion (default=0).  
+
+3. **Model Characteristics**:  
+   - Based on Shockley approximation and advanced device modeling parameters.  
+   - Allows inclusion of additional geometries, temperature effects, and junction capacitances.  
+
+4. **Default Values**:  
+   - Unless specified, dimensions (e.g., `L`, `W`) and areas (`AD`, `AS`) default to zero.  
+
+5. **Usage Notes**:  
+   - All modeling requires an associated `.model` definition in the netlist for device-specific parameters.  
+   - Optimize performance by specifying realistic values for `L`, `W`, `AD`, `AS`.  
+
+**End of Extract**

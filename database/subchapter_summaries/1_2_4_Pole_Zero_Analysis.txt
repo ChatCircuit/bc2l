@@ -1,0 +1,23 @@
+**Summary of Pole-Zero Analysis (Ngspice Manual):**
+
+- **Purpose:** Computes poles and/or zeros in the small-signal AC transfer function.
+
+- **Process:**
+  1. Determines DC operating point.
+  2. Creates linearized, small-signal models for nonlinear devices.
+  3. Uses small-signal circuit models to find poles and zeros.
+
+- **Supported Transfer Functions:**  
+  - (Output voltage) / (Input voltage)  
+  - (Output voltage) / (Input current)  
+
+  These cover cases such as input/output impedance and voltage gain.
+
+- **Input/Output Ports Specification:** Two pairs of nodes.
+
+- **Supported Components:** Resistors, capacitors, inductors, linear-controlled sources, independent sources, BJTs, MOSFETs, JFETs, diodes.  
+  **Not Supported:** Transmission lines.
+
+- **Numerical Method:** Sub-optimal numerical search.  
+  - May be computationally expensive for large circuits.  
+  - May fail or find excessive poles/zeros in certain cases.

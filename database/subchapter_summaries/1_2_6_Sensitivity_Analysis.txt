@@ -1,0 +1,8 @@
+1.2.6 Sensitivity Analysis:  
+Ngspice can compute:  
+- **DC operating-point sensitivity** or **AC small-signal sensitivity** of an output variable (node voltage/branch current) relative to all circuit variables, including model parameters.  
+- It perturbs each parameter of every device independently to observe the change.  
+
+Characteristics:  
+- The method is a **numerical approximation**, which may show second-order effects in highly sensitive parameters or fail to reveal very low but non-zero sensitivities.  
+- **Zero-valued parameters** are excluded to reduce excessive data since they cannot be perturbed.  
