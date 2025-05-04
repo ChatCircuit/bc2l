@@ -117,8 +117,8 @@ def retrieve_docs(query, top_n = 1):
 if __name__ == "__main__":
     # Example initialization
     Prepare_RAG_DBQ(
-        index_path="./DB/ngspice_index.faiss",
-        meta_path="./DB/ngspice_meta.npy"
+        index_path="./database/DB/ngspice_index.faiss",
+        meta_path="./database/DB/ngspice_meta.npy"
     )
 
 
