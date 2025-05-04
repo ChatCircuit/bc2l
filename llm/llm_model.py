@@ -154,7 +154,7 @@ def Call_Agent(user_message, mode = 'Complex', count_token = False):
     return parsed_json, Response
 
 
-def Prepare_llm(DQuery = False, llm='gpt'):
+def Prepare_llm(DQuery = False, llm='gpt-o3-mini'):
     global api_version, api_key, LLM, api_endpoint, deployment_name, client, System_Prompt_Complex, tokenizer, DBG
     # Retrieve environment variables  
     LLM = llm
@@ -183,7 +183,7 @@ def Prepare_llm(DQuery = False, llm='gpt'):
             api_version=api_version,  # Use the latest supported Azure API version  
             azure_endpoint=api_endpoint,  
         )
-    elif 'gpt' in LLM.lower():
+    elif 'deepseek' in LLM.lower():
         client = ChatCompletionsClient(
             credential=AzureKeyCredential(api_key),
             endpoint=api_endpoint

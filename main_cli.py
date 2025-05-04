@@ -73,7 +73,7 @@ def main():
     ############################
     ##### initialize llm and prompts and simulator
     ############################
-    llm_model.Prepare_llm(llm=os.getenv("LLM_MODEL"))  # prepare the LLM model
+    llm_model.Prepare_llm()  # prepare the LLM model
 
     from llm.cook_llm_feed import Prompt_manager
     prompt_manager = Prompt_manager(netlist=netlist, max_history_length=int((os.getenv("MAX_HISTORY_LENGTH"))))  # initialize the prompt manager with the netlist and max history length
