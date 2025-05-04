@@ -4,9 +4,9 @@ import argparse, logging, json, os, sys
 from dotenv import load_dotenv
 
 
-import database.static_database as static_database
+# import database.static_database as static_database
 import llm.llm_model as llm_model
-import database.database_query as database_query
+# import database.database_query as database_query
 # from python_interpreter import python_interpreter
 
 from logger import get_logger
