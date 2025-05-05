@@ -7,9 +7,13 @@
 
 # ignore folders
 trash_codes/
-yolo_model/
 ngspice-43_64/Spice64/
-llm_query_dataset/test_ckts/test_ckt_netlist all resources/
+
+_datasets/yolo_model/
+_datasets/llm_query_dataset/test_ckts/test_ckt_netlist all resources/
+_datasets/ckt_schematic_dataset/
+
+_models/
 
 # neural network weights
 *.bin

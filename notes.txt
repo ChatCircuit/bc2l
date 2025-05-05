@@ -1,0 +1,2 @@
+* to run the main_cli
+python main_cli.py -s netlist -f val_data/sample_netlist.cir

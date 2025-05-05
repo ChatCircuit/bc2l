@@ -8,6 +8,9 @@ import torch
 from PIL import Image
 import matplotlib.pyplot as plt
 
+from logger import get_logger
+logger = get_logger(__name__)
+
 def crop_bounding_boxes(img_path, bbox_arr, should_plot=False):
     '''
     returns a list of PIL images and their class
@@ -49,7 +52,7 @@ def crop_bounding_boxes(img_path, bbox_arr, should_plot=False):
 
 
 # model
-from classification_model.model import predict
+from model import predict
 
 
 def get_comp_bbox_class_orient(img_path):
@@ -67,7 +70,7 @@ def get_comp_bbox_class_orient(img_path):
     bbox_arr = get_comp_bbox(img_path)
 
     end_time = time.time()  # Record the end time
-    print(f">>>>>>>>>> Execution time for yolo: {end_time - start_time:.4f} seconds")
+    logger.info(f"Execution time for yolo: {end_time - start_time:.4f} seconds")
 
     # print(bbox_arr)
     # # only keeping the bounding boxes of COMPONENTS, ignoring text altogether now
@@ -100,7 +103,7 @@ def get_comp_bbox_class_orient(img_path):
             raise Exception("invalid class number found in bbox_arr")
 
     end_time = time.time()  # Record the end time
-    print(f">>>>>>>>>> Execution time for classfier model: {end_time - start_time:.4f} seconds")
+    logger.info(f"Execution time for classfier model: {end_time - start_time:.4f} seconds")
 
     return bbox_arr
 

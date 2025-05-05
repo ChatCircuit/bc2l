@@ -153,7 +153,7 @@ def get_COMPONENTS(skeleton_ckt, comp_bbox):
     # in pil: pixel => (x, y) 
     # in numpy: pixel => (y, x) y= row value, x = column value
 
-    from simulate import NON_ELECTRICAL_COMPS
+    NON_ELECTRICAL_COMPS = [-1, -2] #classes for COMPONENTS like crossover, junction etc
 
     # define all data structrues
     COMPONENTS = []
@@ -409,7 +409,7 @@ def reduce_nodes(skeleton_ckt: np.ndarray, comp_bbox: list[list[float]], NODE_MA
         none.
         modifies the NODE_MAP and COMPONENTS array in place as they are passed by reference by default
     '''
-    from simulate import NON_ELECTRICAL_COMPS
+    NON_ELECTRICAL_COMPS = [-1, -2] #classes for COMPONENTS like crossover, junction etc
 
     # remove all electrical COMPONENTS from the skeleton and find the contours
 

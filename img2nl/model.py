@@ -87,11 +87,11 @@ def get_model(model_name:str):
 
     if(model_name == "effnetv2"):
         model = MultiOutputEfficientNetV2(num_classes_task1=4, num_classes_task2=4)
-        model_weight_path = r"./classification_model/effnetv2_s_best_val_model.pth"
+        model_weight_path = r"_models/classification_models/effnetv2_s_best_val_model.pth"
 
     elif(model_name == "resnet18"):
         model = MultiOutputResNet(num_classes_task1=4, num_classes_task2=4)
-        model_weight_path = r"./classification_model/resnet18_best_val_model.pth"
+        model_weight_path = r"_models/classification_models/resnet18_best_val_model.pth"
     else:
         raise ValueError("Invalid model name specified. Couldn't load model")
     

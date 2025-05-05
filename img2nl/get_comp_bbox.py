@@ -26,8 +26,8 @@ def get_comp_bbox(img_path):
 
     img_path = img_path.replace("\\", "/") # converting windows style image path to linux  style
 
-    model_path = "./yolo_model/runs/train/exp/weights/best.pt"
-    parent_dir = Path(r".\yolo_model\runs\detect").resolve() # all folders within it are deleted in the beginning
+    model_path = "_models/yolo_model/runs/train/exp/weights/best.pt"
+    parent_dir = Path(r"_models/yolo_model/runs/detect").resolve() # all folders within it are deleted in the beginning
 
 
     # had to change the pathlib.py file in lib at dir "C:\Users\TestUser\AppData\Local\Programs\Python\Python39\Lib" 
@@ -66,7 +66,7 @@ def get_comp_bbox(img_path):
     device = 'cuda' if torch.cuda.is_available() else 'cpu' 
     print(f"Using device: {device}")    
 
-    from yolo_model import detect
+    from _models.yolo_model import detect
     
     detect.run(weights=model_path,
                source=img_path,
@@ -81,7 +81,7 @@ def get_comp_bbox(img_path):
 
     # fetch label txt file into an array
     # det_result_arr - an array containing the output txt file holding the object detection result into an array of float format
-    with open(f"./yolo_model/runs/detect/my_detection/labels/{img_name}.txt", "r") as file:
+    with open(f"_models/yolo_model/runs/detect/my_detection/labels/{img_name}.txt", "r") as file:
         det_result = file.read()
 
     det_result_arr = det_result.splitlines()

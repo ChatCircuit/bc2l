@@ -1,15 +1,31 @@
 '''
-contains the main simulation functionality
+given a circuit schematic image(hand drawn or computer generated),
+it will return the netlist of the circuit.
 '''
 
-from PIL import Image
-from pprint import pprint
+from PIL import Image, ImageDraw, ImageFont
+from scipy.ndimage import binary_dilation
+import numpy as np
+import time
+
+from my_utils import img_preprocess, skeletonize_ckt
+from make_netlist import make_netlist
+from my_utils import get_COMPONENTS
+from my_utils import reduce_nodes
+from get_comp_class_bbox_orient import get_comp_bbox_class_orient
+
+# get logger
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) #appending parent folder to sys path so that modules can be imported from there
+from logger import get_logger
+logger = get_logger(__name__)
+
+
+
 
 # * GLOBAL VARIABLES
 NON_ELECTRICAL_COMPS = [-1, -2] #classes for COMPONENTS like crossover, junction etc
 
-from PIL import Image
-import numpy as np
 
 def process_and_show_node_map(node_map: np.ndarray, ckt_img: Image.Image):
     """
@@ -22,10 +38,10 @@ def process_and_show_node_map(node_map: np.ndarray, ckt_img: Image.Image):
     Parameters:
         node_map (numpy.ndarray): Input 2D numpy array.
         ckt_img (PIL.Image.Image): Circuit image to overlay the node map onto.
+
+    Returns:
+
     """
-    from PIL import Image, ImageDraw, ImageFont
-    import numpy as np
-    from scipy.ndimage import binary_dilation
 
     # Create a copy to avoid modifying the original array
     processed_map = np.nan_to_num(node_map, nan=-1)  # Replace NaN with -1
@@ -65,47 +81,39 @@ def process_and_show_node_map(node_map: np.ndarray, ckt_img: Image.Image):
 
     # Blend the images (node map overlay is semi-transparent)
     combined_img = Image.blend(combined_img, node_map_img_resized, alpha=0.3)
-    
-
-    # Display the combined image
-    # combined_img.show()
 
     return combined_img 
 
 
 
-def simulate_from_img(path: str):
+def img2nl(path: str):
     '''
     given the path to an image, it returns ??
     '''
     global NON_ELECTRICAL_COMPS
-    import time
     ekdom_start = time.time()
 
     start_time = time.time()  # Record the start time
 
     ckt_img = Image.open(path).convert('L')  # Convert to grayscale
     end_time = time.time()  # Record the end time
-    print(f">>>>>> Execution time for image open : {end_time - start_time:.4f} seconds")
 
     # * skeletonize the ckt
     start_time = time.time()  # Record the start time
 
-    from my_utils import img_preprocess, skeletonize_ckt
-    ckt_img_enhanced = img_preprocess(ckt_img, contrast_factor=3, sharpness_factor=1, show_enhanced_img=False)
-    skeleton_ckt = skeletonize_ckt(ckt_img_enhanced, kernel_size=3,show_skeleton_ckt=False)
+    ckt_img_enhanced = img_preprocess(ckt_img, contrast_factor=1, sharpness_factor=1, show_enhanced_img=False)
+    skeleton_ckt = skeletonize_ckt(ckt_img_enhanced, kernel_size=6,show_skeleton_ckt=False)
     ############################################################################################
     
     end_time = time.time()  # Record the end time
-    print(f">>>>>> Execution time for skeletonize : {end_time - start_time:.4f} seconds")
+    logger.info(f"Execution time for skeletonize : {end_time - start_time:.4f} seconds")
 
     # * get component bounding box
     start_time = time.time()  # Record the start time
-    from get_comp_class_bbox_orient import get_comp_bbox_class_orient
     comp_bbox = get_comp_bbox_class_orient(path)
 
     end_time = time.time()  # Record the end time
-    print(f">>>>>> Execution time for all models: {end_time - start_time:.4f} seconds")
+    logger.info(f"Execution time for all models: {end_time - start_time:.4f} seconds")
 
     ## only keeping the electrical COMPONENTS in the ckt skeleton image
     # electrical_component_bbox = [[comp_class, x, y, w, h, comp_orientation, comp_name], [....], .....] 
@@ -122,56 +130,41 @@ def simulate_from_img(path: str):
     # * assigning nodes to components
     start_time = time.time()  # Record the start time
 
-    from my_utils import get_COMPONENTS
     COMPONENTS, NODE_MAP, all_start_points = get_COMPONENTS(skeleton_ckt, comp_bbox)
 
 
     # * finding connection between components and reducing node counts
-    from my_utils import reduce_nodes
     reduce_nodes(skeleton_ckt, comp_bbox, NODE_MAP, COMPONENTS, all_start_points)
     
     end_time = time.time()  # Record the end time
-    print(f">>>>>> Execution time for nodal algos: {end_time - start_time:.4f} seconds")
+    logger.info(f"Execution time for nodal algos: {end_time - start_time:.4f} seconds")
 
-    # * make ckt and simulate
+    # * make ckt netlist
     start_time = time.time()  # Record the start time
 
-    from make_netlist import make_netlist
     circuit = make_netlist(COMPONENTS) # from the connection described in the COMPONENTS array, get the circuit object
+    ckt_netlist_str = str(circuit)
 
-    # TODO: this is where LLM comes into play after the circuit object is made
-    from analyse import Analyzer
-    analyzer = Analyzer(circuit)
-    comp_voltages = analyzer.get_comp_voltages(COMPONENTS)
-
-    end_time = time.time()  # Record the end time
-    print(f">>>>>> Execution time for simulation: {end_time - start_time:.4f} seconds")
 
     ekdom_sesh = time.time()
-    print(f">>>>>> total execution time: {ekdom_sesh - ekdom_start:.4f} seconds")
+    logger.info(f"total execution time: {ekdom_sesh - ekdom_start:.4f} seconds")
 
     combined_img = process_and_show_node_map(NODE_MAP, ckt_img)
 
-    # create ckt_netlist and add component names in the electrical_component_bbox list
-    ckt_netlist_str = str(circuit)
-
-    ckt_netlist = str(circuit).split('\r\n')
-    print(f"====> ckt netlist: {ckt_netlist}")
-
-    for i, line in enumerate(ckt_netlist[1:]):  # Skip the title line
-        if line:  # Ensure the line is not empty
-            component_name = line.split()[0]
-            electrical_component_bbox[i].append(component_name)
-
-    return electrical_component_bbox, comp_voltages, combined_img, ckt_netlist_str, analyzer
+    return ckt_netlist_str, combined_img
 
 
 if __name__ == "__main__":
     # path = r"ckt5.jpg"
     # path = r"C:\Users\Touhid2\Desktop\50_jpg.rf.dfa9222529f42fb211b7fd65119dddf3.jpg"
     # path = r"ckt1.jpeg"
-    path = r"ckt10.png"
-    simulate_from_img(path)
 
-    print('done simulation')
-    # print("----------simulation result:", bbox, volts)
+    # path = r"val_data/ckt10.jpg"
+    path = r"H:\NOTHING\#Projects\bring_ckt_to_life_project\code\val_data\motu_challenge_ckt.jpeg"
+    netlist, combined_img = img2nl(path)
+    print(f"netlist: {netlist}")
+    
+    # Display the combined image
+    combined_img.show()
+
+

@@ -3,6 +3,12 @@ from PySpice.Unit import *
 from engineering_notation import EngNumber
 from pprint import pprint
 
+# get logger
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from logger import get_logger
+logger = get_logger(__name__)
+
 def make_netlist(COMPONENTS):
     '''
     given the array COMPONENTS it returns  a pyspice circuit object.
@@ -26,8 +32,8 @@ def make_netlist(COMPONENTS):
     l_count = 0
     vdc_count = 0
 
-    print('nodal connections (0: cap, 1: inductor, 2: resistor, 3: vdc): \n')
-    pprint(COMPONENTS)
+    logger.info('nodal connections (0: cap, 1: inductor, 2: resistor, 3: vdc): \n')
+    logger.info(f"COMPONENTS: {COMPONENTS}")
     
     for component in COMPONENTS:
         comp_class = component[0]
@@ -47,25 +53,25 @@ def make_netlist(COMPONENTS):
 
         # TODO: using a default value for all COMPONENTS, gotta find a way to extract value
         if(comp_name == 'resistor'):
-            print("adding resistor to ckt")
+            logger.debug("adding resistor to ckt")
             r_count = r_count + 1
             
             circuit.R( f"{r_count}", nodes_connected[0], nodes_connected[1], 1 @u_kΩ) 
 
         elif(comp_name == 'capacitor_unpolarized'):
-            print("adding capactor_unpolarized to ckt")
+            logger.debug("adding capactor_unpolarized to ckt")
             c_up_count= c_up_count + 1
 
             circuit.C(f"{c_up_count}", nodes_connected[0], nodes_connected[1], 1@u_uF)
 
 
         elif(comp_name == 'inductor'):
-            print("adding inductor to ckt")
+            logger.debug("adding inductor to ckt")
             l_count = l_count + 1
             circuit.L(f"{l_count}", nodes_connected[0], nodes_connected[1], 1@u_mH)
 
         elif(comp_name == 'vdc'):
-            print("adding vdc to ckt")
+            logger.debug("adding vdc to ckt")
             vdc_count = vdc_count + 1
             
             # TODO: Add polarity handling here
@@ -80,7 +86,7 @@ def make_netlist(COMPONENTS):
             circuit.V(f"{vdc_count}",  plus_node, minus_node, 10@u_V)
             
         else:
-            print(f"component '{comp_name}' not yet implemented")
+            logger.error(f"component '{comp_name}' not yet implemented")
 
 
     # print("------ netlist of the circuit: ")
