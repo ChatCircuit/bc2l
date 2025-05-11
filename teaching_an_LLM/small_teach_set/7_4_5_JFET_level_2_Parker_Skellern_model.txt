@@ -1,0 +1,58 @@
+**Ngspice JFET Level 2 Parker Skellern Model (7.4.5 Summary)**
+
+1. **Key Characteristics of the Model**:
+   - Improvements over Level 1 JFET model with smooth high-order derivatives, crucial for distortion and intermodulation predictions.
+   - Frequency-dependent output conductance and transconductance as bias functions.
+   - Accurate pinch-off potential modulation by both drain-gate and source-gate potentials, matching S-parameter and pulsed-bias measurements.
+   - Self-heating varies with frequency.
+   - Includes all extreme operating regions (subthreshold, forward gate bias, controlled resistance, breakdown).
+   - Independent fitting parameters for different operating regions, preventing compromises.
+   - Strict drain-source symmetry with smooth transitions during drain-source potential reversal.
+
+2. **Supported Parameters**:
+   | **Name**  | **Description**                        | **Units** | **Default** |
+   |-----------|----------------------------------------|-----------|-------------|
+   | ID        | Device identifier                     | Text      | PF1         |
+   | ACGAM     | Capacitance modulation                | -         | 0           |
+   | BETA      | Linear-region transconductance scale  | -         | 10^-4       |
+   | CGD       | Zero-bias gate-drain capacitance      | F         | 0           |
+   | CGS       | Zero-bias gate-source capacitance     | F         | 0           |
+   | DELTA     | Thermal reduction coefficient         | 1/W       | 0           |
+   | FC        | Forward bias capacitance parameter    | -         | 0.5         |
+   | HFETA     | High-frequency Vgs feedback param.    | -         | 0           |
+   | HFE1      | HFGAM modulation by Vgd               | 1/V       | 0           |
+   | HFE2      | HFGAM modulation by Vgs               | 1/V       | 0           |
+   | HFGAM     | High-frequency Vgd feedback param.    | -         | 0           |
+   | HFG1      | HFGAM modulation by Vsg               | 1/V       | 0           |
+   | HFG2      | HFGAM modulation by Vdg               | 1/V       | 0           |
+   | IBD       | Gate-junction breakdown current       | A         | 0           |
+   | IS        | Gate-junction saturation current      | A         | 10^-14      |
+   | LFGAM     | Low-frequency feedback parameter      | -         | 0           |
+   | LFG1      | LFGAM modulation by Vsg               | 1/V       | 0           |
+   | LFG2      | LFGAM modulation by Vdg               | 1/V       | 0           |
+   | MVST      | Subthreshold Modulation               | 1/V       | 0           |
+   | N         | Gate-junction ideality factor         | -         | 1           |
+   | P         | Linear-region power-law exponent      | -         | 2           |
+   | Q         | Saturated-region power-law exponent   | -         | 2           |
+   | RS        | Source ohmic resistance               | Ω         | 0           |
+   | RD        | Drain ohmic resistance                | Ω         | 0           |
+   | TAUD      | Thermal reduction relaxation time     | s         | 0           |
+   | TAUG      | Gamma feedback relaxation time        | s         | 0           |
+   | VBD       | Gate-junction breakdown potential     | V         | 1           |
+   | VBI       | Gate-junction potential               | V         | 1           |
+   | VST       | Subthreshold potential                | V         | 0           |
+   | VTO       | Threshold voltage                     | V         | -2.0        |
+   | XC        | Capacitance pinch-off reduction factor| -         | 0           |
+   | XI        | Saturation-knee potential factor      | -         | 1000        |
+   | Z         | Knee transition parameter             | -         | 0.5         |
+   | RG        | Gate ohmic resistance                 | Ω         | 0           |
+   | LG        | Gate inductance                       | H         | 0           |
+   | LS        | Source inductance                     | H         | 0           |
+   | LD        | Drain inductance                      | H         | 0           |
+   | CDSS      | Fixed drain-source capacitance        | F         | 0           |
+   | AFAC      | Gate-width scale factor               | -         | 1           |
+   | NFING     | Number of gate fingers scale factor   | -         | 1           |
+   | TNOM      | Nominal temperature (unused)          | K         | 300 K       |
+   | TEMP      | Temperature                           | K         | 300 K       |
+
+This structured list provides the exact parameters, default values, and unit specifications necessary for netlist setup and debugging of the Level 2 JFET Parker-Skellern model.

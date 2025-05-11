@@ -9,7 +9,8 @@ from typing import List, Dict
 import RAG_db_creation as crag
 
 # Globals to be configured
-DATA_DIR = "subchapter_summaries"
+# DATA_DIR = "subchapter_summaries"
+DATA_DIR = r"H:\NOTHING\#Projects\bring_ckt_to_life_project\code\database\subchapter_summaries"
 INDEX_PATH = None
 META_PATH = None
 EMBED_MODEL = None
@@ -123,13 +124,14 @@ if __name__ == "__main__":
 
 
     while True:
+        print("\n\n\n\n\n############################################################################")
         user_query = input("Enter your query (type 'quit' to exit): ")
         if user_query.lower() == 'quit':
             print("Exiting...")
             break
-        top_docs = retrieve_docs(user_query, top_n=3)
+        top_docs = retrieve_docs(user_query, top_n=5)
         print("Top relevant documents:")
         for d in top_docs:
-            print(f"\n\n\n\n\n\t\t >>>>>>>> FILE NAME:  {d['id']}")
+            print(f"\n\n\n\n\\t\t >>>>>>>> FILE NAME:  {d['id']}")
             with open(os.path.join(DATA_DIR, d['id']), 'r', encoding="utf-8") as file:
                 print(file.read())

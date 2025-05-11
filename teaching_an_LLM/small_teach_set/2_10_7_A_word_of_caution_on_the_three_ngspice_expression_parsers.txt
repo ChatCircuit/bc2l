@@ -1,0 +1,14 @@
+- **Deprecated Notation**: The historical parameter notation using `&` as the first character of a line (equivalent to `.param`) is deprecated and will be removed in a future release.
+
+- **Expression Parsers and Evaluation**:
+  - **Front-End Evaluation**: `.param` lines and brace `{}` expressions are evaluated in the front-end during netlist expansion, making all number attributes known constants before internal data setup.
+  - **Run-Time Evaluation**: Arithmetic expressions (without `{}`) specific to certain components (B-sources, E-sources, G-sources, and R-, L-, or C-devices) are evaluated during the circuit analysis stage.
+  
+- **Syntactic Difference**:
+  - Compile-time expressions use braces `{...}`.
+  - Run-time expressions do **not** use braces `{}`.
+
+- **Ngspice Scripting Language**: Separately, the ngspice scripting language accepts arithmetic/logic expressions that operate only on its scalar or vector data sets.
+
+- **Implementation Limitation**: Uniform expression syntax, operator/function sets, and precedence rules are not consistently achieved across `.param`, run-time expressions, and back-end scripting.
+

@@ -1,0 +1,47 @@
+.dc command in Ngspice is used to define a **DC transfer curve** sweep of sources, resistors, or circuit temperature under DC conditions (capacitors open, inductors shorted).
+
+### General Syntax:
+```
+.dc srcnam vstart vstop vincr [src2 vstart2 vstop2 vincr2]
+```
+
+### Parameters:
+- **srcnam**: Name of a voltage/current source, resistor, or temperature being swept.
+- **vstart, vstop, vincr**: Start value, stop value, and increment step for the sweep.
+- **src2, vstart2, vstop2, vincr2**: (Optional) A second independent variable for a nested sweep.
+
+### Functionality:
+- Sweeps the primary source (`srcnam`) over the specified range.
+- If a second sweep source (`src2`) is provided, the second variable sweeps over its range and, for each of its values, the primary source is fully swept.
+
+#### Use Case:
+- Provides characteristics such as device output curves or circuit performance under varying parameters.
+
+### Examples:
+1. **Single Sweep**:
+   ```
+   .dc VIN 0.25 5.0 0.25
+   ```
+   Sweeps voltage source `VIN` from 0.25 V to 5.0 V in steps of 0.25 V.
+
+2. **Nested Sweep**:
+   ```
+   .dc VDS 0 10 .5 VGS 0 5 1
+   ```
+   Sweeps `VDS` from 0 to 10 V in steps of 0.5 V, with `VGS` nested: sweeping from 0 to 5 V in steps of 1 V.
+
+3. **Resistor Sweep**:
+   ```
+   .dc RLoad 1k 2k 100
+   ```
+   Sweeps resistor `RLoad` from 1 kΩ to 2 kΩ in steps of 100 Ω.
+
+4. **Temperature Sweep**:
+   ```
+   .dc TEMP -15 75 5
+   ```
+   Sweeps circuit temperature from -15 °C to 75 °C in steps of 5 °C.
+
+### Characteristics:
+- **Independent source control** allows precise testing across a range of configurations.
+- **Nested sweeps** facilitate device characterization (e.g., transistor output curves).

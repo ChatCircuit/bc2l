@@ -1,0 +1,12 @@
+* RC Parallel Circuit - Measuring Capacitor Current (savecurrents method)
+
+V1 in 0 PULSE(0 5 0 1n 1n 1u 2u)  ; Pulse source for transient analysis
+
+R1 in out 1k
+R2 in out 2k
+C1 out 0 1u
+
+.options savecurrents
+.tran 0.1u 10u
+.print tran V(out) I(C1)
+.end

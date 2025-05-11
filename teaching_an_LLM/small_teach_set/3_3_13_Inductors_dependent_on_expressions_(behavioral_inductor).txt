@@ -1,0 +1,44 @@
+- **Behavioral Inductor Syntax**:  
+  - General Form:
+    ```
+    LXXXXXXX n+ n- L = 'expression' <tc1=value> <tc2=value>
+    LXXXXXXX n+ n- 'expression' <tc1=value> <tc2=value>
+    ```
+    - `n+` and `n-`: Positive and negative nodes.  
+    - `L = 'expression'`: Expression defines inductance, can depend on node voltages, branch currents, or special variables like `time`, `temper`, and `hertz`.
+    - `<tc1=value>` `<tc2=value>`: Optional temperature coefficients.
+
+- **Allowed Variables and Parameters**:  
+  - Expressions can include node voltages, branch currents (`i(Vsource)`), time (`time`), temperature (`temper`), frequency (`hertz`), and user-defined parameters.
+
+- **Example Behavioral Inductor Code**:  
+   ```
+   .param Ll=0.5m Lh=5m It=50u Vi=2m
+   .ic v(int21) = 0
+   * Behavioral inductor based on control current i(Vm)
+   L1 l2 lll L = 'i(Vm) < {It} ? {Ll} : {Lh}'
+   * Fixed inductor setup
+   L3 33 331 {Ll}
+   * Non-linear inductor (discrete/model-based setup)
+   F21 int21 0 B21 -1
+   L21 int21 0 1
+   B21 n1 n2 V = '(i(Vm21) < {It} ? {Ll} : {Lh})' * v(int21)
+   ```
+
+- **Key Notes on Example**:  
+  - The inductor `L1` changes inductance (`Ll` or `Lh`) based on the control current `i(Vm)` compared to a threshold `It`.  
+  - Fixed inductor `L3` always uses the value of `Ll`.  
+  - Non-linear inductor (`L21` + `B21`) mimics behavior using equations at `v(int21)`.
+
+- **Commands for Analysis**:  
+   ```
+   .control
+   unset askquit
+   tran 1u 100u uic
+   plot i(Vm) i(vm33)
+   plot i(vm21) i(vm33)
+   plot i(vm)-i(vm21)
+   .endc
+   ```
+
+This defines transient analysis (`tran`) and plotting commands for comparing currents through different inductors.

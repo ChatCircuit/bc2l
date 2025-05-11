@@ -1,0 +1,44 @@
+### Summary:
+
+#### Command:
+```
+.SENS OUTVAR [< filter ...>] [DC]  
+.SENS OUTVAR [< filter ...>] AC DEC ND FSTART FSTOP  
+.SENS OUTVAR [< filter ...>] AC OCT NO FSTART FSTOP  
+.SENS OUTVAR [< filter ...>] AC LIN NP FSTART FSTOP  
+```
+
+#### Description:
+- **Purpose**: The .SENS analysis calculates the sensitivity of a specified circuit variable `OUTVAR` (node voltage or voltage-source branch current) to device and model parameters. Sensitivity is measured as the change in output per unit change in input.
+
+- **Forms**:
+  1. **DC Sensitivity**: Calculates sensitivity of the DC operating-point value of `OUTVAR`.
+  2. **AC Sensitivity**:
+     - Frequency sweep parameters (`DEC`, `OCT`, `LIN`) match those in `.AC` analysis.
+     - Outputs frequency-dependent sensitivity of `OUTVAR`.
+
+- **Output**:
+  - Dimensions: Change in output per unit change of input.
+  - Default: All modifiable, real-valued parameters are varied.  
+    - **Device parameters**: Vector name is the device name (e.g., resistance, inductance).  
+    - **Model parameters**: Named in the format `model:parameter`.
+
+- **Filters**:
+  - Filters can restrict sensitivity calculations to specific parameters using wildcard matches:
+    - `*`: Matches any substring.
+    - `?`: Matches any single character.
+
+#### Examples:
+```
+.SENS V(1,OUT)  
+.SENS V(OUT) AC DEC 10 100 100k  
+.SENS I(VTEST) rbias m*_* q*:*  
+```
+- **Example 1**: Sensitivity of node V(1,OUT) (DC by default).  
+- **Example 2**: AC sensitivity of V(OUT) using a DEC sweep spanning 10 points per decade from 100 Hz to 100 kHz.  
+- **Example 3**: Sensitivity analysis includes specific resistor `rbias`, all MOSFET parameters (`m*_*`), and all BJT model parameters (`q*:*`).
+
+#### Key Details:
+- Sensitivity results can be visualized for specific devices or models by supplying a filter string.
+- Filters include `*` for broad matches or `?` for finer matching.
+- AC sweep settings mirror `.AC` sweep parameters (`DEC`, `OCT`, `LIN`).

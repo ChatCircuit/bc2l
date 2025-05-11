@@ -1,0 +1,38 @@
+**Summary of Ngspice Manual (Section 11.1.4 Transient Analysis Options)**
+
+- **AUTOSTOP**: Stops transient analysis after finishing `.meas` commands in batch/control mode. Not available with `meas` command in control mode.
+
+- **CHGTOL=x**: Sets charge tolerance. Default value: `1.0e-14`.
+
+- **CONVSTEP=x & CONVABSSTEP=x**: Relative and absolute step limits for code models, respectively.
+
+- **INTERP**: Interpolates output data onto fixed `TSTEP` grid using linear interpolation. Does not affect simulation but reduces memory usage (control mode) and file size (batch mode). Example: `Ngspice/examples/xspice/delta-sigma/delta-sigma-1.cir`.
+
+- **ITL3=x**: Lower transient analysis iteration limit. Default: `4`. *(Note: not in Spice3)*.
+
+- **ITL4=x**: Time-point transient iteration limit. Default: `10`.
+
+- **ITL5=x**: Total transient analysis iteration limit. Default: `5000`. Set `ITL5=0` to disable this test. *(Note: not in Spice3)*.
+
+- **ITL6=x [*]**: Synonym for `SRCSTEPS`.
+
+- **MAXEVTITER=x & MAXOPALTER=x**: Maximum event iterations per analysis point and maximum analog/event alternations for solving hybrid circuits, respectively.
+
+- **MAXORD=x [*]**: Maximum order for numerical integration:
+  - Gear method (`2-6`); Default: `2`.
+  - Trapezoidal method (`1`: backward Euler).
+
+- **METHOD=name**: Sets numerical integration method:
+  - Options: `Gear`, `trapezoidal` (`trap`).
+  - Default: `trapezoidal`.
+
+- **NOOPALTER=TRUE|FALSE**: If `FALSE`, enables analog-event alternations for XSPICE models during initial DC operating analysis.
+
+- **RAMPTIME=x**: Rate of change for independent sources during source stepping; affects inductors/capacitors with initial conditions.
+
+- **SRCSTEPS=x [*]**: Activates source-stepping method for DC operating point solution. Specifies the number of steps.
+
+- **TRTOL=x**: Sets transient error tolerance. Default: `7`. Value internalized to `1` for higher precision in XSPICE configurations with `'A'` devices (slows transient analysis). 
+
+- **XMU=x**: Damping factor for trapezoidal integration. Default: `0.5`. Lower values (e.g., `0.495`) may suppress trap ringing but must be carefully adjusted to avoid excessive damping.
+

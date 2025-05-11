@@ -4,5 +4,5 @@ V1 1 0 10V
 R1 1 2 200
 R2 2 0 1k
 C1 2 0 1uF ic=0
-.op
+.ops
 .end

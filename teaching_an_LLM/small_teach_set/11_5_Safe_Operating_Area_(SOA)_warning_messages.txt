@@ -1,0 +1,28 @@
+**Summary:**
+
+1. **Safe Operating Area (SOA) Warning Mechanism**:  
+   - To enable SOA warnings, set `.option warn=1`. Warnings will be issued during `.op`, `.dc`, and `.tran` analyses if branch voltages, currents, dissipated power, or resulting temperatures of devices (Resistors, Capacitors, Diodes, BJTs, MOSFETs) exceed parameter limits specified in the device models.  
+   - Default parameter values are positive and set to infinity unless changed in the netlist.
+
+2. **Advanced SOA Warning Option**:  
+   - Set `.option warn=2` for additional operating point information (specific to the bipolar VBIC model).
+
+3. **Execution in Transient Analysis**:  
+   - The SOA check is executed at each time step after Newton-Raphson iterations in transient analysis.
+
+4. **Warning Message Limitation**:  
+   - Use `.option maxwarns=<number>` (default: 5) to limit the count of SOA warning messages.
+
+5. **Output Control**:  
+   - Warning messages go to `stdout` by default or to a file specified by the command line option `--soa-log=filename`.
+
+6. **Setting SOA Limits**:  
+   - To enable SOA checking, appropriate limit values must be added to `.model` parameters for the respective device.
+
+**Example Directives:**  
+- `.option warn=1`  
+- `.option warn=2` (for VBIC model)  
+- `.option maxwarns=5`  
+- Command-line option: `--soa-log=filename`  
+
+Ensure `.model` parameters include relevant limit values for SOA warnings to function properly.

@@ -1,0 +1,48 @@
+all the contents in the manual can be divided into 4 parts: 
+1. general info about ngspice (gi)
+2. circuit description info (cd)
+3. devices info (di)
+4. simulation commands info (sc)
+
+
+ch1 - gi
+ch2 - cd
+ch3 - di
+ch4 - di
+ch5 - di
+ch6 - di
+ch7 - di
+ch8 - XSPICE
+ch9 - VERILOG-A
+ch10 - di
+ch11 - sc
+ch12 - gi
+ch13 - gi
+ch14 - gi
+ch15 - gi
+ch16 - TCLSPICE
+ch17 - EXAMPLES
+ch18 - sc
+ch19 - NGSPICE AS CIRCUIT OPTIMIZER
+ch20 - NOTES
+------end of part 1 (ngspice) --------
+
+
+We have to teach all these to ngspice. but for phase 1, we will only teach a small portion of it and test out the llm's performance. 
+
+---------PHASE 1:---------------------
+teach the following chapters/subchapters
+
+ch11 - simulation directives
+
+ch2 - circuit description
+ch3 - basic ckt elements
+ch4 - voltage and current sources
+ch7 - bjt, diodes, mosfets etc.
+
+ 
+list of important chapters/subchapters: 
+* 11.3 - all the different analysis types
+* 11.6.5 - .probe
+* 11.7 - Measuring current through device terminals
+

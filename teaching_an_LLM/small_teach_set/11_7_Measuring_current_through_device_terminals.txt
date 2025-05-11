@@ -1,0 +1,10 @@
+**Summary: Measuring Current Through Device Terminals (Section 11.7 - Ngspice Manual)**
+
+- **Measuring Current**: To measure current through component terminals in a netlist, Ngspice requires the use of branch currents or probes.
+
+- **Keyword Syntax**:  
+  `I(Xdevice)` measures current through the device `Xdevice`.  
+  `I(Vname)` measures current through a voltage source defined by `Vname`.
+
+- **Theory**: For passive devices (resistors, capacitors, inductors), currents follow Kirchhoff's laws. For active devices (transistors, diodes), currents across terminals depend on the models and parameters provided.
+

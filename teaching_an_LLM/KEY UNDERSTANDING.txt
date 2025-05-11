@@ -1,0 +1,2 @@
+* add methods so that llm can learn from error of its own generated code
+* maybe learning is also about, creating connection between what someone is reading and with what somethin he previously read. 

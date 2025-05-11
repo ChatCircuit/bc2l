@@ -1,0 +1,31 @@
+**Summary for Netlist Code/Command Usage:**
+
+**Semiconductor Resistors Syntax:**
+```
+RXXXXXXX n+ n- <value> <mname> <l=length> <w=width>
++ <temp=val> <dtemp=val> <m=val> <ac=val> <scale=val> <noisy=0|1>
+```
+
+**Key Usage Details:**
+1. **`n+` and `n-`**: The two nodes to which the resistor is connected.
+2. **`value`**: Directly specifies the resistance value. Overrides geometric and model-based calculations.
+3. **`mname`**: Specifies a model for a process-based resistor calculation.
+4. **`l` and `w` (length and width)**:
+   - Required to calculate resistance if `value` is not provided.
+   - If `width` is omitted, it uses the model's default width.
+5. **Optional parameters**:
+   - `temp=val`: Operating temperature for this resistor (overrides `.option` or `dtemp`).
+   - `dtemp=val`: Temperature difference from the default.
+   - `m=val`: Multiplier for instance count.
+   - `ac=val`: AC value for small-signal analysis.
+   - `scale=val`: Scaling factor.
+   - `noisy=0|1`: Enable/Disable noise contribution.
+
+**Theoretical Notes:**
+- If `value` is provided, it takes precedence and the geometric (`l`, `w`) and process (`mname`) details are ignored.
+- If `value` is omitted, both `mname` and `length` must be specified for resistance calculation.
+
+**Examples:**
+1. `RLOAD 2 10 10K` (Fixed resistance of 10kΩ).
+2. `RMOD 3 7 RMODEL L=10u W=1u` (Resistance calculated based on a given model `RMODEL`, length `10u` and width `1u`).
+

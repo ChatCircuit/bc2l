@@ -1,0 +1,54 @@
+### Voltage and Current Sources (Ngspice Manual):
+
+#### Types and Syntax:
+1. **Independent Voltage/Current Sources**: 
+   - Voltage source: `Vxxx N+ N- Value`
+   - Current source: `Ixxx N+ N- Value`
+   - `Value` can be constant, an expression, or time-dependent waveform.
+
+2. **Controlled Sources**:
+   - Voltage-controlled voltage source (VCVS): `Exxx N+ N- NC+ NC- Gain`
+     - Default: Gain (linear amplification factor).
+   - Voltage-controlled current source (VCCS): `Gxxx N+ N- NC+ NC- Transconductance`
+   - Current-controlled voltage source (CCVS): `Hxxx N+ N- Vsrc Gain`
+     - `Vsrc`: Name of the controlling current source.
+   - Current-controlled current source (CCCS): `Fxxx N+ N- Vsrc Value`
+
+#### Time-dependent Sources:
+- PWL (Piecewise Linear): `Vxxx N+ N- PWL(Time1 Value1 Time2 Value2 ...)`
+- Sinusoidal: `SIN(Vo Va Freq Td Theta)`
+- Pulse: `PULSE(V1 V2 Tdelay Tr Tf Pw Period)`
+- Exponential: `EXP(V1 V2 Tdelay Tau1 Tau2)`
+
+#### Theoretical Characteristics:
+1. **VCVS (E)**: Ideal voltage amplification between output and input nodes.
+2. **VCCS (G)**: Direct transconductance, influencing current flow based on voltage inputs.
+3. **CCVS (H)**: Voltage output driven by controlling current source's gain.
+4. **CCCS (F)**: Direct current control by gain of input current.
+
+#### Default Values:
+- Sources will adopt zero values if parameters are undefined:
+  - For SIN sources, defaults include `Vo = 0` and the waveform parameters `Freq, Td, Theta`.
+
+#### Unique Example Code Snippet:
+1. **Voltage-Controlled Voltage Source**:
+   ```plaintext
+   E1 2 0 1 0 5
+   ```
+   - Amplification of node voltage (5x) between defined nodes.
+
+2. **Pulse Source**:
+   ```plaintext
+   V2 3 0 PULSE(0 5 1ms 10ns 10ns 100ms 200ms)
+   ```
+   - Pulse oscillates between 0V and 5V, with specified characteristics.
+
+3. **Controlled Current Source**:
+   ```plaintext
+   G1 5 0 2 0 0.01
+   ```
+   - Places current proportional to voltage differential (Transconductance: 0.01).
+
+#### Notes for Netlist Code Generation:
+- Maintain clarity in defining controlling nodes.
+- Time-dependent sources must include comprehensive time parameters to avoid simulation errors.

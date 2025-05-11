@@ -141,6 +141,7 @@ class Prompt_manager:
         returns the full prompt to be passed to the LLM.
         """ 
         return self.prompt
+        
 
 
 

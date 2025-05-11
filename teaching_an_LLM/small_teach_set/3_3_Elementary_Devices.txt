@@ -1,0 +1,25 @@
+### Section: 3.3 Elementary Devices (Ngspice Manual Summary)
+
+**Elementary devices** in Ngspice include basic circuit elements like resistors, capacitors, inductors, coupled inductors, mutual inductances, etc. The nodes, parameters, and key attributes associated with these components are outlined below:
+
+- **Resistor (R)**:  
+  Syntax: `Rxxx node1 node2 value`  
+  - `value`: Resistance in Ohms.  
+  - Can include temperature coefficients (`TC1`, `TC2`).  
+
+- **Capacitor (C)**:  
+  Syntax: `Cxxx node1 node2 value`  
+  - `value`: Capacitance in Farads.  
+  - Optional parameters:  
+    - `IC=<initial voltage>`: Initial condition.
+    - Models (`.model`) can specify non-linear capacitance.  
+
+- **Inductor (L)**:  
+  Syntax: `Lxxx node1 node2 value`  
+  - `value`: Inductance in Henrys.  
+  - Optional: Specify initial current using `IC=<initial current>`.  
+
+- **Coupled Inductors and Mutual Inductance (K)**:  
+  Syntax: `Kxxx L1 L2 ... Lk coupling_factor`  
+  - Coupling factor must satisfy `0 < coupling_factor ≤ 1`.  
+

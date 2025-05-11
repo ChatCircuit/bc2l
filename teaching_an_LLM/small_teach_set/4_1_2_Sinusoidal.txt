@@ -1,0 +1,28 @@
+**Summary for SIN Source in Ngspice:**
+
+1. **General Form:**
+   ```
+   SIN(VO VA FREQ TD THETA PHASE)
+   ```
+
+2. **Parameters Table:**
+   | **Name** | **Parameter**      | **Default Value** | **Units**  |
+   |----------|--------------------|-------------------|------------|
+   | VO       | Offset             | -                 | V, A       |
+   | VA       | Amplitude          | -                 | V, A       |
+   | FREQ     | Frequency          | 1/TSTOP           | Hz         |
+   | TD       | Delay              | 0.0               | sec        |
+   | THETA    | Damping factor     | 0.0               | 1/sec      |
+   | PHASE    | Phase              | 0.0               | degrees    |
+
+3. **Theoretical Characteristics (Formula):**
+   The voltage or current waveform is described by:
+   ```
+   V(t) = VO, if 0 ≤ t < TD
+   V(t) = VO + VA * exp(-(t-TD)*THETA) * sin(2π * FREQ * (t-TD) + PHASE), if TD ≤ t < TSTOP
+   ```
+
+4. **Example Syntax:**  
+   ```
+   VIN 3 0 SIN(0 1 100MEG 1NS 1E10)
+   ```

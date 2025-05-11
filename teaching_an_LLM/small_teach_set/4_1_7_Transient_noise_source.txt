@@ -1,0 +1,44 @@
+**Summary of Transient Noise Source (Ngspice Manual Section 4.1.7):**
+
+**General Form**  
+`TRNOISE(NA NT NALPHA NAMP RTSAM RTSCAPT RTSEMT)`
+
+**Description:**  
+The transient noise source injects experimental low-frequency noise (Gaussian, 1/f, and RTS) into voltage or current sources for transient analysis. Multiple noise types can be combined in one `TRNOISE` specification.
+
+**Key Parameters:**  
+- **NA**: RMS noise amplitude (Gaussian). Units: V or A. Default: None.
+- **NT**: Time step between sample values. Units: seconds. Default: None.
+- **NALPHA**: Exponent for 1/f noise (valid range: `0 < α < 2`). Default: None.
+- **NAMP**: Amplitude for 1/f noise. Units: V or A. Default: None.
+- **RTSAM**: Amplitude of Random Telegraph Signal (RTS). Units: V or A. Default: None.
+- **RTSCAPT**: Mean trap capture time (RTS). Units: seconds. Default: None.
+- **RTSEMT**: Mean trap emission time (RTS). Units: seconds. Default: None.
+
+**Important Notes:**  
+- `NT` and `RTSAM` set to `0` will ignore the `TRNOISE` contribution for individual sources.
+- Use the **`alter`** command to dynamically modify or disable transient noise:
+  - Example:  
+    `alter @vnoi[trnoise] = [0 0 0 0]  $ Disable noise`
+    `alter @vrts[trnoise] = [0 0 0 0 0 0 0] $ Disable RTS noise`
+- Disable all `TRNOISE` sources globally with:  
+  `set notrnoise` (in `.spiceinit` or control section).  
+  Enable again with: `unset notrnoise`.
+
+**Examples:**  
+1. White noise:  
+   `VNoiw 1 0 DC 0 TRNOISE(20n 0.5n 0 0)`
+2. 1/f noise:  
+   `VNoi1of 1 0 DC 0 TRNOISE(0 10p 1.1 12p)`
+3. Combined white and 1/f noise:  
+   `VNoiw1of 1 0 DC 0 TRNOISE(20 10p 1.1 12p)`
+4. Combined white, 1/f, RTS noise:  
+   `IALL 10 0 DC 0 trnoise(1m 1u 1.0 0.1m 15m 22u 50u)`
+
+**Implementation:**  
+- Applicable to independent **voltage sources** (`vsrc`) and **current sources** (`isrc`).
+
+**Reference Chapters for Further Details:**  
+- Chapter 11.3.11: Detailed description of transient noise.
+- Chapter 13.5.3: Description of `alter` command.
+

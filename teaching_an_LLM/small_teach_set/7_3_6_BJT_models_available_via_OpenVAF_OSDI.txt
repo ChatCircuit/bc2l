@@ -1,0 +1,31 @@
+### Summary for Netlist Code Generation/Modification/Debugging:
+
+#### **7.3.6 BJT Models via OpenVAF/OSDI**
+Ngspice, through its OSDI interface and OpenVAF compiler, supports additional Verilog-A compact BJT models designed to address modern device simulation needs.
+
+#### **Relevant Models:**
+
+1. **HICUM Level 0 (L0)**:
+   - Focus: Reduces simulation and design time for large circuits.
+   - Advantages: Modern BJT/HBT technologies support with accurate physical effect formulations for:
+     - **Forward transit time**
+     - **Base-collector punch-through**
+     - **Collector impact ionization**
+   - Improved over the traditional SPICE Gummel-Poon model.
+
+2. **HICUM Level 2 (L2)**:
+   - Focus: High-frequency and high-current-density transistor circuit design.
+   - Process Support: Si, SiGe, and III-V based technologies.
+   - Features:
+     - Accurate physical effect formulations.
+     - Geometry scaling and statistical modeling.
+     - Covers wide temperature, operating, and frequency ranges.
+
+3. **MEXTRAM (504 and 505)**:
+   - Focus: Detailed modeling of advanced bipolar transistors.
+   - Features:
+     - Superior to the Gummel-Poon model.
+     - Supports advanced processes (e.g., double-poly, SiGe transistors).
+     - Suitable for high-voltage power devices.
+
+This summarized information is dedicated to leveraging OpenVAF-supported BJT models for accurate and efficient circuit simulation in modern technologies.

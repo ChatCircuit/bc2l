@@ -1,0 +1,18 @@
+1. **Input File Structure for Ngspice**:
+   - **Essential Lines**:
+     - The first line must be the *title*. No special character is needed in the first place.
+     - The last line must be `.end`, followed by a newline delimiter.
+
+   - **Order and Structure**:
+     - The order of other lines is almost arbitrary, with exceptions:
+       - Continuation lines (must immediately follow the line being continued).
+       - `.subckt ... .ends` for subcircuit definitions.
+       - `.if ... .endif` for conditional statements.
+       - `.control ... .endc` for control block enclosures.
+     - Leading whitespaces are ignored.
+     - Empty lines are ignored.
+
+   - **Core Lines**:
+     - The lines from Sections 2.1 to 2.12 are generally placed outside the `.control` section unless stated otherwise.
+     - The `.include includefile` line can be placed anywhere in the input file, and the content of `includefile` is inserted in place of the `.include` line. 
+

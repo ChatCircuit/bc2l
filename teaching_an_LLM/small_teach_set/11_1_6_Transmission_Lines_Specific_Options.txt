@@ -1,0 +1,2 @@
+Transmission Lines Specific Options:  
+**TRYTOCOMPACT**: Used exclusively with the **LTRA model** (refer 6.2.1). When activated, the simulator attempts to condense the transmission line's historical input voltage and current data.

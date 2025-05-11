@@ -1,0 +1,49 @@
+**Summary for Netlist Code Use, Debugging, and Queries:**
+
+**Switches Overview:**
+- Two types:  
+  1. **Voltage-controlled switch**: "SXXXXXXX" (model: SW).  
+  2. **Current-controlled switch**: "WXXXXXXX" (model: CSW).  
+
+- Key characteristics:
+  - **Hysteresis** can be defined (ON or OFF state based on controlling signal range).
+  - **Resistance**: On-resistance (`R_on`) and off-resistance (`R_off`) must satisfy \(0 < R < \infty\).
+
+**General Syntax:**
+1. **Voltage-controlled switch**:  
+   `SXXXXXXX N+ N- NC+ NC- MODEL <ON><OFF>`  
+   - `N+`, `N-`: Termination nodes.  
+   - `NC+`, `NC-`: Positive and negative nodes for controlling voltage signal.  
+   - `MODEL`: Mandatory model for the switch.  
+   - `<ON>/<OFF>` (optional): Initial state when control signal is in hysteresis range.
+
+2. **Current-controlled switch**:  
+   `WYYYYYYY N+ N- VNAM MODEL <ON><OFF>`  
+   - `N+`, `N-`: Termination nodes.  
+   - `VNAM`: Voltage source controlling the current through it.  
+   - `MODEL`: Mandatory model for the switch.  
+   - `<ON>/<OFF>` (optional): Initial state when control current is in hysteresis range.
+
+**Key Details:**
+- Voltage-controlled switches:
+  - Control depends on the voltage between `NC+` and `NC-`.
+- Current-controlled switches:
+  - Control depends on the current flowing through the specified voltage source (`VNAM`).
+  - Positive current flows from the positive terminal, through the source, to the negative terminal.
+
+**Examples:**
+1. **Voltage-controlled:**
+   ```
+   s1 1 2 3 4 switch1 ON
+   s2 5 6 3 0 sm2 OFF
+   ```
+
+2. **Current-controlled:**
+   ```
+   w1 1 2 vclock switchmod1
+   W2 3 0 vramp sm1 ON
+   wreset 5 6 vclck lossyswitch OFF
+   ```
+
+- **Initial Conditions (`<ON>/<OFF>`):**  
+  Necessary if control voltage/current starts within the hysteresis range (determines the initial state of the switch).

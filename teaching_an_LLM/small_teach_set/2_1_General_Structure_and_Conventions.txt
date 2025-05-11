@@ -1,0 +1,32 @@
+The section **2.1 General Structure and Conventions** covers the syntax and conventions used in Ngspice. Here's the summary:
+
+- **General Structure of Netlist**:
+  1. Each line represents a statement.
+  2. Case-insensitive.
+  3. Comments start with an asterisk (`*`) or `$`.
+  4. Continuation of a line uses a `+` at the start of the next line.
+
+- **Component Definition**:
+  * Components must start with a specific character:
+    - `R`, `L`, `C` for passive components (resistor, inductor, and capacitor).
+    - `V`, `I` for independent voltage and current sources.
+    - `D` for diodes, `Q` for BJTs, `M` for MOSFETs, etc.
+
+- **Node Naming**:
+  * Nodes are identified numerically (e.g., 1, 2) or with alphanumeric labels.
+  * Node `0` is always the global ground.
+
+- **Units**:
+  * Default units include:
+    - Resistance: ohms.
+    - Capacitance: farads.
+    - Inductance: henries.
+  
+- **Model and Subcircuit References**:
+  * Models are defined with the `.MODEL` keyword.
+  * Subcircuits are defined using `.SUBCKT` and `.ENDS`.
+  
+- **Simulation Commands**:
+  * Simulation setup and execution use commands like `.DC`, `.AC`, `.TRAN`, etc.
+
+This section provides a foundational understanding for writing Ngspice netlists, ensuring consistency and correct syntax usage in simulation workflows.

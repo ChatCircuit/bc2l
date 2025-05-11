@@ -1,0 +1,2 @@
+Resistor and Capacitor SOA Model Parameter:  
+**Bv_max**: Generates an SOA (Safe Operating Area) warning if |Vr| or |Vc| exceeds the specified Bv_max value.

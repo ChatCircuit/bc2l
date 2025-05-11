@@ -1,0 +1,8 @@
+MOS SOA model parameters:
+
+- **Vgs_max**: Issues SOA warning if |Vgs| exceeds Vgs_max.
+- **Vgd_max**: Issues SOA warning if |Vgd| exceeds Vgd_max.
+- **Vgb_max**: Issues SOA warning if |Vgb| exceeds Vgb_max.
+- **Vds_max**: Issues SOA warning if |Vds| exceeds Vds_max.
+- **Vbs_max**: Issues SOA warning if |Vbs| exceeds Vbs_max.
+- **Vbd_max**: Issues SOA warning if |Vbd| exceeds Vbd_max.

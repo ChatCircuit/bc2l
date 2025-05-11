@@ -1,0 +1,34 @@
+**Summary of 4.1.10 Arbitrary Phase Sources (Ngspice Manual)**
+
+1. **Feature Overview**:  
+   - Ngspice allows for defining arbitrary phase shifts for independent sources.  
+   - Phase shift is specified in **degrees**, as opposed to using the TD (time delay) parameter found in other SPICE versions.  
+   - This phase parameter is appended as the **final parameter** in the source definition.
+
+2. **Usage Syntax**:  
+   - Applicable to independent sources such as `sin` and `pulse`.  
+   - Example syntax and default details for these waveforms:  
+
+     ```
+     v1 <node+> <node-> <dc_value> sin( <vo> <va> <freq> <td> <df> <phase> )
+     v2 <node+> <node-> <dc_value> pulse( <v1> <v2> <td> <tr> <tf> <pw> <per> <phase> )
+     ```
+
+3. **Theoretical Characteristics**:  
+   - **SIN waveform**: `<phase>` specifies the phase offset in degrees at time `t = 0`.  
+   - **PULSE waveform**: `<phase>` introduces a phase shift applied across the periodic characteristics of the pulse.
+
+4. **Examples** (with unique/detailed values):  
+   - **Sinusoidal Source with Phase Shift** (45°):  
+     ```
+     v1 1 0 0.0 sin(0 1 1k 0 0 45.0)
+     ```
+   - **Pulse Source with Phase Shift** (45°):  
+     ```
+     v2 2 0 0.0 pulse(-1 1 0 1e-5 1e-5 5e-4 1e-3 45.0)
+     ```
+
+5. **Practical Notes**:  
+   - Phase is included at the end of the source definition in degrees, instead of relying on the TD (time-delay) parameter.  
+   - Useful for simulations requiring precise phase alignment or offsets in independent source signals.
+

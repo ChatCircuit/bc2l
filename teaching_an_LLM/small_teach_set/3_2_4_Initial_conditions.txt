@@ -1,0 +1,19 @@
+**Summary of Ngspice Manual Section 3.2.4: Initial Conditions**
+
+1. **Device Initial Conditions for DC Convergence:**
+   - **Purpose:** Enhances DC convergence in circuits with multiple stable states.
+   - **Usage:**
+     - Specify a device as `OFF` to set terminal voltages of the device to zero initially.
+     - After convergence, Ngspice iterates to compute the exact terminal voltages.
+     - `OFF` can be used to enforce convergence to a desired DC state.
+     - If the device is truly conducting (despite being defined `OFF`), correct solutions are still computed, though more iterations may be required.
+
+2. **Alternative DC Convergence Aid:**
+   - **.NODESET:** Control line serving a similar purpose to `OFF`. Described in Chapter 11.2.1.
+   - **Preferred Method:** `.NODESET` is easier to apply and should generally be used instead of `OFF`.
+
+3. **Initial Conditions for Transient Analysis:**
+   - True initial conditions for transient analysis, distinct from DC convergence aids.
+   - Refer to `.IC` and `.TRAN` control lines for transient analysis initial condition details:
+     - `.IC` Control Line (Chapter 11.2.2).
+     - `.TRAN` Control Line (Chapter 11.3.10).

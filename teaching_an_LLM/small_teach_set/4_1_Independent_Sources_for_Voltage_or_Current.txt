@@ -1,0 +1,64 @@
+### Summary of Section 4.1: Independent Sources for Voltage or Current
+
+**General Syntax**:  
+- Voltage Source: `VXXXXXXX N+ N- <<DC> DC/TRAN VALUE> <AC <ACMAG <ACPHASE>>> <DISTOF1 <F1MAG <F1PHASE>>> <DISTOF2 <F2MAG <F2PHASE>>>`  
+- Current Source: `IYYYYYYY N+ N- <<DC> DC/TRAN VALUE> <AC <ACMAG <ACPHASE>>> <DISTOF1 <F1MAG <F1PHASE>>> <DISTOF2 <F2MAG <F2PHASE>>>`
+
+**Key Points**:  
+- **Nodes**:
+  - `N+`: Positive node, `N-`: Negative node.
+  - Positive current flows from `N+` to `N-` for voltage sources and vice versa for current sources.  
+- Voltage sources can be used as "ammeters"; a zero-valued voltage source measures current without altering circuit functionality.
+
+**DC/TRAN**:  
+- Specifies DC and transient values of the source.
+- Omission is allowed if the values are zero.
+- If time-invariant, the value may be prefixed by `DC`.  
+
+**AC Analysis**:  
+- The keyword `AC` specifies small-signal behavior with mandatory `ACMAG` (AC magnitude) and optional `ACPHASE` (AC phase).  
+  - Default `ACPHASE`: 0.  
+  - Typical `ACMAG`: 1 (unity for convenient scaling).  
+- Avoid `AC` if the source isn’t an AC small-signal input.
+
+**Distortion Inputs**:  
+- `DISTOF1` and `DISTOF2`: Independent source distortion at frequencies `F1` and `F2`.  
+  - Optional: Magnitude (default `1.0`) and Phase (default `0.0`).  
+  - Related to `.DISTO` control line.
+
+**Transient Analysis**:  
+- Independent sources can have **time-dependent values** for transient analysis, using the time-zero value for DC analysis.  
+
+**Available Source Functions** (for transient analysis not already in AC/DC):
+1. Pulse
+2. Exponential
+3. Sinusoidal
+4. Piece-wise Linear
+5. Single-Frequency FM
+6. AM
+7. Transient Noise
+8. Random Voltages or Currents
+9. External Data (via shared library)
+10. RF Port  
+
+**Defaults**:
+- Parameters omitted or set to zero assume default values:
+  - `ACPHASE`: 0  
+  - Distortion Input Magnitude: 1.0  
+  - Distortion Input Phase: 0.0.
+
+**Key Example Codes**:  
+1. Voltage source:
+   ```plaintext
+   VCC 10 0 DC 6            * DC voltage source, 6V
+   VIN 13 2 0.001 AC 1 SIN(0 1 1MEG)   * AC sinusoidal input
+   VCARRIER 1 0 DISTOF1 0.1 -90.0      * Distortion input example
+   ```
+
+2. Current source:
+   ```plaintext
+   ISRC 23 21 AC 0.333 45.0 SFFM(0 1 10K 5 1K)   * AC single-frequency FM
+   IIN1 1 5 AC 1 DISTOF1 DISTOF2 0.001           * AC with distortion inputs
+   ```
+
+This section defines the roles and syntax for independent voltage and current sources. Use these specifications for simulation inputs, transient analysis, and advanced AC behaviors such as distortion and small-signal reference.

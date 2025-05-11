@@ -1,0 +1,45 @@
+### Summary for Ngspice BJT SOA Model Parameters
+
+**11.5.3.1 Gummel-Poon (Levels 1 and 2)**  
+Supported parameters for SOA checks:
+- **Vbe_max**: Issues warning if |Vbe| > Vbe_max.  
+- **Vbc_max**: Issues warning if |Vbc| > Vbc_max.  
+- **Vce_max**: Issues warning if |Vce| > Vce_max.  
+- **Vcs_max**: Issues warning if |Vcs| > Vcs_max.  
+- **Ic_max**: Issues warning if |Ic| > Ic_max.  
+- **Ib_max**: Issues warning if |Ib| > Ib_max.  
+- **Pd_max**: Issues warning if power > Pd_max.  
+- **Te_max**: Issues warning if temperature > Te_max (not yet functional).  
+
+Parameters for Thermal Effects:
+- **rth0**: Thermal resistance (junction to ambient).  
+- **tnom**: Nominal temperature for parameter measurement.  
+- Temperature-dependent power derating formula (if `rth0` and `tnom` are defined):  
+  `pdmax = pdmax_mod - (temp - tnom) / rth0`.  
+
+Other Notes:  
+- Default temperature: `27°C` (or defined by global `.temp` or device-specific `temp` parameter).  
+- Without `rth0` or `tnom`, power dissipation is checked only against `Pd_max`.  
+
+**11.5.3.2 HICUM (Level 8)**  
+Supported SOA parameters:  
+- Identical to Gummel-Poon parameters: `Vbe_max`, `Vbc_max`, `Vce_max`, `Vcs_max`.  
+
+**11.5.3.3 VBIC (Levels 4 and 9)**  
+Supported SOA parameters:  
+- **Vbe_max, Vbc_max, Vce_max, Vcs_max**: Same as Gummel-Poon.  
+- Alternate parameters: **bvbe, bvbc, bvce, bvsub** (can replace the above).  
+- Optional forward bias thresholds (default = `0.2V`):  
+  - **vbefwd**: B-E forward voltage.  
+  - **vbcfwd**: B-C forward voltage.  
+
+Device operation states (set `.option warn=2`):  
+| **Operation** | **Conditions**                               |  
+|---------------|---------------------------------------------|  
+| `off`         | `Vbe <= vbefwd` AND `Vbc <= vbcfwd`         |  
+| `saturation`  | `Vbe > vbefwd` AND `Vbc > vbcfwd`           |  
+| `forward`     | `Vbe > vbefwd` AND `Vbc <= vbcfwd`          |  
+| `reverse`     | `Vbe <= vbefwd` AND `Vbc > vbcfwd`          |  
+
+Substrate leakage detection:  
+- **vsubfwd**: Substrate junction forward voltage.

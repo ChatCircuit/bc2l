@@ -1,0 +1,11 @@
+4.1.9 External Voltage or Current Input
+
+General form:  
+`EXTERNAL`
+
+Examples:  
+`Vex 1 0 dc 0 external`  
+`Iex i1 i2 dc 0 external <m = xx>`
+
+- Allows input of voltages or currents to be set externally via a calling process when ngspice is used as a shared library.  
+- Refer to Chapter 15 and Section 15.3.3.9 for detailed explanation.

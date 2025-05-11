@@ -1,0 +1,41 @@
+**3.3.6 Capacitors**
+
+**General Form (syntax):**  
+`CXXXXXXX n+ n- <value> <mname> <m=val> <scale=val> <temp=val> + <dtemp=val> <tc1=val> <tc2=val> <ic=init_condition>`
+
+**Key Details:**  
+- **n+** and **n-** are the positive and negative nodes.  
+- **value** specifies the capacitance in Farads.  
+- Capacitance can be defined directly in the instance line or through a `.model` definition.
+
+**Examples:**  
+- Instance definition:  
+  `CBYP 13 0 1UF`  
+  `COSC 17 23 10U IC=3V`  
+
+- Using `.model` for capacitance:  
+  ```
+  C1 15 5 cstd  
+  C2 2 7 cstd  
+  .model cstd C cap=3n
+  ```
+  Both have capacitance = 3nF.
+
+- Temperature-dependent capacitance:  
+  ```
+  CEB 1 2 1u cap1 dtemp=5  
+  .MODEL cap1 C tc1=0.001
+  ```
+  - `tc1`, `tc2`: Temperature coefficients for quadratic temperature dependence (overrides model’s values if specified in the instance line).  
+
+**Initial Conditions:**  
+- Optional `IC=` specifies initial voltage (in Volts).  
+- Initial conditions apply only if the `.tran` control line includes the `uic` option.
+
+**Capacitance Calculation:**  
+`C_nom = value ⋅ scale ⋅ m`  
+
+**Temperature Coefficients:**  
+- `tc1` and `tc2` define quadratic temperature dependence (equation 83).  
+- Instance line coefficients override `.model` coefficients.
+

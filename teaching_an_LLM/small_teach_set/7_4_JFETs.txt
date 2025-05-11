@@ -1,0 +1,38 @@
+**Summary for Section 7.4 JFETs (Ngspice Manual):**
+
+- **JFET (Junction Field-Effect Transistor):**  
+  Represents an N-channel or P-channel JFET in Ngspice simulation.
+
+- **Netlist Syntax:**  
+  ```
+  JXXXX ND NG NE MNAME
+  ```
+  - `JXXXX`: Instance name (must start with "J").  
+  - `ND, NG, NE`: Drain, Gate, and Source nodes, respectively.  
+  - `MNAME`: Model name linked to `.model` statement.
+
+- **Model Specifications (via `.model` Statement):**  
+  ```
+  .model MNAME NJF/PJF (Parameters)
+  ```
+  - `NJF`: N-channel JFET, `PJF`: P-channel JFET.  
+
+- **Common Parameters:**  
+  - `IS`: Saturation current (default = 1e-14 A).  
+  - `BETA`: Transconductance coefficient (default = 1e-4 A/V²).  
+  - `VT0/VTO`: Pinch-off voltage (default = -2 V for NJF, +2 V for PJF).  
+  - `LAMBDA`: Channel-length modulation parameter (default = 0).  
+  - `RD, RS, RG`: Drain, source, and gate resistances (default = 0 for RD & RS, inf for RG).  
+  - `AREA`: Scaling factor for BETA (default = 1).  
+
+- **Theoretical Behavior:**  
+  - Follows Shockley's equation for current-voltage characteristics.  
+  - Controlled by the gate-source voltage (Vgs) within a defined operational range.  
+
+- **Unique Example Code:**  
+  ```
+  J1 2 3 0 TestJFET
+  .model TestJFET NJF (BETA=2e-5 VT0=-1)
+  ```
+
+This section provides key details about defining and using JFETs in a netlist, requiring model parameters and instance connections for accurate simulation.

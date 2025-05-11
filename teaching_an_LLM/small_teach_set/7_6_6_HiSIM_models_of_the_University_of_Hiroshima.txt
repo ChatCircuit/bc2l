@@ -1,0 +1,14 @@
+**Summary**:
+
+**HiSIM Models for Circuit Simulation**:
+1. **HiSIM2 Model**:  
+   - **Type**: Surface-Potential-Based MOSFET Model for Circuit Simulation.  
+   - **Version**: 2.8.0.  
+   - **Level**: 68.  
+
+2. **HiSIM_HV Model**:  
+   - **Type**: Surface-Potential-Based HV/LD-MOSFET Model for Circuit Simulation.  
+   - **Versions**: 1.2.4 and 2.2.0.  
+   - **Level**: 73.  
+
+Additional references point to source code and manual available from relevant links.

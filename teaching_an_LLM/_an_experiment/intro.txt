@@ -1,0 +1,2 @@
+the goal of this experiment is to test out, how an LLM performs given a memory an situation-aware-memory(SAM) extraction ability.
+

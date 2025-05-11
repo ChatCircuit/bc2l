@@ -1,0 +1,50 @@
+**Strategic Summary for Inductor Model (Netlist Code Generation/Querying):**
+
+1. **Parameters and Default Values**:
+   - `IND`: Model inductance (H), Default: `0`, Example: `1e-3`.
+   - `CSECT`: Cross-section (m²), Default: `0`, Example: `1e-6`.
+   - `DIA`: Coil diameter (m), Default: `0`, Example: `1e-3`.
+   - `LENGTH`: Length (m), Default: `0`, Example: `1e-2`.
+   - `TC1`: First order temperature coefficient (H/°C), Default: `0`, Example: `0.001`.
+   - `TC2`: Second order temperature coefficient (H/°C²), Default: `0`, Example: `0.0001`.
+   - `TNOM`: Parameter measurement temperature (°C), Default: `27`, Example: `50`.
+   - `NT`: Number of turns (-), Default: `0`, Example: `10`.
+   - `MU`: Relative magnetic permeability (-), Default: `1`.
+
+2. **Inductance Calculation** (Formulas and Dependencies):
+   - Instance line `value` specified:
+     `L_nom = value * scale_m`
+   - Model inductance `IND` specified:
+     `L_nom = IND * scale_m`
+   - Geometrical/Physical parameters used when neither `value` nor `IND` are specified:
+     - If `LENGTH` ≠ 0:
+       - If `DIA` is specified:
+         `L_nom = MU * μ0 * NT² * π * DIA² / (4 * LENGTH)`
+       - Otherwise:
+         `L_nom = MU * μ0 * NT² * CSECT / LENGTH`
+
+   - Constants:
+     - Magnetic constant: `μ0 = 1.25663706143592 µH/m`.
+     - `DIA` takes precedence over `CSECT`.
+
+   - Geometry correction factor `kl` applied per Lundin's correction (used for accurate modeling when diameter and length are of similar magnitude).
+
+3. **Temperature Adjustment**:
+   - Adjusted inductance:
+     `L(T) = L(TNOM) * (1 + TC1 * (T - TNOM) + TC2 * (T - TNOM)²)`,
+     where,
+     `L(TNOM) = L_nom`.
+
+   - `T`: Instance temperature, explicitly set using `temp` or derived from circuit temperature and `dtemp`.
+
+4. **Key Notes**:
+   - Instance parameters override model parameters (`NT` applies to both).
+   - `L_nom` is derived by prioritizing physical (`IND`) or geometrical parameters (`DIA`, `CSECT`).
+   - Temperature coefficients (`TC1`, `TC2`) account for temperature-dependent variations.
+
+5. **Missing Database Knowledge**:
+   - Explicit geometry correction (`Lundin factor`).
+   - Magnetic constant for computations: `μ0 = 1.25663706143592 µH/m`.
+   - Explicit precedence of `DIA` over `CSECT`.
+
+This condensed information is essential for inductor-related netlist creation, modification, debugging, and theoretical model explanations.

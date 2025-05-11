@@ -1,0 +1,20 @@
+**Summary of Ngspice .PSS (Periodic Steady State) Analysis Section:**
+
+- **General Syntax:**  
+  `.pss gfreq tstab oscnob psspoints harms sciter steadycoeff <uic>`
+
+- **Key Parameters Explained:**  
+  - **gfreq:** User-suggested guessed fundamental frequency. If inaccurate within ±10% of inferred frequency (rgfreq), it will be discarded.  
+  - **tstab:** Stabilization time before shooting analysis begins. Proper tstab is crucial; recommended to ensure circuit readiness by performing a TRAN analysis prior to PSS analysis.  
+  - **oscnob:** Node/branch for oscillation dynamics. Harmonic content reported here.  
+  - **psspoints:** Steps for evaluating predicted period after convergence. Should exceed at least twice the requested `harms`. Adjusted automatically if set improperly.  
+  - **harms:** Number of harmonics requested for calculation.  
+  - **sciter:** Allowed shooting cycle iterations. Default = **50**.  
+  - **steady_coeff:** Weighting coefficient for Global Convergence Error (reference for determining convergence). Lower values increase accuracy but prolong analysis time. Default = **1e-3**.  
+  - **uic (Optional):** Indicates no quiescent operating point solution before transient analysis. If provided, initial conditions specified using IC=... will be used, or node voltages from the `.ic` line (if provided).  
+
+- **Example Codes:** Unique/important lines preserved:  
+  - `.pss 150 200e-3 2 1024 11 50 5e-3 uic`  
+  - `.pss 624e6 500n bout 1024 10 100 5e-3 uic`
+
+This periodic steady-state analysis (experimental code) focuses on harmonic prediction at oscillatory nodes or branches using fine-tuned parameters like stabilizing time (`tstab`), guessed frequencies, shooting iterations, and calculation accuracy (via `steady_coeff`).

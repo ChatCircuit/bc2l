@@ -1,0 +1,91 @@
+**Summary of JFET Level 1 Model with Parker-Skellern Modification**  
+
+**Overview**  
+The JFET Level 1 model is derived from the Shichman and Hodges FET model. It defines the variation of drain current (`IDrain`) based on parameters like `VTO`, `BETA`, `LAMBDA`, and other intrinsic characteristics. Parker-Skellern modifications introduce parameter `B` for enhanced flexibility, particularly in fitting output characteristics.  
+
+---
+
+**Key Parameters and Their Characteristics:**
+
+1. **VTO**: Threshold voltage (default: -2 V)
+2. **BETA**: Transconductance parameter (default: 0.0001 A/V²)
+3. **LAMBDA**: Channel-length modulation parameter (default: 0 1/V)
+4. **RD**: Drain ohmic resistance (default: 0 Ω)
+5. **RS**: Source ohmic resistance (default: 0 Ω)
+6. **CGS**: Zero-bias gate-source junction capacitance (default: 0 F)
+7. **CGD**: Zero-bias gate-drain junction capacitance (default: 0 F)
+8. **PB**: Gate junction potential (default: 1 V)
+9. **IS**: Gate saturation current (default: 1e-14 A)
+10. **B**: Doping tail parameter for fitting (default: 1)
+11. **KF/AF**: Flicker noise parameters (default: KF=0, AF=1)
+12. **NLEV**: Noise equation selector (default: 1, set to 3 for an alternative thermal channel noise model)
+13. **GDSNOI**: Channel noise coefficient for `NLEV=3` (default: 1)
+14. **FC**: Coefficient for forward-bias depletion capacitance formula (default: 0.5)
+15. **TNOM**: Reference parameter measurement temperature, °C (default: 27 °C)
+16. **TCV**: Threshold voltage temperature coefficient (default: 0 1/°C)
+17. **VTOTC**: Alternative threshold voltage temperature coefficient (default: 0 1/°C)
+18. **BEX**: Mobility temperature exponent (default: 0)
+19. **BETATCE**: Alternative mobility temperature exponent (default: 0)
+20. **XTI**: Gate saturation current temperature coefficient (default: 3)
+21. **EG**: Bandgap voltage (default: 1.11)
+
+---
+
+**Temperature Dependence:**
+
+1. If `VTOTC` is specified:  
+   - \( VTO(Temp) = VTO + VTOTC \cdot (Temp - TNOM) \)  
+2. If `VTOTC` is not specified:  
+   - \( VTO(Temp) = VTO - TCV \cdot (Temp - TNOM) \)  
+3. If `BETATCE` is specified:  
+   - \( BETA(Temp) = BETA \cdot 1.01^{BETATCE \cdot (Temp - TNOM)} \)  
+4. If `BETATCE` is not specified:  
+   - \( BETA(Temp) = BETA \cdot \left(\frac{Temp}{TNOM}\right)^{BEX} \)
+
+---
+
+**Nonlinear Capacitance:**
+Charge storage in JFET is modeled using nonlinear depletion layer capacitances (`CGS`, `CGD`) that scale as \(-1/2\) power of junction voltage.
+
+---
+
+**Thermal and Noise Modeling:**
+
+1. **Default:** Standard thermal and flicker noise models.
+2. **Alternative Noise Model (`NLEV=3`):**
+   - Noise defined by:  
+     \( Sn\_oise = \frac{2}{3} \cdot 4kT \cdot BETA \cdot Vgst \cdot (1 + α + α^2) / (1 + α) \cdot GDSNOI \)  
+   - \( α = \begin{cases} 
+      1 - \frac{v_{ds}}{v_{gs} - VTO}, & \text{if } v_{gs} - VTO ≥ v_{ds} \\ 
+      0, & \text{otherwise} 
+     \end{cases} \)
+
+---
+
+**Parker-Skellern Modifications:**  
+
+1. Adjustments to `IDrain` equations:
+   - If `B=1`, simplified forms for `IDrain` exist (reducing complexity of the piecewise equations).  
+2. Adds parameter `B` to improve model adaptability where needed.  
+
+---
+
+**Table Reference Example:**
+
+| Parameter | Default   | Example   |
+|-----------|-----------|-----------|
+| VTO       | -2        | -2.0      |
+| BETA      | 0.0001    | 1.0e-3    |
+| RD        | 0 Ω       | 100 Ω     |
+| CGS       | 0 F       | 5 pF      |
+| PB        | 1 V       | 0.6 V     |
+
+---
+
+**Key Analytical Equations:**  
+
+1. \( Vgst = Vgs - VTO \)  
+2. \( I_{Drain} \): Form depends on \( Vgst \) and \( Vds \), governed by parameters \( BETA, LAMBDA, B \). Complex cases and simplifications depend on conditions around \( Vgst ≤ 0, Vgst ≥ Vds, Vgst < Vds \).  
+
+---  
+This structured summary condenses parameter definitions, conditions, and operational descriptions for debugging and code/model usage.

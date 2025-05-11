@@ -1,0 +1,22 @@
+**Summary for Netlist Code Generation/Modification/Debugging**
+
+**Component: Junction Field-Effect Transistors (JFETs)**
+
+- **General Form**:  
+  `JXXXXXXX nd ng ns mname <area> <off> <ic=vds,vgs> <temp=t>`
+
+- **Definitions**:  
+  - `nd, ng, ns`: Drain, gate, and source nodes, respectively.  
+  - `mname`: Model name for the JFET.  
+  - `<area>` (optional): Area factor, defaults to `1.0` if omitted.  
+  - `<off>` (optional): Initial condition indicator for DC analysis.  
+  - `<ic=vds,vgs>` (optional): Initial conditions for drain-source voltage (VDS) and gate-source voltage (VGS). Used with `.TRAN` and the `uic` option for transient analysis.  
+  - `<temp=t>` (optional): Device operating temperature, overrides `.option` temperature setting.
+
+- **Notes**:  
+  - Using `.ic` control line is a better approach for setting initial conditions.  
+  - The `uic` option is required when `ic=vds,vgs` is used during transient analysis.
+
+**Example**:  
+`J1 7 2 3 JM1 OFF`  
+Explanation: This sets up a JFET with drain at node 7, gate at node 2, source at node 3, using the model `JM1`, and sets it to an "OFF" initial condition.

@@ -1,0 +1,98 @@
+**Summary of Ngspice Manual on Expression Syntax**  
+
+1. **Expression Syntax**:  
+Expressions can include:
+- **Atom**: A spice number or identifier.  
+- **Unary Operator** & Atom.  
+- **Function Name** and its arguments.  
+- **Binary Operator** applied to Atom and Expression.  
+- Parentheses for grouping expressions.  
+
+Evaluation follows precedence rules (see below) and functions only operate on real values.  
+
+---
+
+2. **Operator Precedence and Descriptions**:  
+| Operator | Alias | Precedence | Description          |  
+|----------|-------|------------|----------------------|  
+| -        |       | 1          | Unary minus          |  
+| !        |       | 1          | Unary NOT            |  
+| **, ^    |       | 2          | Power (e.g., `pwr`)  |  
+| *, /, %, \ |     | 3          | Multiply, divide, modulo, integer divide |  
+| +, -     |       | 4          | Add, subtract        |  
+| ==, !=, <=, >=, <, > | | 5     | Equality & inequality operators |  
+| &&       |       | 6          | Boolean AND          |  
+| ||       |       | 7          | Boolean OR           |  
+| c?x:y    |       | 8          | Ternary operator     |  
+
+- Boolean FALSE = `0`, Boolean TRUE = any non-zero value.  
+- Logical results: `1` (TRUE) or `0` (FALSE).  
+
+---
+
+3. **Compatibility Modes for Power Functions (“**” or "^")**:  
+- **compatmode hs**:  
+  - `x > 0`: `pow(x, y)`  
+  - `x < 0`: `pow(x, round(y))`  
+  - `x = 0`: `0`  
+- **compatmode lt**:   
+  - `x > 0`: `pow(x, y)`  
+  - `x < 0`: `pow(x, y)` (if `y` is close to an integer), else `0`.  
+
+---
+
+4. **Built-in Functions**:  
+| Function           | Description                                  |  
+|--------------------|----------------------------------------------|  
+| `sqrt(x)`          | Square root of x                            |  
+| `sin(x), cos(x), tan(x)` | Trigonometric functions.               |  
+| `asin(x), acos(x), atan(x)` | Inverse trig functions.            |  
+| `exp(x)`           | Exponential function `e^x`.                 |  
+| `log(x), ln(x)`    | Logarithmic functions.                      |  
+| `abs(x)`           | Absolute value.                             |  
+| `nint(x)`          | Nearest integer (half-integers toward even).|  
+| `int(x)`           | Round toward zero.                          |  
+| `floor(x)`         | Nearest integer <= x.                       |  
+| `ceil(x)`          | Nearest integer >= x.                       |  
+| `pow(x, y)`        | x^y from C runtime library.                 |  
+| `min(x, y)`        | Minimum of x and y.                         |  
+| `max(x, y)`        | Maximum of x and y.                         |  
+| `sgn(x)`           | 1 for x > 0, 0 for x = 0, -1 for x < 0.     |  
+| `gauss(nom, rvar, sigma)` | Gaussian variation (relative).       |  
+| `agauss(nom, avar, sigma)` | Gaussian variation (absolute).       |  
+| `unif(nom, rvar)`  | Uniform variation (relative).               |  
+| `aunif(nom, avar)` | Uniform variation (absolute).               |  
+
+---
+
+5. **Scaling Suffixes**: These suffixes can modify numerical values.
+| Suffix | Value    |  
+|--------|----------|  
+| g      | `1e+09`  |  
+| meg    | `1e+06`  |  
+| k      | `1000`   |  
+| m      | `0.001`  |  
+| u      | `1e-06`  |  
+| n      | `1e-09`  |  
+| p      | `1e-12`  |  
+| f      | `1e-15`  |  
+
+---
+
+6. **Example for Logical Operators**:
+``` 
+* Logical operators
+v1or   1 0  {1 || 0}    * Boolean OR
+v1and  2 0  {1 && 0}    * Boolean AND
+v1not  3 0  {! 1}       * Boolean NOT
+v1mod  4 0  {5 % 3}     * Modulo
+v1div  5 0  {5 \ 3}     * Integer Division
+v0not  6 0  {! 0}       * NOT applied to 0 (False)
+.control
+op
+print allv
+.endc
+.end
+```
+
+**Note**: Redundant variations like `x^y`, `x**y`, and `pwr(x, y)` yield nearly identical results.

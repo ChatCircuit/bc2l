@@ -1,0 +1,32 @@
+**Summary of Ngspice Manual Section 4.1.3: Exponential Source**
+
+- **General Form**:  
+  `EXP(V1 V2 TD1 TAU1 TD2 TAU2)`
+
+- **Description**:
+  The exponential source generates a waveform that transitions between two values, shaped by exponential rise and fall characteristics controlled by specific time delay and time constant parameters.
+
+- **Parameters and Defaults**:
+  | Parameter | Description            | Default Value   | Units   |
+  |-----------|------------------------|-----------------|---------|
+  | V1        | Initial value          | -               | V, A    |
+  | V2        | Pulsed value           | -               | V, A    |
+  | TD1       | Rise delay time        | 0.0             | sec     |
+  | TAU1      | Rise time constant     | TSTEP           | sec     |
+  | TD2       | Fall delay time        | TD1 + TSTEP     | sec     |
+  | TAU2      | Fall time constant     | TSTEP           | sec     |
+
+- **Waveform Formula**:
+  Given V_21 = V2 - V1 and V_12 = V1 - V2: 
+  - For `0 ≤ t < TD1`:  
+    \( V(t) = V1 \)
+  - For `TD1 ≤ t < TD2`:  
+    \( V(t) = V1 + V_{21}(1 - e^{-(t - TD1) / TAU1}) \)
+  - For `TD2 ≤ t < TSTOP`:  
+    \( V(t) = V1 + V_{21}(1 - e^{-(t - TD1) / TAU1}) + V_{12}(1 - e^{-(t - TD2) / TAU2}) \)
+
+- **Example Code**:
+  Unique line from example:  
+  `VIN 3 0 EXP(-4 -1 2NS 30NS 60NS 40NS)`
+
+This summary highlights essential information for netlist code generation, including syntax, theoretical characteristics, default values, and example usage of exponential sources in Ngspice.

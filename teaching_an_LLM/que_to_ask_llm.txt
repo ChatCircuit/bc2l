@@ -1,0 +1,7 @@
+these questions are based on, ch11 (simulation directives) of the ngspice manual.
+
+* if you want to not print the initial transient solution in the simulation output, what should you do? 
+
+* how can you set the seed value for random number generation in ngspice
+
+* 

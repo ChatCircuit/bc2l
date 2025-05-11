@@ -1,0 +1,48 @@
+**Ngspice Semiconductor Resistor Model (R): Summary for Netlist Code Generation/Modification, Debugging, and Queries**
+
+1. **Parameters and Syntax for Resistor Model:**
+   - **TC1**: First-order temperature coefficient (default: 0.0 Ω/°C).
+   - **TC2**: Second-order temperature coefficient (default: 0.0 Ω/°C²).
+   - **RSH**: Sheet resistance (Ω/□), no default, example: 50 Ω/□.
+   - **DEFW**: Default width (default: 1e-6 m, example: 2e-6 m).
+   - **NARROW**: Narrowing due to side etching (default: 0.0 m).
+   - **SHORT**: Shortening due to side etching (default: 0.0 m).
+   - **TNOM**: Parameter measurement temperature (default: 27°C).
+   - **KF**: Flicker noise coefficient (default: 0.0, example: 1e-25).
+   - **AF**: Flicker noise exponent (default: 0.0, example: 1.0).
+   - **WF**: Flicker noise width exponent (default: 1.0).
+   - **LF**: Flicker noise length exponent (default: 1.0).
+   - **EF**: Flicker noise frequency exponent (default: 1.0).
+   - **R (RES)**: Default resistance value if element value is not specified, example: 1000 Ω.
+
+2. **Formula: Nominal Resistance Calculation**
+   - **Nominal Resistance (R_nom):** 
+     \( R_{nom} = R_{sh} \frac{l - SHORT}{w - NARROW} \)
+     - Default resistance value: 1 mΩ if `RSH` or `l` is not defined.
+     - `DEFW` used as default \( w \) if unspecified.
+
+3. **Formula: Temperature Compensation**
+   - **Adjusted Resistance (R(T)):**
+     \( R(T) = R(T_{nom})(1 + TC1(T - T_{nom}) + TC2(T - T_{nom})^2) \)
+     - Instance temperature \( T \) defined via `temp` keyword.
+     - If both `temp` and `dtemp` are specified, `dtemp` is ignored.
+
+4. **Noise Modeling:**
+   - **Thermal Noise in Resistors**:
+     \( i_{R}^2 = 4kTR\Delta f \)
+     - \( k \): Boltzmann constant.
+     - \( T \): Instance temperature.
+   - **Flicker Noise (1/f):**
+     \( i_{Rf}^2 = KF \cdot I_{R}^{AF} \cdot W^{WF} \cdot L^{LF} \cdot f^{EF} \Delta f \)
+   - `noisy` keyword for default noise modeling; `noise` for noiseless simulation.
+
+5. **Typical Sheet Resistance Values for Processes (Ω/□):**
+   - **Inter-metal (metal1 - metal2)**: Min. 0.005, Typ. 0.007, Max. 0.1.
+   - **Top-metal (metal3)**: Min. 0.003, Typ. 0.004, Max. 0.05.
+   - **Polysilicon (poly)**: Min. 15, Typ. 20, Max. 30.
+   - **Silicide**: Min. 2, Typ. 3, Max. 6.
+   - **Diffusion (n+, p+)**: Min. 10, Typ. 25, Max. 100.
+   - **Silicided diffusion**: Min. 2, Typ. 4, Max. 10.
+   - **n-well**: Min. 1000, Typ. 2000, Max. 5000.
+
+This compilation offers critical data and formulas for coding, modeling, and debugging semiconductor resistor components in Ngspice.

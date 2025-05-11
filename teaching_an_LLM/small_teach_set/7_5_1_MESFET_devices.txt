@@ -1,0 +1,17 @@
+MESFET Devices (Section 7.5.1):
+
+General Form:  
+`ZXXXXXXX ND NG NS MNAME <AREA> <OFF> <IC=VDS, VGS>`
+
+- **Components**:  
+  - `ND`: Drain node.  
+  - `NG`: Gate node.  
+  - `NS`: Source node.  
+  - `MNAME`: MESFET model name.  
+  - `<AREA>`: Optional parameter for area scaling.  
+  - `<OFF>`: Optional, allows specifying the device starts in an `OFF` state.  
+  - `<IC=VDS, VGS>`: Optional initial conditions for drain-source (VDS) and gate-source (VGS) voltages.  
+
+Example:  
+`Z1 7 2 3 ZM1 OFF`  
+This defines a MESFET connected between nodes 7, 2, and 3 with model `ZM1`, starting in the OFF state.

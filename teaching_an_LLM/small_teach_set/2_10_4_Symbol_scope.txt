@@ -1,0 +1,17 @@
+**Summary of Section 2.10.4 Symbol Scope (Ngspice Manual):**
+
+- **Global and Unique Naming:**
+  - All **subcircuit names** and **model names** are global and must be unique.
+  
+- **Global vs. Local Parameters:**
+  - Parameters defined with `.param` **outside** a `.subckt ... .ends` block are **global**.
+  - Parameters defined with `.param` **inside** a `.subckt ... .ends` block are **local** and **mask global parameters of the same name** until the `.ends` line is encountered.
+  - **Local reassignment of global parameters:** Global parameters cannot be reassigned within a `.subckt`. Instead, a local copy of the parameter is created.
+
+- **Scope Nesting:**
+  - Symbol scope can nest up to 10 levels.
+  - Example:  
+    - Main circuit calls subcircuit `A` with param `xx`.
+    - Subcircuit `A` calls subcircuit `B` with param `xx`.
+    - Subcircuit `B` calls subcircuit `C` with param `xx`.
+    - At any given point, only the **most local version** of `xx` (in this case, belonging to `C`) is visible.

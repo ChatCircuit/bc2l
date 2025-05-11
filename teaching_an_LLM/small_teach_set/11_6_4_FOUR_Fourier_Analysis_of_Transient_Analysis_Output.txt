@@ -1,0 +1,30 @@
+**Summary:**
+
+**.FOUR: Fourier Analysis of Transient Analysis Output**
+
+- **General Form:** `.four freq ov1 <ov2 ov3 ...>`
+- **Example:** `.four 100K v(5)`
+
+1. **Purpose:**  
+   - Performs a Fourier analysis as part of transient analysis in **batch mode**.
+   - Determines the DC component and the first nine harmonics of a specified vector.
+
+2. **Key Parameters:**
+   - **freq:** Fundamental frequency.
+   - **ov1, ov2, ...:** Output vectors (signals) to analyze.
+   - Analysis interval: `<TSTOP - period, TSTOP>`, where:
+     - `TSTOP`: Final time of transient analysis.
+     - `period = 1/freq`: Period of the fundamental frequency.
+
+3. **Accuracy Note:**  
+   - `TMAX` (from `.tran` command) should be set to `period/100.0` for accurate results, especially for high-Q circuits.
+
+4. **Expression Support:**  
+   - `.four` supports algebraic expressions using `par('expression')`.
+
+5. **Usage Restrictions:**  
+   - Available only in **batch mode** without a rawfile selection (see Section 12.4.1).  
+   - Alternatives for **interactive mode (.control)**:
+     - **spec** command (Section 13.5.87)
+     - **fft** command (Section 13.5.33)  
+

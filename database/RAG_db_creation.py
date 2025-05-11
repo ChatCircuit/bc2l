@@ -110,3 +110,9 @@ def build_or_load_index(documents=None):
         metadata = documents
         print(f"Built new index with {index.ntotal} vectors.")
     return index, metadata
+
+if __name__ == "__main__":
+    text = "hello world, my name is touhid"
+    emb = embed_text(text)
+
+    print(emb)

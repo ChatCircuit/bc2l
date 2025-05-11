@@ -1,0 +1,26 @@
+### Summary: Ngspice BJT Models (NPN/PNP)
+
+1. **Model Selection via `.model` Card**
+   - Ngspice provides three BJT device models selectable with `.model` card:
+     - `.model QMOD1 PNP`
+     - `.model QMOD3 NPN level=4`
+     - Default model: SPICE BJT Model (LEVEL=1)
+
+2. **LEVEL Keyword and Models:**
+   - **`LEVEL=1`** (Default if no LEVEL specified):
+     - Original SPICE BJT model.
+     - Includes modeling for vertical/lateral devices, temperature corrections of resistors (collector, emitter, base), and quasi-saturation effects.
+   - **`LEVEL=4`**:
+     - Advanced VBIC (Vertical Bipolar Inter-Company) model. 
+     - For details, see section 7.3.4 or [Designer's Guide VBIC Documentation](http://www.designers-guide.org/VBIC/).
+   - **`LEVEL=8`**:
+     - HICUM/L2 (High Current Model) model. Details in section 7.3.5 or the HICUM official website.
+
+3. **Additional Notes:**
+   - OpenVAF/OSDI (introduced in ngspice-39) allows support for modern bipolar models written in Verilog-A (e.g., VBIC, Mextram, HICUM).
+
+4. **Default Parameters and Modification:**
+   - Default parameters from ngspice are used if not overridden in the `.model` definition.
+   - Parameters can be replaced for customization as per project requirements (refer to parameter tables not included here).
+
+No example or explicit parameter table provided in the given text.

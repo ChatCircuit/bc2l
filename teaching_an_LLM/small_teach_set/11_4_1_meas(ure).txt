@@ -1,0 +1,1 @@
+.meas (.measure) statement/command is used to analyze output data from tran, ac, or dc simulations. It is executed immediately after the simulation concludes (also refer to Chapter 13.5.50 for the equivalent command).
