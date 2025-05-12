@@ -79,36 +79,62 @@ class MemoryManager:
 
         return emb
 
-    def append2index(self, data:dict, save:bool=True):
+    def save_memory(self, data:dict, save:bool=True):
         """
         args:
-            doc - a dictionary of format {"id": <data_id>, "content": <data_text>}
-            save - whether the save the new embedding and data into the index and metadata file
+            doc - a dictionary of format {"id": <data_id>, "content": <data_text>}, if id already exists, then the content will be updated with the current data.
+            save - whether to save the new embedding and data into the index and metadata file
         """
         # Check if the ID already exists in metadata
-        if any(item["id"] == data["id"] for item in self.metadata):
-            logger.warning(f"ID '{data['id']}' already exists in metadata. Skipping addition.")
-            return
+        for idx, item in enumerate(self.metadata):
+            if item["id"] == data["id"]:
+                logger.info(f"ID '{data['id']}' already exists in metadata. updating with new data.")
+                
+                # Remove metadata
+                del self.metadata[idx]
+                
+                # Remove faiss index
+                self.index.remove_ids(np.array([idx]))  # Remove the old embedding
+                
 
         emb = self.embed_text(data["content"])
         
         # Save to faiss index
         self.index.add(emb)
-        if(save): faiss.write_index(self.index, self.index_path)
+        if save:
+            faiss.write_index(self.index, self.index_path)
 
         # Save to npy metadata
         self.metadata.append(data)
-        if(save): np.save(self.meta_path, self.metadata)
+        if save:
+            np.save(self.meta_path, self.metadata)
 
-        logger.info(f"Added new data to index and metadata. saved to file: {save}")
+        logger.info(f"Added new data to index and metadata. Saved to file: {save}")
         
 
+    def get_memory(self, query:str, top_n:int=5):
+        """
+        returns:
+            list of dictionary of retreived memory with id of format: [{"id":<>, "content":<>}, {..}, ...]
+            and also the distances list
+        """
+        q_emb = np.array(self.embed_text(query)).astype('float32').reshape(1, -1)
+        distances, indices = self.index.search(q_emb, top_n)
+        
+        # print([self.metadata[i] for i in indices[0]])
+
+        return [self.metadata[i] for i in indices[0]], distances
 
 
 if __name__ == "__main__":
     # mem_manager = MemoryManager(index_path="./DB/ngspice_index.faiss", meta_path="./DB/ngspice_meta.npy")
     mem_manager = MemoryManager(index_path="./database/DB/memory_index.faiss", meta_path="./database/DB/memory_metadata.npy")
     
-    data = {"id":"second_memory2", "content":"this is my first memory, i should always remeber this"}
+    data = {"id":"third memory", "content":"you should use .probe I(component_name) in ngspice to find current through a component"}
 
-    mem_manager.append2index(data)
+    mem_manager.save_memory(data)
+    
+    mem, distances = mem_manager.get_memory("ngspice", top_n=2)
+
+    for i, (memory, distance) in enumerate(zip(mem, distances[0])):
+        print(f"Memory {i + 1}: ID={memory['id']}, Content={memory['content']}, Distance={distance}")
