@@ -7,6 +7,12 @@ from azure.core.credentials import AzureKeyCredential
 import dotenv
 from typing import List, Dict
 
+# get logger
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) #appending parent folder to sys path so that modules can be imported from there
+from logger import get_logger
+logger = get_logger(__name__)
+
 
 # Globals to be configured
 DATA_DIR: str
@@ -52,6 +58,29 @@ def Prepare_RAG_DB(
 
     docs = load_documents(DATA_DIR)
     index, meta = build_or_load_index(docs)
+
+# written by touhid
+def setup_embed_model():
+    """
+    Set up global file paths, API key, and model identifiers for embeddings and chat completions.
+    """
+    dotenv.load_dotenv()
+    global EMBED_MODEL, API_KEY, API_VER, ENDPNT, ECLIENT
+    
+    EMBED_MODEL = os.getenv("AZURE_E3L_DEPLOYMENT")
+    API_KEY = os.getenv("AZURE_E3L_API_KEY")
+    API_VER = os.getenv("AZURE_E3L_API_VERSION")
+    ENDPNT = os.getenv("AZURE_E3L_ENDPOINT")
+    ECLIENT = AzureOpenAI(
+            api_version= API_VER,
+            azure_endpoint= ENDPNT,
+            api_key= API_KEY
+        )
+    
+    logger.info(f"Configured LLM with embed_model={EMBED_MODEL}")
+
+    return ECLIENT
+
 
 
 def load_documents(data_dir: str) -> List[Dict]:
@@ -111,8 +140,13 @@ def build_or_load_index(documents=None):
         print(f"Built new index with {index.ntotal} vectors.")
     return index, metadata
 
+
+
 if __name__ == "__main__":
+    eclient = setup_embed_model()
+
     text = "hello world, my name is touhid"
     emb = embed_text(text)
+    emb = np.array(emb).astype('float32')
 
-    print(emb)
+    print(emb.shape)
