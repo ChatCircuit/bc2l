@@ -20,6 +20,10 @@ class MemoryManager:
 
         internal properties:
             self.metadata - a list of dict of format [{"id":<>, "content":<>}, {..}, ....]
+
+        methods:
+            save_memory(data:str, save:bool=True) - for saving new memory or updating old memory
+            get_memory(query:str, top_n:int) - to retreive top n number of memory using a query
         """
 
         self.index_path = index_path
@@ -63,7 +67,7 @@ class MemoryManager:
             logger.info(f"Metadata file created at location: {os.path.abspath(self.meta_path)}")
 
 
-    def embed_text(self ,text: str):
+    def _embed_text(self ,text: str):
         """
         Generate an embedding vector for the given text using the configured embed_model.
 
@@ -97,7 +101,7 @@ class MemoryManager:
                 self.index.remove_ids(np.array([idx]))  # Remove the old embedding
                 
 
-        emb = self.embed_text(data["content"])
+        emb = self._embed_text(data["content"])
         
         # Save to faiss index
         self.index.add(emb)
@@ -118,7 +122,7 @@ class MemoryManager:
             list of dictionary of retreived memory with id of format: [{"id":<>, "content":<>}, {..}, ...]
             and also the distances list
         """
-        q_emb = np.array(self.embed_text(query)).astype('float32').reshape(1, -1)
+        q_emb = np.array(self._embed_text(query)).astype('float32').reshape(1, -1)
         distances, indices = self.index.search(q_emb, top_n)
         
         # print([self.metadata[i] for i in indices[0]])
