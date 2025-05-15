@@ -142,13 +142,12 @@ if __name__ == "__main__":
     mem_manager = MemoryManager(index_path=index_path2, meta_path=meta_path2)
     
     # data = {"id":"measuring current in ngspice", "content":"you should always use '.probe I(component_name)' in ngspice to find current through a component. do not use any other method for current measuring."}
-    content = """The title line must be the first line of the netlist file or explicitly specified using a `.TITLE` statement.
-Syntax: `.TITLE <any title>`"""
-    data = {"id":"title line in ngspice", "content":content}
+    content = """the capital of bangladesh is dhaka."""
+    data = {"id":"capital of bd", "content":content}
 
-    mem_manager.save_memory(data)
+    # mem_manager.save_memory(data)
     
-    # mem, distances = mem_manager.get_memory("ngspice", top_n=2)
+    mem, distances = mem_manager.get_memory("the capital of bangladesh", top_n=1)
 
-    # for i, (memory, distance) in enumerate(zip(mem, distances[0])):
-    #     print(f"Memory {i + 1}: ID={memory['id']}, Content={memory['content']}, Distance={distance}")
+    for i, (memory, distance) in enumerate(zip(mem, distances[0])):
+        print(f"Memory {i + 1}: ID={memory['id']}, Content={memory['content']}, Distance={distance}")
