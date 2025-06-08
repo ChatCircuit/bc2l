@@ -1,0 +1,4 @@
+11.6.7 .width
+Set the width of a print-out or plot with the following card:
+.with out = 256
+Parameter out yields the maximum number of characters plotted in a row, if printing in columns or an ASCII-plot is selected.

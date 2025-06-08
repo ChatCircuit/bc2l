@@ -1,0 +1,15 @@
+11.7.2 Adding a voltage source in series
+The ngspice matrix solver determines node voltages and currents through independent voltage sources. So to measure the currents through a resistor, you may add a voltage source in series with dc voltage 0.
+Current measurement with series voltage source
+*measure current through R1
+V1 1 0 1
+R1 1 0 5
+R2 1 0 10
+* will become
+V1 1 0 1
+R1 1 11 5
+Vmeas 11 0 dc 0
+R2 1 0 10
+and the current is available as
+vmeas#branch
+after simulation.

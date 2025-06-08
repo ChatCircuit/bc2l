@@ -1,0 +1,2 @@
+11.6.5 .PROBE: Save device node currents, device power dissipation, or differential voltages between arbitrary nodes
+Command .probe enables current measurement at user specified device nodes, as well as (differential) voltage measurements between device nodes.

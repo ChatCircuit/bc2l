@@ -1,0 +1,44 @@
+11.6.5.1 Current measurement
+
+Current measurement at a device node is achieved by automatically placing a Zero volt voltage source (VSRC, 4.1) between the selected (or all) device node and the net attached to that node. The positive pole of the VSRC is pointing out towards the net, the negative pole towards the device. The resulting output vectors are using the xx#branch notation (see examples below). Only top level devices are accessible, so device inside of subcircuits are not considered.
+Besides standard devices you may also measure currents at X instance lines (subcircuit calls). If the subcircuit definition (.subckt line) uses named nodes, these are used instead of node numbers (see device u1 in the example below).
+Be careful when .probe alli is given, because the many output vectors generated automatically may require a large amount of memory to store all the current measurement vectors.
+General form for current measurements on all devices:
+.probe alli
+General form for current measurements on a 2- and multi-terminal device:
+.probe I(device)
+General form for current measurements on a multi-terminal device (one command per terminal):
+.probe I(device,node)
+Examples:
+* measure current at every node of each device in the circuit
+.probe <alli>
+
+* measure current at node 1 of a two-terminal device
+.probe I(R1)
+
+* measure current at all nodes of a subcircuit invocation
+.probe I(XU1)
+
+* measure current at node 3 of a multi-terminal device M4
+.probe I(MQ4,3)
+Resulting output vectors:
+r1#branch
+mq4:s#branch
+Resulting output vectors for .probe all (excerpt only, example file 555-timer-2.cir):
+...
+ra#branch           : current, real, 14579 long
+rb#branch           : current, real, 14579 long
+rl#branch           : current, real, 14579 long
+time                : time, real, 14579 long [default scale]
+xu1:cont#branch      : current, real, 14579 long
+xu1:disc#branch      : current, real, 14579 long
+xu1:gnd#branch       : current, real, 14579 long
+xu1:out#branch       : current, real, 14579 long
+xu1:reset#branch     : current, real, 14579 long
+xu1:thres#branch     : current, real, 14579 long
+xu1:trig#branch      : current, real, 14579 long
+xu1:vcc#branch       : current, real, 14579 long
+xu2:1#branch         : current, real, 14579 long
+xu2:19#branch        : current, real, 14579 long
+...
+Compared to the approach using command .options savecurrents the resulting vectors from a .probe command are available for every simulation type including AC simulation. A slight disadvantage may be that new nodes are added to the instance matrix, increasing simulation time (typically a little bit only).

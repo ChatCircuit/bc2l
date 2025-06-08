@@ -1,0 +1,168 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #FFFFFF;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#ADD8E6", "font": {"color": "black"}, "id": "n1", "label": "Ngspice allows curre...", "shape": "dot", "size": 20, "title": "Ngspice allows current measurement through device terminals using various techniques."}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "n2", "label": "Using `I(Xdevice)` o...", "shape": "dot", "size": 20, "title": "Using `I(Xdevice)` or `I(Vname)` syntax in the netlist, Ngspice measures current through subcircuits or voltage sources."}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "n3", "label": "Ngspice can use a vo...", "shape": "dot", "size": 20, "title": "Ngspice can use a voltage source with `dc 0V` in series with a component to extract current via `vsource#branch`."}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "n4", "label": "The `.probe` command...", "shape": "dot", "size": 20, "title": "The `.probe` command is used to measure device node currents, power dissipation, and differential voltages."}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "n5", "label": "`.probe I(device)` a...", "shape": "dot", "size": 20, "title": "`.probe I(device)` and `.probe I(device,node)` are used to measure current at all or specific terminals of a device."}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "n6", "label": "Voltage sources intr...", "shape": "dot", "size": 20, "title": "Voltage sources introduced by `.probe` have `0V` to avoid altering circuit behavior."}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "n7", "label": "`.probe` also suppor...", "shape": "dot", "size": 20, "title": "`.probe` also supports differential voltage (`vd`) and power (`p`) measurements using internal mechanisms."}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "n8", "label": "`.options savecurren...", "shape": "dot", "size": 20, "title": "`.options savecurrents` automatically saves terminal currents using `.save @device[i]` syntax."}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "n9", "label": "Unlike `.probe`, `.o...", "shape": "dot", "size": 20, "title": "Unlike `.probe`, `.options savecurrents` does not create new nodes but consumes more memory."}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "n10", "label": "`.options savecurren...", "shape": "dot", "size": 20, "title": "`.options savecurrents` does not support AC simulations; vectors will be empty."}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "n11", "label": "MOSFET-specific opti...", "shape": "dot", "size": 20, "title": "MOSFET-specific options like `.options savecurrents_bsim3` allow model-specific current tracking."}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "n12", "label": "All current measurem...", "shape": "dot", "size": 20, "title": "All current measurement approaches rely on inserting voltage sources or saving internal current vectors."}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "n1", "label": "How can Ngspice synt...", "title": "How can Ngspice syntax be used directly to measure current?", "to": "n2"}, {"arrows": "to", "from": "n1", "label": "What method involves...", "title": "What method involves using a zero-volt voltage source for measuring current?", "to": "n3"}, {"arrows": "to", "from": "n1", "label": "What command in Ngsp...", "title": "What command in Ngspice provides current and voltage probing features?", "to": "n4"}, {"arrows": "to", "from": "n1", "label": "What `.options` sett...", "title": "What `.options` setting enables auto-saving of terminal currents?", "to": "n8"}, {"arrows": "to", "from": "n2", "label": "How are internal vol...", "title": "How are internal voltage sources or vectors used in current measurements?", "to": "n12"}, {"arrows": "to", "from": "n3", "label": "How does adding a 0V...", "title": "How does adding a 0V voltage source affect current measurement?", "to": "n12"}, {"arrows": "to", "from": "n4", "label": "How does `.probe` co...", "title": "How does `.probe` command measure current at device terminals?", "to": "n5"}, {"arrows": "to", "from": "n4", "label": "What else can `.prob...", "title": "What else can `.probe` measure besides current?", "to": "n7"}, {"arrows": "to", "from": "n4", "label": "How does `.probe` en...", "title": "How does `.probe` enable current vector generation internally?", "to": "n12"}, {"arrows": "to", "from": "n5", "label": "Why does `.probe` us...", "title": "Why does `.probe` use 0V voltage sources when measuring current?", "to": "n6"}, {"arrows": "to", "from": "n8", "label": "What is the memory i...", "title": "What is the memory impact of using `.options savecurrents`?", "to": "n9"}, {"arrows": "to", "from": "n8", "label": "What are the simulat...", "title": "What are the simulation-type limitations of `.options savecurrents`?", "to": "n10"}, {"arrows": "to", "from": "n8", "label": "What MOSFET-specific...", "title": "What MOSFET-specific options are available for saving currents?", "to": "n11"}, {"arrows": "to", "from": "n8", "label": "How does `.options s...", "title": "How does `.options savecurrents` generate current output vectors?", "to": "n12"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"nodes": {"font": {"size": 10}}, "edges": {"font": {"size": 10, "align": "middle"}, "smooth": {"forceDirection": "none"}}, "physics": {"repulsion": {"centralGravity": 0.1, "damping": 0.09, "nodeDistance": 150, "springConstant": 0.08, "springLength": 120}, "minVelocity": 0.75, "solver": "repulsion"}, "interaction": {"tooltipDelay": 0, "hover": true, "selectable": true, "multiselect": false}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+                  <script type="text/javascript">
+        network.on("doubleClick", function (params) {
+            if (params.nodes.length > 0) {
+                var nodeId = params.nodes[0];
+                var node = nodes.get(nodeId);
+                var fullText = node.text;
+                navigator.clipboard.writeText(fullText).then(function () {
+                    // Create the popup
+                    var popup = document.createElement("div");
+                    popup.innerText = "Copied!";
+                    popup.style.position = "fixed";
+                    popup.style.bottom = "30px";
+                    popup.style.left = "50%";
+                    popup.style.transform = "translateX(-50%)";
+                    popup.style.backgroundColor = "#333";
+                    popup.style.color = "#fff";
+                    popup.style.padding = "10px 20px";
+                    popup.style.borderRadius = "8px";
+                    popup.style.boxShadow = "0 2px 8px rgba(0,0,0,0.2)";
+                    popup.style.zIndex = 1000;
+                    popup.style.fontSize = "14px";
+                    popup.style.opacity = "0";
+                    popup.style.transition = "opacity 0.3s ease-in-out";
+                    document.body.appendChild(popup);
+
+                    // Fade in
+                    setTimeout(() => popup.style.opacity = "1", 10);
+
+                    // Remove after 2 seconds
+                    setTimeout(() => {
+                        popup.style.opacity = "0";
+                        setTimeout(() => document.body.removeChild(popup), 300);
+                    }, 2000);
+                }, function (err) {
+                    console.error("Failed to copy: ", err);
+                });
+            }
+        });
+        </script>
+        </body>
+        
+</html>

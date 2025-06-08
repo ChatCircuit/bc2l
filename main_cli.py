@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 
 
 # import database.static_database as static_database
-import llm.llm_model as llm_model
 # import database.database_query as database_query
 # from python_interpreter import python_interpreter
 
@@ -73,6 +72,9 @@ def main():
     ############################
     ##### initialize llm and prompts and simulator
     ############################
+    import llm.llm_model as llm_model
+    # from teaching_an_LLM._situation_aware_memory.llm_model_streamer import LLMmodel
+    # llm_model = LLMmodel(llm='gemini-2.0-flash')
     llm_model.Prepare_llm()  # prepare the LLM model
 
     from llm.cook_llm_feed import Prompt_manager

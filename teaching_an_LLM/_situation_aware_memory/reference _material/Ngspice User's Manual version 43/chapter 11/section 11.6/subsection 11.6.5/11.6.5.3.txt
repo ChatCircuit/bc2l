@@ -1,0 +1,16 @@
+11.6.5.3 Measurement of power dissipation in a device
+A power consumption measurement of a device with n nodes consists of two steps: all n device node currents i1, i2, ... , in are measured (see11.6.5.1). Then all node voltages v1 ... vn are measured. A common virtual star point vref is calculated as the mean of all n node voltages. Power is the sum of the products of each node current times its node voltage minus vref.
+P = i1*(v1-vref) + i2*(v2-vref) +...+ in*(vn-vref)
+General form for power measurements:
+.probe p(device)
+Examples:
+* power dissipation of a subcircuit device
+.probe p(XU1)
+
+* power dissipation in a MOS transistor
+.probe p(MQ1)
+Resulting output vectors:
+xu1:power
+
+mq1:power
+All new items are added to the list of vectors named by .SAVE (see 11.6.1). If .save is not given, only the newly generated .PROBE vectors are saved.

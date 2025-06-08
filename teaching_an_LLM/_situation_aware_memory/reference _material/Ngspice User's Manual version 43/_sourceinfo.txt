@@ -1,0 +1,3 @@
+Ngspice User’s Manual Version 43 (ngspice release version)
+Writers: Holger Vogt, Giles Atkinson, Paolo Nenzi
+Published on: July 14th, 2024

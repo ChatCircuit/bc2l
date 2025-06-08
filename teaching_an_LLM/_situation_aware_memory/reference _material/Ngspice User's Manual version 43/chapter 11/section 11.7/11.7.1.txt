@@ -1,0 +1,2 @@
+11.7.1 Using the .probe command
+Device currents (discrete devices or subcircuits) may be measured by the .probe command (11.6.5). Voltage sources for measurements are placed in series to the devices nodes specified by the user. For details please see (11.6.5).
