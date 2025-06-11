@@ -1,0 +1,170 @@
+Ngspice User’s Manual Version 43 (ngspice release version)
+Writers: Holger Vogt, Giles Atkinson, Paolo Nenzi
+Published on: July 14th, 2024
+
+Chapter 11:
+
+section 11.6:
+11.6.5.1 Current measurement
+
+Current measurement at a device node is achieved by automatically placing a Zero volt voltage source (VSRC, 4.1) between the selected (or all) device node and the net attached to that node. The positive pole of the VSRC is pointing out towards the net, the negative pole towards the device. The resulting output vectors are using the xx#branch notation (see examples below). Only top level devices are accessible, so device inside of subcircuits are not considered.
+Besides standard devices you may also measure currents at X instance lines (subcircuit calls). If the subcircuit definition (.subckt line) uses named nodes, these are used instead of node numbers (see device u1 in the example below).
+Be careful when .probe alli is given, because the many output vectors generated automatically may require a large amount of memory to store all the current measurement vectors.
+General form for current measurements on all devices:
+.probe alli
+General form for current measurements on a 2- and multi-terminal device:
+.probe I(device)
+General form for current measurements on a multi-terminal device (one command per terminal):
+.probe I(device,node)
+Examples:
+* measure current at every node of each device in the circuit
+.probe <alli>
+
+* measure current at node 1 of a two-terminal device
+.probe I(R1)
+
+* measure current at all nodes of a subcircuit invocation
+.probe I(XU1)
+
+* measure current at node 3 of a multi-terminal device M4
+.probe I(MQ4,3)
+Resulting output vectors:
+r1#branch
+mq4:s#branch
+Resulting output vectors for .probe all (excerpt only, example file 555-timer-2.cir):
+...
+ra#branch           : current, real, 14579 long
+rb#branch           : current, real, 14579 long
+rl#branch           : current, real, 14579 long
+time                : time, real, 14579 long [default scale]
+xu1:cont#branch      : current, real, 14579 long
+xu1:disc#branch      : current, real, 14579 long
+xu1:gnd#branch       : current, real, 14579 long
+xu1:out#branch       : current, real, 14579 long
+xu1:reset#branch     : current, real, 14579 long
+xu1:thres#branch     : current, real, 14579 long
+xu1:trig#branch      : current, real, 14579 long
+xu1:vcc#branch       : current, real, 14579 long
+xu2:1#branch         : current, real, 14579 long
+xu2:19#branch        : current, real, 14579 long
+...
+Compared to the approach using command .options savecurrents the resulting vectors from a .probe command are available for every simulation type including AC simulation. A slight disadvantage may be that new nodes are added to the instance matrix, increasing simulation time (typically a little bit only).
+
+11.6.5.2 (Differential) voltage measurement
+Differential voltage measurements are achieved by placing a voltage controlled voltage source (VCVS, E device) with its two inputs connected to the nodes specified by the user and gain 1. The output is then saved in a vector with a leading vd_ in its name.
+General form for (differential) voltage measurements:
+.probe v(node1)
+.probe vd(device:node1:node2)
+.probe vd(device1:node1, device2:node2)
+device, device1, and device2 are device names (first token in an instance line). node1, node2 are either numbers (according to the node sequence in the instance line, e.g. 1, 2, 3, ...), or are node names of known devices (d, g, s, b for MOS of JFET, c, b, e for bipolar.
+Examples:
+* voltage at node named nR1
+.probe v(nR1)
+
+* voltage across a two-terminal device named R1 
+.probe vd(R1)
+
+* voltage at instance node 1 of device m4
+.probe vd(m4:1:0)
+
+* voltage between nodes 1 and 3 of device m4
+.probe vd(m4:1:3)
+
+* voltage between node 1 of device m4 and node 3 of device m5
+.probe vd(m4:1, m5:3)
+
+* m4, m5 are MOS devices, so the following is equivalent:
+.probe vd(m4:d, m5:s)
+Resulting output vectors:
+nR1
+vd_R1
+vd_m4:d:0
+vd_m4:d:s
+vd_m3:d_m5:s
+
+
+11.6.5.3 Measurement of power dissipation in a device
+A power consumption measurement of a device with n nodes consists of two steps: all n device node currents i1, i2, ... , in are measured (see11.6.5.1). Then all node voltages v1 ... vn are measured. A common virtual star point vref is calculated as the mean of all n node voltages. Power is the sum of the products of each node current times its node voltage minus vref.
+P = i1*(v1-vref) + i2*(v2-vref) +...+ in*(vn-vref)
+General form for power measurements:
+.probe p(device)
+Examples:
+* power dissipation of a subcircuit device
+.probe p(XU1)
+
+* power dissipation in a MOS transistor
+.probe p(MQ1)
+Resulting output vectors:
+xu1:power
+
+mq1:power
+All new items are added to the list of vectors named by .SAVE (see 11.6.1). If .save is not given, only the newly generated .PROBE vectors are saved.
+
+
+11.6.5 .PROBE: Save device node currents, device power dissipation, or differential voltages between arbitrary nodes
+Command .probe enables current measurement at user specified device nodes, as well as (differential) voltage measurements between device nodes.
+
+
+11.6.6 par('expression'): Algebraic expressions for output
+General form:
+par('expression')
+output=par('expression')  $ not in .measure ac
+Examples:
+.four 1001 sq1=par('v(1)*v(1)')
+.measure tran vtest find par('(v(2)*v(1))') AT=2.3m
+.print tran output=par('v(1)/v(2)') v(1) v(2)
+.plot dc v(1) diff=par('(v(4)-v(2))/0.01') out222
+With the output lines .four, .plot, .print, .save and in .measure evaluation, it is possible to add algebraic expressions for output, in addition to vectors. All of these output lines accept par('expression'), where expression is any expression valid for a B source (see Chapt. 5.1). Thus expression may contain predefined functions, numerical values, constants, simulator output like v(n1) or i(vdb), parameters predefined by a .param statement, and the variables hertz, temper, and time. Note that a B-source, and therefore the par('...') feature, operates on values of type complex in AC analysis mode.
+Internally the expression is replaced by a generated voltage node that is the output of a B source, one node, and the B source implementing par('...'). Several par('...') are allowed in each line, up to 99 per input file. The internal nodes are named pa_00 to pa_99. An error will occur if the input file contains any of these reserved node names.
+In .four, .plot, .print, .save, but not in .measure, an alternative syntax
+output=par('expression') is possible. par('expression') may be used as described above. output is the name of the new node to replace the expression. So output has to be unique and a valid node name.
+The syntax of output=par(expression) is strict: no spaces are allowed between par and ('or between ( and '. Also,(' and ') both are required. There is not much error checking on your input, so if there is a typo, for example, an error may pop up at an unexpected place.
+
+
+11.6.7 .width
+Set the width of a print-out or plot with the following card:
+.with out = 256
+Parameter out yields the maximum number of characters plotted in a row, if printing in columns or an ASCII-plot is selected.
+
+
+Section 11.7:
+11.7.1 Using the .probe command
+Device currents (discrete devices or subcircuits) may be measured by the .probe command (11.6.5). Voltage sources for measurements are placed in series to the devices nodes specified by the user. For details please see (11.6.5).
+
+11.7.2 Adding a voltage source in series
+The ngspice matrix solver determines node voltages and currents through independent voltage sources. So to measure the currents through a resistor, you may add a voltage source in series with dc voltage 0.
+Current measurement with series voltage source
+*measure current through R1
+V1 1 0 1
+R1 1 0 5
+R2 1 0 10
+* will become
+V1 1 0 1
+R1 1 11 5
+Vmeas 11 0 dc 0
+R2 1 0 10
+and the current is available as
+vmeas#branch
+after simulation.
+
+11.7.3 Using option 'savecurrents'
+Current measurement by reading internal current data
+*measure current through R1 and R2
+V1 1 0 1
+R1 1 0 5
+R2 1 0 10
+.options savecurrents
+The option savecurrents will add .save lines (11.6.1) like
+.save @r1[i]
+.save @r2[i]
+to your input file information read during circuit parsing. These newly created vectors contain the terminal currents of the devices R1 and R2.
+You will find information of the nomenclature in Chapt. 27, also how to plot these vectors. The following devices are supported: M, J, Q, D, R, C, L, B, F, G, W, S, I (see 2.3). For MOSFETdevices only a subset of MOS1 to MOS9 current parameters are included per default (but see options below). Devices in subcircuits are supported as well. The advantage of the data obtained by .options savecurrents is that no extra nodes are required, because the data are retrieved from internal nodes already existing.
+This option however cannot be used in AC simulations, because complex data are not supported. Vectors thus created will be empty after an AC simulation. So for AC you might use one of the two methods (.probe or series voltage source) as previously described.
+Be careful when choosing savecurrents in larger circuits, because 1 to 4 additional output vectors are created per device and this may consume lots of memory.
+Also note that the data thus retrieved may be delayed by on time step after a transient simulation.
+For MOS1, BSIM3 and BSIM4 three special options are available, listing all currents as described in chapters 31.6.1, 31.6.8 and 31.6.9 of the ngspice manual:
+Current measurement for MOS transistors with BSIM3 or BSIM4 models:
+*measure all currents of MOS1, BSIM3 and BSIM4 transistors
+.options savecurrents_mos1
+.options savecurrents_bsim3
+.options savecurrents_bsim4

@@ -1,0 +1,28 @@
+
+Suppurative pneumonia, aspiration pneumonia and pulmonary abscess
+
+These conditions are considered together, as their aetiology and clinical features overlap. Suppurative pneumonia is characterised by destruction of the lung parenchyma by the inflammatory process. Although micro-abscess formation is a characteristic histological feature, 'pulmonary abscess' is usually taken to refer to lesions in which there is a large local-ised collection of pus, or a cavity lined by chronic inflammatory tissue, from which pus has escaped by rupture into a bronchus.
+
+Suppurative pneumonia and pulmonary abscess often develop after the inhalation of septic material during operations on the nose, mouth or throat, under general anaesthesia, or of vomitus during anaesthesia or coma, particularly if oral hygiene is poor. Additional risk factors for aspira-tion pneumonia include bulbar or vocal cord palsy, achalasia or oesoph-ageal reflux, and alcoholism. Aspiration tends to localise to dependent areas of the lung, such as the apical segment of the lower lobe in a supine patient. These conditions may also complicate local bronchial obstruction from a neoplasm or foreign body.
+
+Infections are usually due to a mixture of anaerobes and aerobes in common with the typical flora encountered in the mouth and upper res-piratory tract. Isolates of Prevotella melaninogenica, Fusobacterium nec-rophorum, anaerobic or microaerophilic cocci and Bacteroides fragilis may be identified. When suppurative pneumonia or a pulmonary abscess occurs in a previously healthy lung, the most likely infecting organisms are Staph. aureus or K. pneumoniae. Actinomyces spp. cause chronic suppurative pulmonary infections, which may be associated with poor dental hygiene.
+
+Bacterial infection of a pulmonary infarct or a collapsed lobe may also produce a suppurative pneumonia or lung abscess. The organism(s) isolated from the sputum include Strep. pneumoniae, Staph. aureus, Streptococcus pyogenes, H. influenzae and, in some cases, anaerobic bacteria. In many cases, however, no pathogen can be isolated, particu-larly when antibiotics have been given.
+
+Some strains of Staph. aureus, often community-acquired MRSA (CA-MRSA), produce the cytotoxin Panton-Valentine leukocidin (PVL). PVL-producing strains are mainly responsible for suppurative skin infec-tion but also cause a rapidly progressive severe necrotising pneumonia.
+
+Lemierre syndrome is a rare cause of pulmonary abscesses. The usual causative agent is the anaerobe Fusobacterium necrophorum. The illness typically commences as a sore throat, painful swollen neck, fever, rigor, haemoptysis and dyspnoea; spread into the jugular veins leads to thrombosis and metastatic dispersal of the organisms.
+
+Injection drug-users are at particular risk of developing haematogenous lung abscess, often in association with endocarditis affecting the pulmo-nary and tricuspid valves. These abscesses are usually caused by staphy-lococci and streptococci, and occasionally by fungi such as Candida spp.
+
+A non-infective form of aspiration pneumonia - exogenous lipid pneu-monia - may follow the aspiration of animal, vegetable or mineral oils. The clinical features of suppurative pneumonia are summarised in Box 17.45.
+
+Investigations
+
+Radiological features of suppurative pneumonia include homogeneous lobar or segmental opacity consistent with consolidation or collapse. Abscesses are characterised by cavitation and a fluid level. Occasionally, a pre-existing emphysematous bulla becomes infected and appears as a cavity containing an air-fluid level.
+
+Management
+
+Aspiration pneumonia can usually be treated with amoxicillin and metronidazole. Further modification of antibiotics should be informed by clinical response and microbiological results. CA-MRSA is usu-ally susceptible to a variety of oral non-β-lactam antibiotics, such as trimethoprim-sulfamethoxazole, clindamycin, tetracyclines and linezolid. Parenteral therapy with vancomycin or linezolid can also be considered. Fusobacterium necrophorum is highly suscepti-ble to β-lactam antibiotics and to metronidazole, clindamycin and third-generation cephalosporins. Prolonged treatment for 4-6 weeks may be required in some patients with lung abscess. Established pulmonary actinomycosis requires 6-12 months' treatment with intravenous or oral penicillin, or with a tetracycline in penicillin-aller-gic patients.
+
+Physiotherapy is of great value, especially when suppuration is present in the lower lobes or when a large abscess cavity has formed. In most patients there is a good response to treatment, and although residual fibrosis and bronchiectasis are common sequelae, these seldom give rise to serious morbidity. Surgery should be contemplated if no improve-ment occurs despite optimal medical therapy. Removal or treatment of any obstructing endobronchial lesion is essential.

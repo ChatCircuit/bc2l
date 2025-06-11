@@ -31,7 +31,9 @@ class LLMmodel:
                 supported models: 
                 i) 'gpt-o3-mini', 'gpt-o4-mini', 
                 ii) 'deepseek-r1', 
-                iii) 'gemini-2.0-flash', 'gemini-2.5-flash-preview-04-17', and other gemini models: https://ai.google.dev/gemini-api/docs/models, rate limit: https://ai.google.dev/gemini-api/docs/rate-limits#free-tier
+                iii) 'gemini-2.0-flash', 'gemini-2.5-flash-preview-04-17', 'gemini-2.5-flash-preview-05-20'
+                    and other gemini models: https://ai.google.dev/gemini-api/docs/models, 
+                    rate limit: https://ai.google.dev/gemini-api/docs/rate-limits#free-tier
     """
 
     def __init__(self, llm='gpt-o3-mini'):
@@ -164,7 +166,7 @@ class LLMmodel:
                     
                     content = response.choices[0].message.content
                     token_count = response.usage.total_tokens
-                if 'gemini' in self.LLM.lower():
+                elif 'gemini' in self.LLM.lower():
                     """
                     for gemini the message history should be in the format:
 
@@ -190,7 +192,6 @@ class LLMmodel:
                         )
                     content = response.text
                     token_count = response.usage_metadata.total_token_count
-
                 else:
                     # deepseek
                     response = self.client.complete(
@@ -377,6 +378,17 @@ if __name__ == "__main__":
     # print(res, tc)
 
     # checking the generate_response function
+    message_history = [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "What is the capital of France?"},
+        {"role": "assistant", "content": "The capital of France is Paris."},
+        {"role": "user", "content": "What about the currency of this country?"}
+    ]
+
+    res, tc = llm.generate_response(message_history)
+    print(res, tc)
+
+    # checking the generate_response_stream function
     # message_history = [
     #     {"role": "system", "content": "You are a helpful assistant."},
     #     {"role": "user", "content": "What is the capital of France?"},
@@ -384,15 +396,5 @@ if __name__ == "__main__":
     #     {"role": "user", "content": "What about the currency of this country?"}
     # ]
 
-    # res, tc = llm.generate_response(message_history)
+    # res, tc = llm.generate_response_stream(message_history, sleep_time=0.1)
     # print(res, tc)
-
-    # checking the generate_response_stream function
-    message_history = [
-        {"role": "user", "content": "What is the capital of France?"},
-        {"role": "assistant", "content": "The capital of France is Paris."},
-        {"role": "user", "content": "What about the currency of this country?"}
-    ]
-
-    res, tc = llm.generate_response_stream(message_history, sleep_time=0.1)
-    print(res, tc)

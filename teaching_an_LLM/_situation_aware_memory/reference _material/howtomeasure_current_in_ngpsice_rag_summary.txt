@@ -1,0 +1,170 @@
+\t       >>>>>>>> FILE NAME:  11_7_Measuring_current_through_device_terminals.txt
+**Summary: Measuring Current Through Device Terminals (Section 11.7 - Ngspice Manual)**
+
+- **Measuring Current**: To measure current through component terminals in a netlist, Ngspice requires the use of branch currents or probes.
+
+- **Keyword Syntax**:
+  `I(Xdevice)` measures current through the device `Xdevice`.
+  `I(Vname)` measures current through a voltage source defined by `Vname`.
+
+- **Theory**: For passive devices (resistors, capacitors, inductors), currents follow Kirchhoff's laws. For active devices (transistors, diodes), currents across terminals depend on the models and parameters provided.
+
+
+
+
+
+\t       >>>>>>>> FILE NAME:  11_7_2_Adding_a_voltage_source_in_series.txt
+**Summary:**
+
+1. **Purpose of Adding a Voltage Source in Series:**
+   - The ngspice matrix solver calculates node voltages and currents through independent voltage sources.
+   - A voltage source with `dc voltage 0` can be added in series to measure the current through a resistor.
+
+2. **Current Measurement Technique Using Voltage Source in Series:**
+   ```ngspice
+   * Original Circuit
+   V1 1 0 1
+   R1 1 0 5
+   R2 1 0 10
+
+   * Modified Circuit with Current Measurement
+   V1 1 0 1
+   R1 1 11 5
+   Vmeas 11 0 dc 0
+   R2 1 0 10
+   ```
+   - `Vmeas 11 0 dc 0` is added in series with `R1`.
+   - Current is accessible as `vmeas#branch` after simulation.
+
+3. **Key Notes for Current Measurement:**
+   - Voltage source added in series should have `dc voltage 0` to avoid altering the circuit behavior.
+   - Access current calculation through `vmeas#branch`.
+
+
+
+
+
+
+\t       >>>>>>>> FILE NAME:  11_7_1_Using_the_probe_command.txt
+The `.probe` command in Ngspice is used to measure device currents (for discrete devices or subcircuits). Voltage sources are introduced in series with the device nodes specified by the user to facilitate current measurements. Reference additional details in section 11.6.5.
+
+
+
+
+\t       >>>>>>>> FILE NAME:  11_6_5_PROBE_Save_device_node_currents_device_power_dissipation_or_differential_voltages_between_arbitrary_nodes.txt
+**11.6.5 .PROBE: Overview**
+The `.probe` command in Ngspice is used to measure device node currents, power dissipation, or differential voltages in circuits.
+
+---
+
+**1. Current Measurement (.probe alli / .probe I):**
+- **Mechanism:** It uses a zero-volt voltage source (VSRC) to measure currents at device nodes, saved as `xx#branch` format (e.g., `R1#branch`).
+- **Scope:** Only top-level devices are accessible (not subcircuits). Named nodes in subcircuits can be measured if subcircuit definitions provide names.    
+- **Impact:** May add new nodes to the instance matrix, slightly increasing simulation time.
+
+**General Syntax:**
+- `.probe alli` → Measure current at every device node.
+- `.probe I(device)` → Measure current at all terminals of a device.
+- `.probe I(device,node)` → Measure current at a single terminal of a device.
+
+**Examples:**
+- `.probe alli` → All nodes in the circuit.
+- `.probe I(R1)` → Node 1 of two-terminal device `R1`.
+- `.probe I(XU1)` → All nodes in subcircuit `XU1`.
+- `.probe I(MQ4,3)` → Node 3 of multi-terminal device `MQ4`.
+
+**Resulting Vectors:**
+- Example entries: `r1#branch`, `xu1:gnd#branch`, `xu1:out#branch`, etc.
+
+---
+
+**2. Differential Voltage Measurement (.probe vd):**
+- **Mechanism:** Uses a Voltage Controlled Voltage Source (VCVS) with gain = 1 to measure voltages between nodes. Output vector names use a `vd_` prefix.    
+- **Types of Measurements:** Across nodes of devices (single device) or between nodes of different devices.
+
+**General Syntax:**
+- `.probe v(node1)` → Voltage at `node1`.
+- `.probe vd(device:node1:node2)` → Voltage across nodes of a device.
+- `.probe vd(device1:node1, device2:node2)` → Voltage between nodes of two devices.
+
+**Examples:**
+- `.probe v(nR1)` → Voltage at node `nR1`.
+- `.probe vd(R1)` → Voltage across `R1`.
+- `.probe vd(m4:1:3)` → Between nodes `1` and `3` of `m4`.
+- `.probe vd(m4:d, m5:s)` → MOS device, `d` terminal of `m4` and `s` terminal of `m5`.
+
+**Resulting Vectors:**
+- Example entries: `vd_R1`, `vd_m4:d:0`, `vd_m4:d:s`.
+
+---
+
+**3. Power Dissipation Measurement (.probe p):**
+- **Mechanism:** Node currents (`i1, i2...`) and voltages (`v1, v2...`) are measured. A virtual reference voltage `vref` is calculated as the mean of all node voltages. Power is calculated as:
+  `P = i1*(v1-vref) + i2*(v2-vref) + ... + in*(vn-vref)`
+
+**General Syntax:**
+- `.probe p(device)` → Power dissipation in a device.
+
+**Examples:**
+- `.probe p(XU1)` → Subcircuit `XU1`.
+- `.probe p(MQ1)` → MOS transistor `MQ1`.
+
+**Resulting Vectors:**
+- Example entries: `xu1:power`, `mq1:power`.
+
+---
+
+**Remarks:**
+- Unlike `.options savecurrents`, `.probe` vectors are available for all simulation types (e.g., AC simulation).
+- If `.save` is absent, only the `.probe` vectors are saved.
+
+
+
+
+\t       >>>>>>>> FILE NAME:  11_7_3_Using_option_savecurrents.txt
+11.7.3 Using Option `savecurrents` (Ngspice Manual Summary for Netlist Code Generation)
+
+**Purpose**
+- The `.options savecurrents` command enables measurement of device terminal currents by adding `.save` commands internally during circuit parsing. This adds new vectors for the currents, avoiding extra nodes.
+
+**Key Information**
+- Syntax: `.options savecurrents`
+- Automatically adds `.save` lines like:
+  ```
+  .save @r1[i]
+  .save @r2[i]
+  ```
+  These vectors store device terminal currents.
+- Supported Devices: M, J, Q, D, R, C, L, B, F, G, W, S, I (detailed in Chapter 2.3). Devices in subcircuits are also supported.
+- **Not Supported in AC Simulations**: Complex data cannot be processed. Resultant vectors will be empty.
+- Memory Impact: Each device adds 1–4 output vectors, which may cause high memory usage in large circuits. Data is delayed by one time step for transient simulations.
+
+**Special MOSFET Options** (for MOS1, BSIM3, BSIM4 models):
+- `.options savecurrents_mos1`
+- `.options savecurrents_bsim3`
+- `.options savecurrents_bsim4`
+  These enable saving all currents for respective transistor models.
+
+**Limitations and Observations**
+- Does not impact AC analysis.
+- Existing internal nodes are used, no additional nodes are created.
+- Memory usage can increase significantly in large circuits.
+
+**Example**
+```spice
+* Measure currents through R1 and R2
+V1 1 0 1
+R1 1 0 5
+R2 1 0 10
+.options savecurrents
+```
+
+- Auto-generated equivalent `.save` lines:
+  ```
+  .save @r1[i]
+  .save @r2[i]
+  ```
+
+**Usage Caution**
+- Validate memory constraints for large circuits.
+- For AC simulations, alternative methods like `.probe` or series voltage sources should be used.

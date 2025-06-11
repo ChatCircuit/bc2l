@@ -1,0 +1,192 @@
+The provided text, "Ngspice User’s Manual Version 43," details various methods for measuring current, voltage, and power within circuit simulations using Ngspice.
+
+---
+
+## I. Current Measurement
+
+There are three primary methods for measuring current in Ngspice:
+
+### A. Using the `.probe` Command (11.6.5.1 and 11.7.1)
+
+The **`.probe`** command automatically inserts a zero-volt voltage source (VSRC) in series with the selected device node. This allows for current measurement at that node.
+
+* **Placement of VSRC:** The positive pole of the VSRC points towards the net, and the negative pole towards the device.
+* **Output Vector Notation:** Resulting output vectors use the `xx#branch` notation.
+* **Accessibility:** Only top-level devices are accessible; devices within subcircuits are not considered unless they are X instance lines (subcircuit calls). If the subcircuit definition uses named nodes, these names will be used instead of node numbers.
+* **Memory Consumption:** Using `.probe alli` can generate many output vectors, potentially requiring a large amount of memory.
+* **Simulation Compatibility:** Vectors from `.probe` are available for all simulation types, including AC simulations.
+* **Disadvantage:** New nodes are added to the instance matrix, which may slightly increase simulation time.
+
+**General Forms:**
+
+* **All devices:** `.probe alli`
+* **2- and multi-terminal device:** `.probe I(device)`
+* **Multi-terminal device (one command per terminal):** `.probe I(device,node)`
+
+**Examples:**
+
+* Measure current at every node of each device: `.probe <alli>`
+* Measure current at node 1 of a two-terminal device: `.probe I(R1)`
+* Measure current at all nodes of a subcircuit invocation: `.probe I(XU1)`
+* Measure current at node 3 of a multi-terminal device M4: `.probe I(MQ4,3)`
+
+**Resulting Output Vectors:**
+
+* `r1#branch`
+* `mq4:s#branch`
+* **Excerpt from `555-timer-2.cir` using `.probe all`:**
+    * `ra#branch`
+    * `rb#branch`
+    * `rl#branch`
+    * `time`
+    * `xu1:cont#branch`
+    * `xu1:disc#branch`
+    * `xu1:gnd#branch`
+    * `xu1:out#branch`
+    * `xu1:reset#branch`
+    * `xu1:thres#branch`
+    * `xu1:trig#branch`
+    * `xu1:vcc#branch`
+    * `xu2:1#branch`
+    * `xu2:19#branch`
+
+### B. Adding a Voltage Source in Series (11.7.2)
+
+To measure current through a component, you can explicitly add a **zero-volt DC voltage source** in series with it. The Ngspice matrix solver will then determine the current through this independent voltage source.
+
+**Example:**
+
+To measure current through R1:
+
+Original circuit:
+```
+V1 1 0 1
+R1 1 0 5
+R2 1 0 10
+```
+
+Modified circuit with series voltage source:
+```
+V1 1 0 1
+R1 1 11 5
+Vmeas 11 0 dc 0
+R2 1 0 10
+```
+The current will be available as `vmeas#branch` after simulation.
+
+### C. Using the `'savecurrents'` Option (11.7.3)
+
+The **`.options savecurrents`** command allows current measurement by reading internal current data, without adding extra nodes to the circuit. This method is generally faster as it retrieves data from existing internal nodes.
+
+* **Automatic `.save` Lines:** This option automatically adds `.save` lines (e.g., `.save @r1[i]`, `.save @r2[i]`) to your input file information.
+* **Supported Devices:** M, J, Q, D, R, C, L, B, F, G, W, S, I. Devices within subcircuits are also supported.
+* **Nomenclature:** Information on nomenclature and plotting these vectors can be found in Chapter 27 of the Ngspice manual.
+* **Limitation:** This option **cannot be used in AC simulations** because complex data is not supported. Vectors created this way will be empty after an AC simulation. For AC analysis, use `.probe` or the series voltage source method.
+* **Memory Consumption:** In larger circuits, this option can generate 1 to 4 additional output vectors per device, potentially consuming a lot of memory.
+* **Transient Simulation Delay:** Data retrieved may be delayed by one time step after a transient simulation.
+* **MOS Transistor Specific Options:**
+    * `.options savecurrents_mos1`
+    * `.options savecurrents_bsim3`
+    * `.options savecurrents_bsim4`
+    These options measure all currents for MOS1, BSIM3, and BSIM4 transistors, respectively.
+
+**Example:**
+
+To measure current through R1 and R2:
+```
+V1 1 0 1
+R1 1 0 5
+R2 1 0 10
+.options savecurrents
+```
+
+---
+
+## II. Voltage Measurement (11.6.5.2)
+
+Differential voltage measurements are performed by placing a **voltage-controlled voltage source (VCVS, E device)** with a gain of 1. Its inputs are connected to the specified nodes, and the output is saved in a vector with a `vd_` prefix.
+
+**General Forms:**
+
+* **.probe v(node1)**: Measures voltage at a single node.
+* **.probe vd(device:node1:node2)**: Measures differential voltage across two nodes of a device.
+* **.probe vd(device1:node1, device2:node2)**: Measures differential voltage between a node on one device and a node on another device.
+
+**Node Naming:**
+
+* **Numbers:** Node numbers correspond to their sequence in the instance line (e.g., 1, 2, 3).
+* **Names:** Node names are also supported for known devices (e.g., `d, g, s, b` for MOS/JFET, `c, b, e` for bipolar).
+
+**Examples:**
+
+* Voltage at node named nR1: `.probe v(nR1)`
+* Voltage across a two-terminal device named R1: `.probe vd(R1)`
+* Voltage at instance node 1 of device m4: `.probe vd(m4:1:0)`
+* Voltage between nodes 1 and 3 of device m4: `.probe vd(m4:1:3)`
+* Voltage between node 1 of device m4 and node 3 of device m5: `.probe vd(m4:1, m5:3)`
+* Equivalent for MOS devices m4 and m5 (using node names): `.probe vd(m4:d, m5:s)`
+
+**Resulting Output Vectors:**
+
+* `nR1`
+* `vd_R1`
+* `vd_m4:d:0`
+* `vd_m4:d:s`
+* `vd_m3:d_m5:s`
+
+---
+
+## III. Power Dissipation Measurement (11.6.5.3)
+
+Measuring power dissipation in a device involves two steps: first, measuring all device node currents, and second, measuring all node voltages. A common virtual star point (`vref`) is calculated as the mean of all node voltages. Power is then calculated as the sum of the products of each node current and its voltage relative to `vref`.
+
+**Formula:**
+$P = i_1 * (v_1 - vref) + i_2 * (v_2 - vref) + ... + i_n * (v_n - vref)$
+
+**General Form:**
+
+* **.probe p(device)**
+
+**Examples:**
+
+* Power dissipation of a subcircuit device: `.probe p(XU1)`
+* Power dissipation in a MOS transistor: `.probe p(MQ1)`
+
+**Resulting Output Vectors:**
+
+* `xu1:power`
+* `mq1:power`
+
+**Note:** All new items generated by `.probe` are added to the list of vectors named by `.SAVE`. If `.save` is not explicitly given, only the newly generated `.PROBE` vectors are saved.
+
+---
+
+## IV. Algebraic Expressions for Output (`par('expression')`) (11.6.6)
+
+The `par('expression')` function allows you to include algebraic expressions directly in output lines like `.four`, `.plot`, `.print`, `.save`, and within `.measure` evaluations.
+
+* **Expression Validity:** The `expression` can be any valid expression for a B source (see Chapter 5.1). This includes predefined functions, numerical values, constants, simulator outputs (e.g., `v(n1)`, `i(vdb)`), parameters defined by a `.param` statement, and variables like `hertz`, `temper`, and `time`.
+* **AC Analysis:** In AC analysis mode, `par('...')` operates on complex values.
+* **Internal Mechanism:** The expression is replaced by a generated voltage node, which is the output of a B source.
+* **Limitations:** Up to 99 `par('...')` instances are allowed per input file. Internal nodes are named `pa_00` to `pa_99`; using these names will cause an error.
+* **Alternative Syntax (`output=par('expression')`):** This syntax is available for `.four`, `.plot`, `.print`, and `.save` (but not for `.measure`). `output` is the name of the new node replacing the expression and must be unique and a valid node name.
+* **Strict Syntax:** No spaces are allowed between `par` and `(` or between `(` and `'`. Both `(` and `)` are required. The system has limited error checking for typos.
+
+**Examples:**
+
+* `.four 1001 sq1=par('v(1)*v(1)')`
+* `.measure tran vtest find par('(v(2)*v(1))') AT=2.3m`
+* `.print tran output=par('v(1)/v(2)') v(1) v(2)`
+* `.plot dc v(1) diff=par('(v(4)-v(2))/0.01') out222`
+
+---
+
+## V. Output Width Setting (`.width`) (11.6.7)
+
+The **`.width`** command controls the maximum number of characters per row for print-outs or ASCII plots.
+
+**General Form:**
+
+* `.width out = 256` (where `256` is the maximum number of characters)
+
+---
